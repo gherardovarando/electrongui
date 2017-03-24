@@ -37,6 +37,7 @@ class GuiExtension extends ToggleElement {
         this.icon = 'fa fa-cubes fa-2x';
         gui.container.appendChild(this.element);
         this._menuItems = [];
+        this._menuIndx = -1;
         this._menu = new Menu();
         this._menuLabel = 'Extension';
         this._menuItem = new MenuItem({
@@ -44,8 +45,8 @@ class GuiExtension extends ToggleElement {
             type: 'submenu',
             submenu: this._menu
         });
-        gui.emit('load:extension',{
-          extension: this
+        gui.emit('load:extension', {
+            extension: this
         });
     }
 
@@ -67,7 +68,7 @@ class GuiExtension extends ToggleElement {
         return this.active;
     }
 
-    _reloadMenu() {
+    _buildMenuItem() {
         this._menu = new Menu();
         this._menuItems.map((item) => {
             this._menu.append(item);
@@ -76,7 +77,7 @@ class GuiExtension extends ToggleElement {
             label: this._menuLabel,
             type: 'submenu',
             submenu: this._menu
-        })
+        });
     }
 
     setMenuLabel(label) {
@@ -90,17 +91,32 @@ class GuiExtension extends ToggleElement {
         this._removeMenu(); //remove before it changes
         if (item) {
             this._menuItems.push(item);
-            this._reloadMenu();
-            this._appendMenu();
+            this._buildMenuItem();
+            gui.updateMenuItem(this._menuIndx, this._menuItem);
         }
     }
 
-    _appendMenu() {
-        gui.addMenuItem(this._menuItem);
+    removeMenuItem(item) {
+        this._removeMenu(); //remove before it changes
+        if (item) {
+            let idx = this._menuItems.indexOf(item);
+            if (idx < 0) return;
+            this._menuItems.splice(idx, 1);
+            this._buildMenuItem();
+            gui.updateMenuItem(this._menuIndx, this._menuItem);
+        }
     }
 
-    _removeMenu() {
-        gui.removeMenuItem(this._menuItem);
+    appendMenu() {
+        if (this._menuIndx >= 0) return false;
+        this._buildMenuItem();
+        this._menuIndx = gui.addMenuItem(this._menuItem);
+        return true;
+    }
+
+    removeMenu() {
+        gui.removeMenuItem(this._menuIndx);
+        this._menuIndx = -1;
     }
 
     show() {
