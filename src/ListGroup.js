@@ -82,7 +82,7 @@ class ListGroup extends ToggleElement {
             if (typeof options.subtitle.appendChild === 'function') {
                 body.appendChild(options.subtitle);
             } else {
-                let subtitle = Util.div(options.subtitle);
+                let subtitle = util.div(options.subtitle);
                 body.appendChild(subtitle);
             }
         }

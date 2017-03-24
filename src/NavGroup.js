@@ -18,8 +18,8 @@
 
 'use strict';
 
-const Util = require('Util');
-const ToggleElement = require('ToggleElement');
+const util = require('./util.js');
+const ToggleElement = require('./ToggleElement.js');
 
 class NavGroup extends ToggleElement {
     constructor(parent) {
@@ -57,7 +57,7 @@ class NavGroup extends ToggleElement {
 
 
         if (typeof options.icon === "string") {
-            span.appendChild(Util.icon(options.icon));
+            span.appendChild(util.icon(options.icon));
         } else if (typeof options.image === "string") {
             let img = document.createElement('IMG');
             img.className = 'img-circle media-object pull-left icon';
@@ -112,7 +112,7 @@ class NavGroup extends ToggleElement {
         for (let it in this.items) {
             delete this.items[it];
         }
-        Util.empty(this.element, this.element.firstChild);
+        util.empty(this.element, this.element.firstChild);
     }
 
     applyAll(f) {
