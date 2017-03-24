@@ -25,10 +25,9 @@ const {
 } = require('electron').remote;
 const fs = require('fs');
 const path = require('path');
-const async = require('async');
-const GuiExtension = require('GuiExtension');
-const Sidebar = require('Sidebar');
-const ToggleElement = require('ToggleElement');
+const GuiExtension = require('./GuiExtension');
+const Sidebar = require('./Sidebar.js');
+const ToggleElement = require('./ToggleElement.js');
 let gui = require('./gui');
 
 
