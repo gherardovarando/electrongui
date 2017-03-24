@@ -37,7 +37,6 @@ class ExtensionsManager extends GuiExtension {
         super();
         this.extensions = {};
         gui.extensions = this.extensions;
-        this.icon = 'fa fa-map';
         this.activate();
     }
 

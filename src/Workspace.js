@@ -37,6 +37,7 @@ class Workspace extends GuiExtension {
         window.addEventListener('beforeunload', (e) => {
             storage.set('workspace', this.spaces, (error) => {});
         });
+        this.icon = 'fa fa-map';
         this.activate();
     }
 
