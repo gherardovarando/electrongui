@@ -63,7 +63,6 @@ class ExtensionsManager extends GuiExtension {
         }));
         this.appendMenu();
         gui.on('loadextension',(e) =>{
-          console.log(e);
           this.addExtension(e.extension);
         });
     }
@@ -187,9 +186,10 @@ class ExtensionsManager extends GuiExtension {
               }
             }
         });
-        this.addMenuItem();
+        this.addMenuItem(menuitem);
         this.removeMenu();
         this.appendMenu();
+        gui.reloadMenu();
         this.sidebar.addItem({
             id: extension.constructor.name,
             icon: extension.icon,
