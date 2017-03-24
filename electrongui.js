@@ -61,3 +61,5 @@ exports.ToggleElement = ToggleElement;
 exports.TreeList = TreeList;
 exports.util = util;
 exports.Workspace = Workspace;
+exports.Task = Task;
+exports.TaskManager = TaskManager;

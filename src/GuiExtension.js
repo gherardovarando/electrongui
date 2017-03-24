@@ -28,7 +28,6 @@ let gui = require('./gui.js');
 
 class GuiExtension extends ToggleElement {
     constructor(config) {
-
         let element = document.createElement('DIV');
         element.className = 'pane-group';
         element.style.display = 'none'; //hide by default
