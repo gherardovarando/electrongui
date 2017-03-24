@@ -144,7 +144,7 @@ class Gui extends EventEmitter {
         Menu.setApplicationMenu(this._menu);
     }
 
-    addMenuItem(item, label) {
+    addMenuItem(item) {
         if (item instanceof MenuItem) {
             this._menu.append(item);
             this._menuItems.push(item);
