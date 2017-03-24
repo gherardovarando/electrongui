@@ -212,7 +212,6 @@ class ExtensionsManager extends GuiExtension {
         });
 
         extension.on('show', () => {
-            gui.maximize();
             gui.viewTrick();
             this.hide(); //hide the extensions manager
             //and all the other extensions:
@@ -236,7 +235,6 @@ class ExtensionsManager extends GuiExtension {
 
     show() {
         this.hideAll();
-        gui.maximize();
         this.update();
         this.sidebar.show();
         super.show();
