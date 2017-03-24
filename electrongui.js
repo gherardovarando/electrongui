@@ -47,7 +47,7 @@ exports.FolderSelector = FolderSelector;
 exports.Grid = Grid;
 exports.gui = gui;
 exports.Gui = Gui;
-exports.GuiExtension;
+exports.GuiExtension = GuiExtension;
 exports.input = input;
 exports.ListGroup = ListGroup;
 exports.Modal = Modal;
