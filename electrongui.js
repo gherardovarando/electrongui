@@ -17,3 +17,5 @@
  */
 
 'use strict';
+
+require('./src/')
