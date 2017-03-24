@@ -145,8 +145,7 @@ class Gui extends EventEmitter {
     }
 
     addMenuItem(item) {
-      console.log(item);
-        if (item instanceof MenuItem || true) {
+        if (item) {
             console.log("done");
             this._menu.append(item);
             this._menuItems.push(item);
@@ -155,7 +154,7 @@ class Gui extends EventEmitter {
     }
 
     removeMenuItem(item) {
-        if (item instanceof MenuItem) {
+        if (item) {
             let idx = this._menuItems.indexOf(item);
             if (idx < 0) return;
             this._menuItems.splice(idx, 1);

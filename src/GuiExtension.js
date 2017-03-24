@@ -87,7 +87,7 @@ class GuiExtension extends ToggleElement {
 
 
     addMenuItem(item) {
-        if (item instanceof MenuItem) {
+        if (item) {
             this._menuItems.push(item);
             this._reloadMenu();
         }
