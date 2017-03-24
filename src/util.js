@@ -43,8 +43,8 @@ exports.parseTimeInterval = function(s) {
 exports.div = function(className, text) {
     if (document) {
         let t = document.createElement('DIV');
-        if (x) {
-            t.innerHTML = x;
+        if (text) {
+            t.innerHTML = text;
         }
         if (className) {
             t.className = className;
