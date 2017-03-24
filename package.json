@@ -1,0 +1,23 @@
+{
+  "name": "electrongui",
+  "version": "0.0.1",
+  "description": "gui skeleton for electron app ",
+  "main": "electrongui.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gherardovarando/electrongui.git"
+  },
+  "keywords": [
+    "electron",
+    "gui"
+  ],
+  "author": "Gherardo Varando <gherardo.varando@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/gherardovarando/electrongui/issues"
+  },
+  "homepage": "https://github.com/gherardovarando/electrongui#readme"
+}
