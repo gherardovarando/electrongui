@@ -61,8 +61,8 @@ class ExtensionsManager extends GuiExtension {
         this.addMenuItem(new MenuItem({
             type: 'separator'
         }));
-        gui.on('load:extension',(e) =>{
-          this.addExtension(e.extension);
+        gui.on('load:extension', (e) => {
+            this.addExtension(e.extension);
         });
     }
 
@@ -176,12 +176,11 @@ class ExtensionsManager extends GuiExtension {
             label: extension.constructor.name,
             type: 'checkbox',
             click: (item) => {
-              if (item.checked){
-                extension.activate();
+                if (item.checked) {
+                    extension.activate();
+                } else {
+                    extension.deactivate();
                 }
-              }else{
-                extension.deactivate();
-              }
             }
         });
         this.addMenuItem(menuitem);
