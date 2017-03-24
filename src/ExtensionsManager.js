@@ -227,7 +227,6 @@ class ExtensionsManager extends GuiExtension {
             if (Object.keys(this.extensions).every((key) => {
                     return this.extensions[key].isHidden();
                 }) && this.isHidden()) {
-                gui.minimize();
             }
         });
 
@@ -248,7 +247,6 @@ class ExtensionsManager extends GuiExtension {
         if (Object.keys(this.extensions).every((key) => {
                 this.extensions[key].isHidden();
             }) && this.isHidden()) {
-            gui.minimize();
         }
         super.hide();
     }
