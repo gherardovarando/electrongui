@@ -188,6 +188,8 @@ class ExtensionsManager extends GuiExtension {
             }
         });
         this.addMenuItem();
+        this.removeMenu();
+        this.appendMenu();
         this.sidebar.addItem({
             id: extension.constructor.name,
             icon: extension.icon,

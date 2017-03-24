@@ -56,7 +56,7 @@ class Workspace extends GuiExtension {
         });
 
         gui.header.actionsContainer.addButton({
-          id:'save',
+            id:'save',
             groupId: 'basetools',
             icon: 'fa fa-save',
             action: () => {
@@ -87,7 +87,7 @@ class Workspace extends GuiExtension {
     }
 
     deactivate() {
-        this.removeToggleButton();
+        //this.removeToggleButton();
         gui.header.actionsContainer.removeButton('save');
         gui.header.actionsContainer.removeButton('load');
         this.clear();
