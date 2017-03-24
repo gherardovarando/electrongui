@@ -18,7 +18,7 @@
 
 "use strict";
 
-const ToggleElement = require('ToggleElement');
+const ToggleElement = require('./ToggleElement.js');
 const {dialog} = require('electron').remote;
 const json2csv = require('json2csv');
 const fs = require('fs');
@@ -26,7 +26,7 @@ const fs = require('fs');
 /**
  * This class transforms data into an HTML table.
  * It also allows you to export the data from the table to a CSV file.
- * 
+ *
  * @class Table
  * @extends {ToggleElement}
  */
@@ -57,7 +57,7 @@ class Table extends ToggleElement {
      *  },
      *  ...
      * }
-     * 
+     *
      * @param {Object} rowData - Row data.
      */
     addRow(rowData) {
@@ -93,7 +93,7 @@ class Table extends ToggleElement {
 
     /**
      * Sets the header row of the table using column names.
-     * 
+     *
      * @param {Object} rowData - Row data.
      */
     setHeader(rowData) {
@@ -107,7 +107,7 @@ class Table extends ToggleElement {
 
     /**
      * Adds a column header (th) given a column name.
-     * 
+     *
      * @param {string} colName - Column name.
      */
     addColHead(colName) {
@@ -120,7 +120,7 @@ class Table extends ToggleElement {
     /**
      * Exports the table to a CSV file.
      * Opens a dialog asking where to save the file.
-     * 
+     *
      * @param {string} dialogTitle - Save dialog title.
      */
     exportToCSV(dialogTitle) {

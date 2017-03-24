@@ -20,10 +20,7 @@
 
 
 const ToggleElement = require('./ToggleElement');
-const Util = require('Util');
-
-let gui = require('Gui');
-
+const util = require('./util.js');
 class Modal extends ToggleElement {
 
     constructor(options) {
@@ -76,7 +73,7 @@ class Modal extends ToggleElement {
         this.header = document.createElement('DIV');
         this.header.className = 'modal-header';
         this.header.innerHTML = title;
-        let ic = Util.icon('icon icon-cancel-circled pull-right ');
+        let ic = util.icon('icon icon-cancel-circled pull-right ');
         ic.role = 'button';
         ic.onclick = () => {
             this.destroy();
@@ -114,11 +111,10 @@ class Modal extends ToggleElement {
     }
 
     clear() {
-        Util.empty(this.element, this.element.firstChild);
+        util.empty(this.element, this.element.firstChild);
     }
 
     show(){
-      gui.maximize();
       super.show();
     }
 

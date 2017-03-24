@@ -29,11 +29,6 @@ const ToggleElement = require('./ToggleElement');
 const ButtonsContainer = require('./ButtonsContainer');
 
 
-let minHeight = 65;
-if (process.platform === 'win32') {
-    minHeight = 100;
-}
-
 
 class Header extends ToggleElement {
     constructor(element) {
@@ -161,24 +156,7 @@ class Gui extends EventEmitter {
         }
     }
 
-    minimize() {
-        let size = this.win.getSize();
-        this.win.setSize(size[0], minHeight, true);
-    }
 
-    maximize() {
-        let size = this.win.getSize();
-        this.win.setSize(size[0], 600, true);
-    }
-
-    toggleMini() {
-        let size = this.win.getSize();
-        if (size[1] <= minHeight) {
-            this.maximize();
-        } else {
-            this.minimize();
-        }
-    }
 
 }
 
