@@ -62,7 +62,7 @@ class ExtensionsManager extends GuiExtension {
             type: 'separator'
         }));
 
-        gui.addEventListener('loadextension',(e) =>{
+        gui.on('loadextension',(e) =>{
           this.addExtension(e.extension);
         });
     }
