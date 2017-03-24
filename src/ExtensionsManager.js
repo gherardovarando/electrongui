@@ -63,6 +63,7 @@ class ExtensionsManager extends GuiExtension {
         }));
         this.appendMenu();
         gui.on('loadextension',(e) =>{
+          console.log(e);
           this.addExtension(e.extension);
         });
     }
