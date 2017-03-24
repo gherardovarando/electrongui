@@ -25,8 +25,8 @@ const {
     Menu,
     MenuItem
 } = require('electron').remote;
-const ToggleElement = require('ToggleElement');
-const ButtonsContainer = require('ButtonsContainer');
+const ToggleElement = require('./ToggleElement');
+const ButtonsContainer = require('./ButtonsContainer');
 
 
 let minHeight = 65;

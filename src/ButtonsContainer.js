@@ -18,8 +18,8 @@
 
 'use strict';
 
-const Util = require('Util');
-const ToggleElement = require('ToggleElement');
+const util = require('util');
+const ToggleElement = require('./ToggleElement');
 
 class ButtonsContainer extends ToggleElement {
     constructor(element) {
@@ -47,7 +47,7 @@ class ButtonsContainer extends ToggleElement {
         }
 
         if (options.icon) {
-            btn.appendChild(Util.icon(options.icon));
+            btn.appendChild(util.icon(options.icon));
         }
 
         if (options.toggle) {
@@ -120,7 +120,7 @@ class ButtonsContainer extends ToggleElement {
         options = options || {};
         options.className = options.className || '';
         if (!(typeof options.id === 'string')) options.id = `${this.nButtonGroups++}`;
-        let grp = Util.div(null, `btn-group ${options.className}`);
+        let grp = util.div(`btn-group ${options.className}`);
         grp.id = `${this.id}ButtonGroup${options.id}`;
         this.buttonGroups[options.id] = grp;
         if (buttons instanceof Array) {

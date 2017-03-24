@@ -27,7 +27,7 @@ const {
 } = require('electron').remote;
 const util = require('./util.js');
 //const {TreeList} = require('TreeList');
-const GuiExtension = require('GuiExtension');
+const GuiExtension = require('./GuiExtension');
 let gui = require('./gui');
 
 class Workspace extends GuiExtension {
