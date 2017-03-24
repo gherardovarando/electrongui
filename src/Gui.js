@@ -100,7 +100,7 @@ class Gui extends EventEmitter {
         let header = document.getElementsByClassName("toolbar-header")[0];
         header.id = "header";
         this.win = require('electron').remote.getCurrentWindow();
-        this.window = new ToggleElement(document.getElementsByClassName("window-content")[0]);
+        this.container = new ToggleElement(document.getElementsByClassName("window-content")[0]);
         this.header = new Header(header);
         let footer = document.getElementsByClassName("toolbar-footer")[0];
         footer.id = "footer";
@@ -146,7 +146,6 @@ class Gui extends EventEmitter {
 
     addMenuItem(item) {
         if (item) {
-            console.log("done");
             this._menu.append(item);
             this._menuItems.push(item);
             Menu.setApplicationMenu(this._menu);

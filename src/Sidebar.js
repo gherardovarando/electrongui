@@ -26,7 +26,7 @@ const util = require('./util.js');
 class Sidebar extends ToggleElement {
     constructor(parent) {
         if (parent.appendChild) {
-            let element = util.div(null,"pane-sm sidebar animated scrollable fixwidth");
+            let element = util.div("pane-sm sidebar animated scrollable fixwidth");
             element.id = `${parent.id}Sidebar${parent.getElementsByClassName('sidebar').length}`;
             super(element);
             this.parent = parent;

@@ -35,7 +35,7 @@ class GuiExtension extends ToggleElement {
         this.element.id = `${this.constructor.name}Pane`;
         this.id = this.constructor.name;
         this.icon = 'fa fa-cubes fa-2x';
-        gui.window.element.appendChild(this.element);
+        gui.container.appendChild(this.element);
         this._menuItems = [];
         this._menu = new Menu();
         this._menuLabel = 'Extension';
