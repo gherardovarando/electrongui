@@ -61,6 +61,7 @@ class ExtensionsManager extends GuiExtension {
         this.addMenuItem(new MenuItem({
             type: 'separator'
         }));
+        this.appendMenu();
         gui.on('load:extension', (e) => {
             this.addExtension(e.extension);
         });
