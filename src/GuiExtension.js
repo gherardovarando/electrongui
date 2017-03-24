@@ -87,17 +87,19 @@ class GuiExtension extends ToggleElement {
 
 
     addMenuItem(item) {
+        this._removeMenu(); //remove before it changes
         if (item) {
             this._menuItems.push(item);
             this._reloadMenu();
+            this._appendMenu();
         }
     }
 
-    appendMenu() {
+    _appendMenu() {
         gui.addMenuItem(this._menuItem);
     }
 
-    removeMenu() {
+    _removeMenu() {
         gui.removeMenuItem(this._menuItem);
     }
 

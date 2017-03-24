@@ -61,7 +61,6 @@ class ExtensionsManager extends GuiExtension {
         this.addMenuItem(new MenuItem({
             type: 'separator'
         }));
-        this.appendMenu();
         gui.on('loadextension',(e) =>{
           this.addExtension(e.extension);
         });
@@ -187,9 +186,6 @@ class ExtensionsManager extends GuiExtension {
             }
         });
         this.addMenuItem(menuitem);
-        this.removeMenu();
-        this.appendMenu();
-        gui.reloadMenu();
         this.sidebar.addItem({
             id: extension.constructor.name,
             icon: extension.icon,
