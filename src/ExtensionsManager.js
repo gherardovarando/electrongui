@@ -37,6 +37,7 @@ class ExtensionsManager extends GuiExtension {
         super();
         this.extensions = {};
         gui.extensions = this.extensions;
+        this.icon = 'fa fa-map';
         this.activate();
     }
 
@@ -72,64 +73,64 @@ class ExtensionsManager extends GuiExtension {
         super.deactivate();
     }
 
-    // find possible paths like Gui_Extensions folder in process.resourcesPath and __dirname and user defined folders etc...
-    getExtensionsPaths() {
-        let paths = [path.join(__dirname, '..', 'extensions'), path.join(process.resourcesPath, 'extensions')];
-        return paths;
-    }
+    // // find possible paths like Gui_Extensions folder in process.resourcesPath and __dirname and user defined folders etc...
+    // getExtensionsPaths() {
+    //     let paths = [path.join(__dirname, '..', 'extensions'), path.join(process.resourcesPath, 'extensions')];
+    //     return paths;
+    // }
+    //
+    // getExtensionsFromPath(dir, callback) {
+    //     let promises = [];
+    //     let files; //all the files in the directory
+    //     try {
+    //         files = fs.readdirSync(dir);
+    //     } catch (e) {
+    //         callback(e);
+    //         return;
+    //     }
+    //
+    //     files.map((file) => {
+    //         let pr = new Promise((res) => {
+    //             let complete = path.join(dir, file);
+    //             fs.stat(complete, (err, stats) => {
+    //                 if (err) {
+    //                     res();
+    //                     return;
+    //                 } else {
+    //                     if (stats.isFile()) {
+    //                         this.loadExtension(complete, res);
+    //                     } else if (stats.isDirectory()) {
+    //                         if (file.startsWith('_')) {
+    //                             res();
+    //                             return;
+    //                         }
+    //                         this.getExtensionsFromPath(complete, res);
+    //                     }
+    //                 }
+    //             });
+    //         });
+    //         promises.push(pr);
+    //     });
+    //     Promise.all(promises).then(() => {
+    //         if (typeof callback === 'function') {
+    //             callback();
+    //         }
+    //
+    //     });
+    // }
 
-    getExtensionsFromPath(dir, callback) {
-        let promises = [];
-        let files; //all the files in the directory
-        try {
-            files = fs.readdirSync(dir);
-        } catch (e) {
-            callback(e);
-            return;
-        }
-
-        files.map((file) => {
-            let pr = new Promise((res) => {
-                let complete = path.join(dir, file);
-                fs.stat(complete, (err, stats) => {
-                    if (err) {
-                        res();
-                        return;
-                    } else {
-                        if (stats.isFile()) {
-                            this.loadExtension(complete, res);
-                        } else if (stats.isDirectory()) {
-                            if (file.startsWith('_')) {
-                                res();
-                                return;
-                            }
-                            this.getExtensionsFromPath(complete, res);
-                        }
-                    }
-                });
-            });
-            promises.push(pr);
-        });
-        Promise.all(promises).then(() => {
-            if (typeof callback === 'function') {
-                callback();
-            }
-
-        });
-    }
-
-    loadAllExtensions() {
-        let loadPromises = [];
-        this.getExtensionsPaths().map((dir) => {
-            let prom = new Promise((resLoadDir) => {
-                this.getExtensionsFromPath(dir, resLoadDir);
-            });
-            loadPromises.push(prom);
-        });
-        Promise.all(loadPromises).then(() => {
-            this.emit('load:all');
-        });
-    }
+    // loadAllExtensions() {
+    //     let loadPromises = [];
+    //     this.getExtensionsPaths().map((dir) => {
+    //         let prom = new Promise((resLoadDir) => {
+    //             this.getExtensionsFromPath(dir, resLoadDir);
+    //         });
+    //         loadPromises.push(prom);
+    //     });
+    //     Promise.all(loadPromises).then(() => {
+    //         this.emit('load:all');
+    //     });
+    // }
 
     loadExtension(extPath, cl) {
         let ext;
@@ -142,8 +143,8 @@ class ExtensionsManager extends GuiExtension {
                         this.extensions[ext.constructor.name].deactivate();
                     }
                     this.extensions[ext.constructor.name] = ext;
-                    this.addExtension(this.extensions[ext.constructor.name]);
-                    this.emit('load', this.extensions[ext.constructor.name]);
+                    // this.addExtension(this.extensions[ext.constructor.name]);
+                    // this.emit('load', this.extensions[ext.constructor.name]);
                 }
             } catch (e) {
                 console.log(e);

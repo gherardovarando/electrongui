@@ -44,7 +44,7 @@ class GuiExtension extends ToggleElement {
             type: 'submenu',
             submenu: this._menu
         });
-        gui.emit('loadextension',{
+        gui.emit('load:extension',{
           extension: this
         });
     }
