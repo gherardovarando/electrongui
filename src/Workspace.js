@@ -20,21 +20,24 @@
 
 "use strict";
 const storage = require('electron-json-storage');
-const ToggleElement = require('ToggleElement');
+const ToggleElement = require('./ToggleElement');
 const fs = require('fs');
 const {
     dialog
 } = require('electron').remote;
-const Util = require('Util');
-const {TreeList} = require('TreeList');
+const util = require('./util.js');
+//const {TreeList} = require('TreeList');
 const GuiExtension = require('GuiExtension');
-let gui = require('Gui');
+let gui = require('./gui');
 
 class Workspace extends GuiExtension {
     constructor() {
         super();
         this.locked = true;
         this.activate();
+        window.addEventListener('beforeunload', (e) => {
+            storage.set('workspace', this.workspace.spaces, (error) => {});
+        });
     }
 
     activate() {

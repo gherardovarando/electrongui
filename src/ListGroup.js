@@ -18,8 +18,8 @@
 
 'use strict';
 
-const Util = require('Util');
-const ToggleElement = require('ToggleElement');
+const util = require('./util.js');
+const ToggleElement = require('./ToggleElement.js');
 
 class ListGroup extends ToggleElement {
     constructor(parent) {
@@ -41,20 +41,11 @@ class ListGroup extends ToggleElement {
         li.className = 'list-group-item';
 
         // layout
-        let mainContainer = Util.div(null, 'main');
-        // let leftContainer = Util.div(null, 'left');
-        // let centerContainer = Util.div(null, 'center');
-        // let rightContainer = Util.div(null, 'right');
-        // mainContainer.appendChild(leftContainer);
-        // mainContainer.appendChild(centerContainer);
-        // mainContainer.appendChild(rightContainer);
+        let mainContainer = util.div('main');
         li.appendChild(mainContainer);
-        let detailsContainer = Util.div(null, 'details');
+        let detailsContainer = util.div('details');
         li.appendChild(detailsContainer);
 
-        // if (options.id === 'undefined' || options.id === undefined) {
-        //     options.id = `${this.nItems}`;
-        // }
         options.id = options.id || `${this.nItems}`;
         options.key = options.key || '';
         li.id = `${this.id}Item${options.id}`;
@@ -65,16 +56,14 @@ class ListGroup extends ToggleElement {
             img.src = options.image;
             img.height = "30";
             img.width = "30";
-            //centerContainer.appendChild(img);
             mainContainer.appendChild(img);
         } else if (typeof options.icon === 'string') {
-            let icon = Util.icon(`${options.icon} pull-left media-object`);
-            //centerContainer.appendChild(icon);
+            let icon = util.icon(`${options.icon} pull-left media-object`);
             mainContainer.appendChild(icon);
         }
 
         //media-body element
-        let body = Util.div(null, 'media-body');
+        let body = util.div('media-body');
 
         //title
         if (options.title) {

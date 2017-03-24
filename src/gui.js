@@ -18,16 +18,14 @@
 
 'use strict';
 
-const Gui = require('./src/Gui.js');
-const gui = require('./src/gui.js');
-const ToggleElement = require('./src/ToggleElement.js');
-const ListGroup = require('./src/ListGroup.js');
-const input = require('./src/input');
-const ExtensionsManager = require('./src/ExtensionsManager.js');
+const Gui = require('./Gui.js');
+const ToggleElement = require('./ToggleElement.js');
+
+let gui = null;
 
 
-exports.gui = gui;
-exports.Gui = Gui;
-exports.ToggleElement = ToggleElement;
-exports.input = input;
-exports.ExtensionsManager = ExtensionsManager;
+if (!gui) {
+    gui = new Gui();
+}
+
+module.exports = gui;

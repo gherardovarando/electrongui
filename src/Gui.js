@@ -19,35 +19,16 @@
 'use strict';
 
 const EventEmitter = require('events');
-const ProgressBar = require('ProgressBar');
-const storage = require('electron-json-storage');
+const ProgressBar = require('./ProgressBar');
 const fs = require('fs');
 const {
     Menu,
-    MenuItem,
-    app
+    MenuItem
 } = require('electron').remote;
-const {
-    dialog
-} = require('electron').remote;
-
-const {
-    ipcRenderer
-} = require("electron");
-
-const Util = require('Util');
 const ToggleElement = require('ToggleElement');
-const {
-    TreeList,
-    TreeListInput
-} = require('TreeList');
-const ListGroup = require('ListGroup');
-const NavGroup = require('NavGroup');
 const ButtonsContainer = require('ButtonsContainer');
-const Sidebar = require('Sidebar');
 
 
-let instance = null;
 let minHeight = 65;
 if (process.platform === 'win32') {
     minHeight = 100;
@@ -67,7 +48,6 @@ class Header extends ToggleElement {
             actionsContainer.id = "header-actions";
             this.element.appendChild(actionsContainer);
         }
-
         this.actionsContainer = new ButtonsContainer(actionsContainer);
     }
 
@@ -116,41 +96,19 @@ class Footer extends ToggleElement {
 
 class Gui extends EventEmitter {
     constructor() {
-        if (!instance) {
-            super(document.getElementsByTagName('BODY')[0]);
-            let header = document.getElementsByClassName("toolbar-header")[0];
-            header.id = "header";
-            this.window = new ToggleElement(document.getElementsByClassName("window-content")[0]);
-            this.win = require('electron').remote.getCurrentWindow();
-            this.header = new Header(header);
-            let footer = document.getElementsByClassName("toolbar-footer")[0];
-            footer.id = "footer";
-            this.footer = new Footer(footer);
-            this.footer.addProgressBar();
-            this.footer.addNotificationBar();
-            this.subMenus = []
-            this.notificationsStack = [];
-            //this.menu(); //create the simple menu
-
-            //save always the current workspace
-            window.addEventListener('beforeunload', (e) => {
-                storage.set('workspace', this.workspace.spaces, (error) => {});
-            });
-
-            instance = this;
-        }
-        return instance;
-    }
-
-    bindExtensionManager() {
-        const ExtensionsManager = require('ExtensionsManager');
-        this.extensionsManager = new ExtensionsManager(this);
-        this.extensionsManager.activate();
-    }
-
-    bindWorkspace() {
-        const Workspace = require('Workspace');
-        this.workspace = new Workspace(this);
+        super();
+        let header = document.getElementsByClassName("toolbar-header")[0];
+        header.id = "header";
+        this.win = require('electron').remote.getCurrentWindow();
+        this.window = new ToggleElement(document.getElementsByClassName("window-content")[0]);
+        this.header = new Header(header);
+        let footer = document.getElementsByClassName("toolbar-footer")[0];
+        footer.id = "footer";
+        this.footer = new Footer(footer);
+        this.footer.addProgressBar();
+        this.footer.addNotificationBar();
+        this.menuItems = [];
+        this.menu = new Menu();
     }
 
     viewTrick() {
@@ -177,153 +135,30 @@ class Gui extends EventEmitter {
         this.footer.progressBar.stopWaiting();
     }
 
-
-    openDevTools() {
-        ipcRenderer.send('openDevTools');
-    }
-
-    menu() {
-        const menu = new Menu();
-        const file = new Menu();
-        const view = new Menu();
-        view.append(new MenuItem({
-            label: "Mini",
-            type: "normal",
-            accelerator: 'F12',
-            click: () => {
-                this.toggleMini();
-            }
-        }));
-        view.append(new MenuItem({
-            label: "Fullscreen",
-            type: "normal",
-            role: "togglefullscreen"
-        }));
-        view.append(new MenuItem({
-            label: "Toggle DevTools",
-            type: "normal",
-            role: 'toggledevtools'
-        }));
-        view.append(new MenuItem({
-            label: "Extensions manager",
-            type: "normal",
-            click: () => {
-                this.extensionsManager.show();
-            }
-        }));
-        // view.append(new MenuItem({
-        //     label: "Workspace",
-        //     type: "normal",
-        //     click: () => {
-        //         this.workspace.show();
-        //     }
-        // }));
-        file.append(new MenuItem({
-            label: "New workspace",
-            type: "normal",
-            accelerator: 'CmdOrCtrl+Shift+N',
-            click: () => {
-                if (this.workspace) {
-                    this.workspace.newChecking();
-                }
-            }
-        }));
-        file.append(new MenuItem({
-            label: "Open workspace",
-            type: "normal",
-            accelerator: 'CmdOrCtrl+Shift+O',
-            click: () => {
-                if (this.workspace) {
-                    this.workspace.loadChecking();
-                }
-            }
-        }));
-        file.append(new MenuItem({
-            label: "Save workspace",
-            type: "normal",
-            accelerator: 'CmdOrCtrl+S',
-            click: () => {
-                if (this.workspace) {
-                    this.workspace.save(this.workspace.spaces.workspace.path);
-                }
-            }
-        }));
-        file.append(new MenuItem({
-            label: "Save workspace as",
-            type: "normal",
-            accelerator: 'CmdOrCtrl+Shift+S',
-            click: () => {
-                if (this.workspace) {
-                    this.workspace.save();
-                }
-            }
-        }));
-        file.append(new MenuItem({
-            label: "Load extension",
-            type: "normal",
-            click: () => {
-                if (this.extensionsManager) {
-                    dialog.showOpenDialog({
-                        title: 'Choose the extesnion file',
-                        filter: [{
-                            name: 'JavaScript',
-                            extensions: ['js', 'JS']
-                        }],
-                        properties: ['openFile']
-                    }, (filePaths) => {
-                        if (filePaths) {
-                            if (filePaths.length > 0) {
-                              this.extensionsManager.loadExtension(filePaths[0]);
-                            }
-                        }
-                    });
-                }
-            }
-        }));
-        file.append(new MenuItem({
-            label: "Quit",
-            type: "normal",
-            accelerator: 'CmdOrCtrl+Q',
-            click: () => {
-                storage.set('workspace', this.workspace.spaces, (error) => {
-                    app.quit();
-                });
-            }
-        }));
-        menu.append(new MenuItem({
-            label: "File",
-            type: "submenu",
-            submenu: file
-        }));
-        menu.append(new MenuItem({
-            label: "View",
-            type: "submenu",
-            submenu: view
-        }));
-        Menu.setApplicationMenu(menu);
-
-    }
-
-    addSubMenu(submenu) {
-        let menu = Menu.getApplicationMenu();
-        menu.append(submenu);
-        this.subMenus.push(submenu);
-        Menu.setApplicationMenu(menu);
-    }
-
-
-
-    removeSubmenu(submenu) {
-        let idx = this.subMenus.indexOf(submenu);
-        if (idx < 0) return;
-        this.menu();
-        this.subMenus.splice(idx, 1);
-        this.menu();
-        let menu = Menu.getApplicationMenu();
-        this.subMenus.map((sub) => {
-            menu.append(sub);
+    reloadMenu() {
+        this.menu = new Menu();
+        this.menuItems.map((item) => {
+            menu.append(item);
         });
         Menu.setApplicationMenu(menu);
+    }
+
+    addMenuItem(item, label) {
+        if (item instanceof MenuItem) {
+            let menu = Menu.getApplicationMenu();
+            menu.append(item);
+            this.menuItems.push(item);
+            Menu.setApplicationMenu(menu);
+        }
+    }
+
+    removeMenuItem(item) {
+        if (item instanceof MenuItem) {
+            let idx = this.menuItems.indexOf(item);
+            if (idx < 0) return;
+            this.menuItems.splice(idx, 1);
+            this.reloadMenu();
+        }
     }
 
     minimize() {
@@ -335,7 +170,6 @@ class Gui extends EventEmitter {
         let size = this.win.getSize();
         this.win.setSize(size[0], 600, true);
     }
-
 
     toggleMini() {
         let size = this.win.getSize();
@@ -350,4 +184,4 @@ class Gui extends EventEmitter {
 
 
 
-module.exports = new Gui();
+module.exports = Gui();

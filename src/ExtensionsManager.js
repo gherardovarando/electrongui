@@ -19,17 +19,20 @@
  */
 
 "use strict";
+const {
+    Menu,
+    MenuItem
+} = require('electron').remote;
 const fs = require('fs');
 const path = require('path');
 const async = require('async');
 const GuiExtension = require('GuiExtension');
 const Sidebar = require('Sidebar');
 const ToggleElement = require('ToggleElement');
-let gui = require('Gui');
+let gui = require('./gui');
 
 
 class ExtensionsManager extends GuiExtension {
-
 
     constructor() {
         super();
@@ -48,6 +51,16 @@ class ExtensionsManager extends GuiExtension {
         //here put actions to load a new extension from custom file.
         this.pane = new ToggleElement(document.createElement('DIV'));
         this.element.appendChild(this.pane.element);
+        this.setMenuLabel('Extensions');
+        this.addMenuItem(new MenuItem({
+            label: 'Manager',
+            click: () => {
+                this.show();
+            }
+        }));
+        this.addMenuItem(new MenuItem({
+            type: 'separator'
+        }));
     }
 
 
@@ -157,6 +170,20 @@ class ExtensionsManager extends GuiExtension {
 
     addExtension(extension) {
         this.sidebar.list.removeItem(extension.constructor.name);
+        let menuitem = new MenuItem({
+            label: extension.constructor.name,
+            type: 'checkbox',
+            click: (item) => {
+              if (item.checked){
+                if (!extension.activate()){
+                  item.checked = false;
+                }
+              }else{
+                extension.deactivate();
+              }
+            }
+        });
+        this.addMenuItem();
         this.sidebar.addItem({
             id: extension.constructor.name,
             icon: extension.icon,
@@ -176,10 +203,12 @@ class ExtensionsManager extends GuiExtension {
 
         extension.on('deactivate', () => {
             this.sidebar.list.deactiveItem(extension.constructor.name);
+            menuitem.checked = false;
         });
 
         extension.on('activate', () => {
             this.sidebar.list.activeItem(extension.constructor.name);
+            menuitem.checked = true;
         });
 
         extension.on('show', () => {

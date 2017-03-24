@@ -19,18 +19,30 @@
 'use strict';
 
 const ToggleElement = require('ToggleElement');
-let gui = require('Gui');
+const {
+    Menu,
+    MenuItem
+} = require('electron').remote;
+let gui = require('./gui.js');
 
 class GuiExtension extends ToggleElement {
     constructor() {
-            let element = document.createElement('DIV');
-            element.className = 'pane-group';
-            element.style.display = 'none'; //hide by default
-            super(element);
-            this.element.id = `${this.constructor.name}Pane`;
-            this.id = this.constructor.name;
-            this.icon = 'fa fa-cubes fa-2x';
-            gui.window.element.appendChild(this.element);
+        let element = document.createElement('DIV');
+        element.className = 'pane-group';
+        element.style.display = 'none'; //hide by default
+        super(element);
+        this.element.id = `${this.constructor.name}Pane`;
+        this.id = this.constructor.name;
+        this.icon = 'fa fa-cubes fa-2x';
+        gui.window.element.appendChild(this.element);
+        this._menuItems = [];
+        this._menu = new Menu();
+        this._menuLabel = 'Extension';
+        this._menuItem = new MenuItem({
+            label: this._menuLabel,
+            type: 'submenu',
+            submenu: this._menu
+        });
     }
 
     activate() {
@@ -41,15 +53,48 @@ class GuiExtension extends ToggleElement {
 
     deactivate() {
         this.hide();
+        this.removeMenu();
         this.active = false;
         try {
             let pane = this.element;
-            Util.empty(pane, pane.firstChild);
-        } catch (e) {
-            console.log();
-        }
+            util.empty(pane, pane.firstChild);
+        } catch (e) {}
         this.emit('deactivate');
         return this.active;
+    }
+
+    _reloadMenu() {
+        this._menu = new Menu();
+        this._menuItems.map((item) => {
+            this._menu.append(item);
+        });
+        this._menuItems = new MenuItem({
+            label: this._menuLabel,
+            type: 'submenu',
+            submenu: this._menu
+        })
+    }
+
+    setMenuLabel(label) {
+        if (typeof label === 'string') {
+            this._menuLabel = label;
+        }
+    }
+
+
+    addMenuItem(item) {
+        if (item instanceof MenuItem) {
+            this._menuItems.push(item);
+            this._reloadMenu();
+        }
+    }
+
+    appendMenu() {
+        gui.addMenuItem(this._menuItem);
+    }
+
+    removeMenu() {
+        gui.removeMenuItem(this._menuItem);
     }
 
     show() {
