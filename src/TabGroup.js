@@ -18,14 +18,14 @@
 
 'use strict';
 
-const Util = require('Util');
-const ToggleElement = require('ToggleElement');
+const util = require('./util.js');
+const ToggleElement = require('./ToggleElement.js');
 
 class TabGroup extends ToggleElement {
 
     constructor(parent) {
         if (parent.appendChild && (typeof parent.id === 'string')) {
-            let element = Util.div(null, `tab-group`);
+            let element = util.div(null, `tab-group`);
             super(element);
             this.tabItems = {};
             this.appendTo(parent);
@@ -37,8 +37,8 @@ class TabGroup extends ToggleElement {
         if(Object.keys(this.tabItems).length === 0){
             cssclass = `${cssclass} active`;
         }
-        
-        let tabItem = Util.div(config.name, cssclass);
+
+        let tabItem = util.div(config.name, cssclass);
         tabItem.addEventListener('click', () => {
             if (!tabItem.classList.contains(`active`)) {
                 Object.keys(this.tabItems).map((key) => {

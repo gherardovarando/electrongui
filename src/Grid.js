@@ -18,7 +18,7 @@
 
 "use strict";
 
-const ToggleElement = require('ToggleElement');
+const ToggleElement = require('./ToggleElement.js');
 
 class Grid extends ToggleElement {
 

@@ -20,7 +20,7 @@
 
 "use strict";
 
-const ToggleElement = require('ToggleElement');
+const ToggleElement = require('./ToggleElement');
 
 class SplitPane extends ToggleElement {
     constructor(element) {

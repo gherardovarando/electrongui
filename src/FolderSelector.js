@@ -18,7 +18,7 @@
 
 "use strict";
 
-const ToggleElement = require('ToggleElement');
+const ToggleElement = require('./ToggleElement.js');
 
 /**
  * Class representing an HTML element to select a folder.

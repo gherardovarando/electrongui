@@ -177,8 +177,7 @@ class ExtensionsManager extends GuiExtension {
             type: 'checkbox',
             click: (item) => {
               if (item.checked){
-                if (!extension.activate()){
-                  item.checked = false;
+                extension.activate();
                 }
               }else{
                 extension.deactivate();

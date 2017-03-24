@@ -18,15 +18,15 @@
 
 'use strict';
 
-const ToggleElement = require('ToggleElement');
-const Util = require('Util');
+const ToggleElement = require('./ToggleElement.js');
+const util = require('./util.js');
 
 class FlexLayout extends ToggleElement {
 
     /**
      * Creates a flexible layout with two parts.
      * top and bottom or left and right.
-     * 
+     *
      * @param {HTMLElement} parent The parent where
      *  this layout is going to be appended.
      * @param {FlexLayout.Type} type The layout type,
@@ -35,19 +35,19 @@ class FlexLayout extends ToggleElement {
      *  in percentage of the first container.
      */
     constructor(parent, type, firstContainerSize) {
-        let element = Util.div(null, 'flex-layout');
+        let element = util.div(null, 'flex-layout');
         super(element);
 
         let isDragging = false;
 
-        this.firstContainer = Util.div();
+        this.firstContainer = util.div();
         element.appendChild(this.firstContainer);
 
-        let drag = Util.div();
-        drag.appendChild(Util.div(null, 'line'));
+        let drag = util.div();
+        drag.appendChild(util.div(null, 'line'));
         element.appendChild(drag);
 
-        this.lastContainer = Util.div();
+        this.lastContainer = util.div();
         element.appendChild(this.lastContainer);
 
         if (type === FlexLayout.Type.HORIZONTAL) {
