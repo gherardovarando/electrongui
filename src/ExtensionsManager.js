@@ -37,6 +37,7 @@ class ExtensionsManager extends GuiExtension {
         super();
         this.extensions = {};
         gui.extensions = this.extensions;
+        this.activate();
     }
 
     activate() {
@@ -60,13 +61,16 @@ class ExtensionsManager extends GuiExtension {
         this.addMenuItem(new MenuItem({
             type: 'separator'
         }));
+
+        gui.addEventListener('loadextension',(e) =>{
+          this.addExtension(e.extension);
+        });
     }
 
 
     deactivate() {
         this.clear();
         super.deactivate();
-
     }
 
     // find possible paths like Gui_Extensions folder in process.resourcesPath and __dirname and user defined folders etc...

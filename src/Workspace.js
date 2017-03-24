@@ -34,10 +34,10 @@ class Workspace extends GuiExtension {
     constructor() {
         super();
         this.locked = true;
-        this.activate();
         window.addEventListener('beforeunload', (e) => {
-            storage.set('workspace', this.workspace.spaces, (error) => {});
+            storage.set('workspace', this.spaces, (error) => {});
         });
+        this.activate();
     }
 
     activate() {
