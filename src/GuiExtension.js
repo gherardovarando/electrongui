@@ -18,7 +18,8 @@
 
 'use strict';
 
-const ToggleElement = require('./ToggleElement');
+const ToggleElement = require('./ToggleElement.js');
+const util = require('./util.js');
 const {
     Menu,
     MenuItem

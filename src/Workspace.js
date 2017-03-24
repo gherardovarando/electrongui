@@ -27,7 +27,7 @@ const {
 } = require('electron').remote;
 const util = require('./util.js');
 //const {TreeList} = require('TreeList');
-const GuiExtension = require('./GuiExtension');
+const GuiExtension = require('./GuiExtension.js');
 let gui = require('./gui');
 
 class Workspace extends GuiExtension {
@@ -228,7 +228,7 @@ class Workspace extends GuiExtension {
 
     load(path) {
         if (typeof path === 'string' && path != '') {
-            wk = Util.readJSONsync(path);
+            wk = util.readJSONsync(path);
             this.spaces = wk;
             storage.set('workspace', this.spaces);
             this.spaces.workspace = this.spaces.workspace || {
@@ -247,7 +247,7 @@ class Workspace extends GuiExtension {
         }, (file) => {
             let wk;
             try {
-                wk = Util.readJSONsync(file[0]);
+                wk = util.readJSONsync(file[0]);
             } catch (e) {
                 gui.notify(e);
                 return;

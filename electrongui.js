@@ -21,13 +21,14 @@
 const Gui = require('./src/Gui.js');
 const gui = require('./src/gui.js');
 const ToggleElement = require('./src/ToggleElement.js');
-const ListGroup = require('./src/ListGroup.js');
+//const ListGroup = require('./src/ListGroup.js');
 const input = require('./src/input');
 const ExtensionsManager = require('./src/ExtensionsManager.js');
-
+const Workspace = require('./src/Workspace.js');
 
 exports.gui = gui;
 exports.Gui = Gui;
 exports.ToggleElement = ToggleElement;
 exports.input = input;
 exports.ExtensionsManager = ExtensionsManager;
+exports.Workspace = Workspace;

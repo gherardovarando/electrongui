@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/gherardovarando/electrongui/issues"
   },
-  "homepage": "https://github.com/gherardovarando/electrongui#readme"
+  "homepage": "https://github.com/gherardovarando/electrongui#readme",
+  "dependencies": {
+    "electron-json-storage": "^3.0.1"
+  }
 }
