@@ -20,7 +20,7 @@
 
 const ButtonsContainer = require('./src/ButtonsContainer.js');
 const ExtensionsManager = require('./src/ExtensionsManager.js');
-const FlexLayut = require('./src/FlexLayut.js');
+const FlexLayut = require('./src/FlexLayout.js');
 const FolderSelector = require('./src/FolderSelector.js');
 const Grid = require('./src/Grid.js');
 const Gui = require('./src/Gui.js');
