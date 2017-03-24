@@ -184,4 +184,4 @@ class Gui extends EventEmitter {
 
 
 
-module.exports = Gui();
+module.exports = Gui;
