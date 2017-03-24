@@ -18,13 +18,13 @@
 
 'use strict';
 const EventEmitter = require('events');
-const Util = require('Util');
+const util = require('./util');
 
 class ToggleElement extends EventEmitter {
     constructor(element) {
         super();
         if (!element){
-          element = Util.div();
+          element = util.div();
         }
         this.element = element;
         this.id = element.id;
@@ -52,7 +52,7 @@ class ToggleElement extends EventEmitter {
 
 
     clear() {
-     Util.empty(this.element,this.element.firstChild);
+     util.empty(this.element,this.element.firstChild);
     }
 
     show() {
