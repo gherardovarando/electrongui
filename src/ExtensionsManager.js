@@ -34,7 +34,19 @@ let gui = require('./gui');
 class ExtensionsManager extends GuiExtension {
 
     constructor() {
-        super();
+        super({
+          menuLabel: 'Extensions',
+          menuTemplate: [
+            {
+              label: 'Manager',
+              click: () => {
+                  this.show();
+              }
+            },{
+              type: 'separator'
+            }
+          ]
+        });
         this.extensions = {};
         gui.extensions = this.extensions;
         this.activate();
@@ -51,27 +63,12 @@ class ExtensionsManager extends GuiExtension {
         //here put actions to load a new extension from custom file.
         this.pane = new ToggleElement(document.createElement('DIV'));
         this.element.appendChild(this.pane.element);
-        this.setMenuLabel('Extensions');
-        this.addMenuItem(new MenuItem({
-            label: 'Manager',
-            click: () => {
-                this.show();
-            }
-        }));
-        this.addMenuItem(new MenuItem({
-            type: 'separator'
-        }));
         this.appendMenu();
         gui.on('load:extension', (e) => {
             this.addExtension(e.extension);
         });
     }
 
-
-    deactivate() {
-        this.clear();
-        super.deactivate();
-    }
 
     // // find possible paths like Gui_Extensions folder in process.resourcesPath and __dirname and user defined folders etc...
     // getExtensionsPaths() {

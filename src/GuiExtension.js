@@ -27,19 +27,22 @@ const {
 let gui = require('./gui.js');
 
 class GuiExtension extends ToggleElement {
-    constructor() {
+    constructor(config) {
         let element = document.createElement('DIV');
         element.className = 'pane-group';
         element.style.display = 'none'; //hide by default
         super(element);
         this.element.id = `${this.constructor.name}Pane`;
         this.id = this.constructor.name;
-        this.icon = 'fa fa-cubes fa-2x';
+        this.icon = config.icon || 'fa fa-cubes';
         gui.container.appendChild(this.element);
         this._menuItems = [];
         this._menuIndx = -1;
         this._menu = new Menu();
-        this._menuLabel = 'Extension';
+        if (config.menuTemplate){
+          this._menu =  Menu.buildFromTemplate(config.menuTemplate);
+        }
+        this._menuLabel = config.menuLabel  || 'Extension';
         this._menuItem = new MenuItem({
             label: this._menuLabel,
             type: 'submenu',
@@ -58,12 +61,9 @@ class GuiExtension extends ToggleElement {
 
     deactivate() {
         this.hide();
+        this.clear();
         this.removeMenu();
         this.active = false;
-        try {
-            let pane = this.element;
-            util.empty(pane, pane.firstChild);
-        } catch (e) {}
         this.emit('deactivate');
         return this.active;
     }
