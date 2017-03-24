@@ -146,7 +146,7 @@ class Gui extends EventEmitter {
 
     addMenuItem(item) {
       console.log(item);
-        if (item instanceof MenuItem) {
+        if (item instanceof MenuItem || true) {
             console.log("done");
             this._menu.append(item);
             this._menuItems.push(item);
