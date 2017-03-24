@@ -109,6 +109,7 @@ class Gui extends EventEmitter {
         this.footer.addNotificationBar();
         this._menuItems = [];
         this._menu = new Menu();
+        Menu.setApplicationMenu(this._menu);
     }
 
     viewTrick() {
