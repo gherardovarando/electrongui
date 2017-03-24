@@ -72,7 +72,7 @@ class GuiExtension extends ToggleElement {
         this._menuItems.map((item) => {
             this._menu.append(item);
         });
-        this._menuItems = new MenuItem({
+        this._menuItem = new MenuItem({
             label: this._menuLabel,
             type: 'submenu',
             submenu: this._menu
