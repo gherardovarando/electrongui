@@ -107,8 +107,8 @@ class Gui extends EventEmitter {
         this.footer = new Footer(footer);
         this.footer.addProgressBar();
         this.footer.addNotificationBar();
-        this.menuItems = [];
-        this.menu = new Menu();
+        this._menuItems = [];
+        this._menu = new Menu();
     }
 
     viewTrick() {
@@ -136,27 +136,26 @@ class Gui extends EventEmitter {
     }
 
     reloadMenu() {
-        this.menu = new Menu();
-        this.menuItems.map((item) => {
-            menu.append(item);
+        this._menu = new Menu();
+        this._menuItems.map((item) => {
+            this._menu.append(item);
         });
-        Menu.setApplicationMenu(menu);
+        Menu.setApplicationMenu(this._menu);
     }
 
     addMenuItem(item, label) {
         if (item instanceof MenuItem) {
-            let menu = Menu.getApplicationMenu();
-            menu.append(item);
-            this.menuItems.push(item);
-            Menu.setApplicationMenu(menu);
+            this._menu.append(item);
+            this._menuItems.push(item);
+            Menu.setApplicationMenu(this._menu);
         }
     }
 
     removeMenuItem(item) {
         if (item instanceof MenuItem) {
-            let idx = this.menuItems.indexOf(item);
+            let idx = this._menuItems.indexOf(item);
             if (idx < 0) return;
-            this.menuItems.splice(idx, 1);
+            this._menuItems.splice(idx, 1);
             this.reloadMenu();
         }
     }
