@@ -33,7 +33,7 @@ class GuiExtension extends ToggleElement {
         element.className = 'pane-group';
         element.style.display = 'none'; //hide by default
         super(element);
-        config = Object.assign(config,{
+        config = Object.assign(config || {},{
           icon: 'fa fa-cubes',
           menuLabel: this.constructor.name
         });
