@@ -41,12 +41,12 @@ class GuiExtension extends ToggleElement {
         this.id = this.constructor.name;
         this.icon = config.icon;
         gui.container.appendChild(this.element);
-        this._menuItems = [];
         this._menuIndx = -1;
         this._menu = new Menu();
         if (config.menuTemplate){
           this._menu =  Menu.buildFromTemplate(config.menuTemplate);
         }
+        this._menuItems = this._menu.items;
         this._menuLabel = config.menuLabel;
         this._menuItem = new MenuItem({
             label: this._menuLabel,
