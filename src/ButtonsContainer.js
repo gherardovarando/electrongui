@@ -18,7 +18,7 @@
 
 'use strict';
 
-const util = require('util');
+const util = require('./util.js');
 const ToggleElement = require('./ToggleElement');
 
 class ButtonsContainer extends ToggleElement {
