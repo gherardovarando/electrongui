@@ -28,14 +28,15 @@ let gui = require('./gui.js');
 
 class GuiExtension extends ToggleElement {
     constructor(config) {
-        config = Object.assign(config,{
-          icon: 'fa fa-cubes',
-          menuLabel: this.constructor.name
-        });
+
         let element = document.createElement('DIV');
         element.className = 'pane-group';
         element.style.display = 'none'; //hide by default
         super(element);
+        config = Object.assign(config,{
+          icon: 'fa fa-cubes',
+          menuLabel: this.constructor.name
+        });
         this.element.id = `${this.constructor.name}Pane`;
         this.id = this.constructor.name;
         this.icon = config.icon;
