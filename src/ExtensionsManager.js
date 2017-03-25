@@ -35,17 +35,15 @@ class ExtensionsManager extends GuiExtension {
 
     constructor() {
         super({
-          menuLabel: 'Extensions',
-          menuTemplate: [
-            {
-              label: 'Manager',
-              click: () => {
-                  this.show();
-              }
-            },{
-              type: 'separator'
-            }
-          ]
+            menuLabel: 'Extensions',
+            menuTemplate: [{
+                label: 'Manager',
+                click: () => {
+                    this.show();
+                }
+            }, {
+                type: 'separator'
+            }]
         });
         this.extensions = {};
         gui.extensions = this.extensions;
@@ -169,6 +167,10 @@ class ExtensionsManager extends GuiExtension {
 
 
     addExtension(extension) {
+        if (this.extensions[extension.constructor.name] instanceof GuiExtension) {
+            this.extensions[extension.constructor.name].deactivate();
+        }
+        this.extensions[extension.constructor.name] = extension;
         this.sidebar.list.removeItem(extension.constructor.name);
         this.removeMenuItem();
         let menuitem = new MenuItem({
@@ -221,12 +223,12 @@ class ExtensionsManager extends GuiExtension {
             });
         });
 
-        extension.on('hide', () => {
-            if (Object.keys(this.extensions).every((key) => {
-                    return this.extensions[key].isHidden();
-                }) && this.isHidden()) {
-            }
-        });
+        // extension.on('hide', () => {
+        //     if (Object.keys(this.extensions).every((key) => {
+        //             return this.extensions[key].isHidden();
+        //         }) && this.isHidden()) {
+        //     }
+        // });
 
         this.emit('add', extension);
 
@@ -243,8 +245,7 @@ class ExtensionsManager extends GuiExtension {
     hide() {
         if (Object.keys(this.extensions).every((key) => {
                 this.extensions[key].isHidden();
-            }) && this.isHidden()) {
-        }
+            }) && this.isHidden()) {}
         super.hide();
     }
 
