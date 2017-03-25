@@ -100,7 +100,6 @@ class GuiExtension extends ToggleElement {
     }
 
     removeMenuItem(item) {
-        this._removeMenu(); //remove before it changes
         if (item) {
             let idx = this._menuItems.indexOf(item);
             if (idx < 0) return;
