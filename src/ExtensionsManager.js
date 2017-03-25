@@ -132,7 +132,7 @@ class ExtensionsManager extends GuiExtension {
                 this.pane.clear();
                 this, pane.appendChild(util.div(null, extension.constructor.name))
                 this.pane.show();
-            }
+            },
             onclick: {
                 active: () => {
                     extension.activate();
