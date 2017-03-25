@@ -28,7 +28,8 @@ const path = require('path');
 const GuiExtension = require('./GuiExtension');
 const Sidebar = require('./Sidebar.js');
 const ToggleElement = require('./ToggleElement.js');
-let gui = require('./gui');
+const util = require('./util.js');
+const gui = require('./gui');
 
 
 class ExtensionsManager extends GuiExtension {
@@ -68,65 +69,6 @@ class ExtensionsManager extends GuiExtension {
     }
 
 
-    // // find possible paths like Gui_Extensions folder in process.resourcesPath and __dirname and user defined folders etc...
-    // getExtensionsPaths() {
-    //     let paths = [path.join(__dirname, '..', 'extensions'), path.join(process.resourcesPath, 'extensions')];
-    //     return paths;
-    // }
-    //
-    // getExtensionsFromPath(dir, callback) {
-    //     let promises = [];
-    //     let files; //all the files in the directory
-    //     try {
-    //         files = fs.readdirSync(dir);
-    //     } catch (e) {
-    //         callback(e);
-    //         return;
-    //     }
-    //
-    //     files.map((file) => {
-    //         let pr = new Promise((res) => {
-    //             let complete = path.join(dir, file);
-    //             fs.stat(complete, (err, stats) => {
-    //                 if (err) {
-    //                     res();
-    //                     return;
-    //                 } else {
-    //                     if (stats.isFile()) {
-    //                         this.loadExtension(complete, res);
-    //                     } else if (stats.isDirectory()) {
-    //                         if (file.startsWith('_')) {
-    //                             res();
-    //                             return;
-    //                         }
-    //                         this.getExtensionsFromPath(complete, res);
-    //                     }
-    //                 }
-    //             });
-    //         });
-    //         promises.push(pr);
-    //     });
-    //     Promise.all(promises).then(() => {
-    //         if (typeof callback === 'function') {
-    //             callback();
-    //         }
-    //
-    //     });
-    // }
-
-    // loadAllExtensions() {
-    //     let loadPromises = [];
-    //     this.getExtensionsPaths().map((dir) => {
-    //         let prom = new Promise((resLoadDir) => {
-    //             this.getExtensionsFromPath(dir, resLoadDir);
-    //         });
-    //         loadPromises.push(prom);
-    //     });
-    //     Promise.all(loadPromises).then(() => {
-    //         this.emit('load:all');
-    //     });
-    // }
-
     loadExtension(extPath, cl) {
         let ext;
         if (typeof extPath === 'string') {
@@ -134,12 +76,7 @@ class ExtensionsManager extends GuiExtension {
                 let tmp = require(extPath);
                 if (tmp.prototype instanceof GuiExtension) {
                     ext = new tmp();
-                    if (this.extensions[ext.constructor.name] instanceof GuiExtension) {
-                        this.extensions[ext.constructor.name].deactivate();
-                    }
-                    this.extensions[ext.constructor.name] = ext;
-                    // this.addExtension(this.extensions[ext.constructor.name]);
-                    // this.emit('load', this.extensions[ext.constructor.name]);
+                    this.addExtension(this.extensions[ext.constructor.name]);
                 }
             } catch (e) {
                 console.log(e);
@@ -191,6 +128,11 @@ class ExtensionsManager extends GuiExtension {
             title: extension.constructor.name,
             toggle: true,
             active: extension.active,
+            onmouseover: () => {
+                this.pane.clear();
+                this, pane.appendChild(util.div(null, extension.constructor.name))
+                this.pane.show();
+            }
             onclick: {
                 active: () => {
                     extension.activate();

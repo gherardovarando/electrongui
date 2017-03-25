@@ -109,19 +109,6 @@ class ListGroup extends ToggleElement {
         if (options.toggle) {
             li.role = 'button';
 
-            // if (options.toggle.expand) {
-            //     if (item.details) {
-            //         detailsContainer.classList.add('expandable');
-            //
-            //         item.hideDetails = () => {
-            //             let caret = '<i class="fa fa-caret-right" aria-hidden="true"></i>';
-            //             leftContainer.innerHTML = caret;
-            //             item.details.hide();
-            //         }
-            //         item.hideDetails();
-            //     }
-            // }
-
             li.onclick = (e) => {
                 let done = false;
                 if (li.classList.contains('active')) {
@@ -153,18 +140,24 @@ class ListGroup extends ToggleElement {
             li.classList.add('active');
         }
 
-        if (options.ondblclick) {
+        if (typeof options.ondblclick === 'function') {
             li.role = 'button';
             li.ondblclick = (e) => {
                 options.ondblclick(item, e)
             };
         }
 
-        if (options.oncontextmenu) {
+        if (typeof options.oncontextmenu === 'function') {
             li.role = 'button';
             li.oncontextmenu = (e) => {
                 options.oncontextmenu(item, e);
             }
+        }
+
+        if (typeof options.onmouseover  === 'function'){
+          li.onmouseover = (e) =>{
+            options.onmouseover(item,e);
+          }
         }
 
         item.key = options.key; //set the search key
