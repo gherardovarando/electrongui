@@ -235,7 +235,6 @@ class ExtensionsManager extends GuiExtension {
 
     show() {
         this.hideAll();
-        this.update();
         this.sidebar.show();
         super.show();
     }
@@ -249,14 +248,6 @@ class ExtensionsManager extends GuiExtension {
     }
 
 
-    update() {
-        let indx = 0;
-        for (let i in this.extensions) {
-            indx++;
-            this.sidebar.list.removeItem(this.extensions[i].constructor.name);
-            this.addExtension(this.extensions[i]);
-        }
-    }
 
 
 
