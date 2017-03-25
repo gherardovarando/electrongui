@@ -169,10 +169,9 @@ class ExtensionsManager extends GuiExtension {
     addExtension(extension) {
         if (this.extensions[extension.constructor.name] instanceof GuiExtension) {
             this.extensions[extension.constructor.name].deactivate();
+            this.sidebar.list.removeItem(extension.constructor.name);
         }
         this.extensions[extension.constructor.name] = extension;
-        this.sidebar.list.removeItem(extension.constructor.name);
-        this.removeMenuItem();
         let menuitem = new MenuItem({
             label: extension.constructor.name,
             type: 'checkbox',
