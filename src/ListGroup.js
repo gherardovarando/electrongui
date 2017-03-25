@@ -82,7 +82,7 @@ class ListGroup extends ToggleElement {
             if (typeof options.subtitle.appendChild === 'function') {
                 body.appendChild(options.subtitle);
             } else {
-                let subtitle = util.div('',options.subtitle);
+                let subtitle = util.div('', options.subtitle);
                 body.appendChild(subtitle);
             }
         }
@@ -132,7 +132,7 @@ class ListGroup extends ToggleElement {
                     }
                 } else {
                     if (options.onclick && typeof options.onclick.active === 'function') {
-                        options.onclick.active(item,e);
+                        options.onclick.active(item, e);
                         done = true;
                     }
                     li.classList.add('active');
@@ -200,7 +200,7 @@ class ListGroup extends ToggleElement {
         if (id === undefined || id === null) {
             return;
         }
-        if (this.items[id]) {
+        if (this.items[id] instanceof ToggleElement) {
             this.removeKey(id, this.items[id].element.getElementsByTagName('STRONG')[0].innerHTML);
             this.items[id].element.getElementsByTagName('STRONG')[0].innerHTML = newtitle;
             this.setKey(id, newtitle, true);
@@ -208,20 +208,40 @@ class ListGroup extends ToggleElement {
     }
 
     showItem(id) {
-        this.items[id].show();
+        if (id === undefined || id === null) {
+            return;
+        }
+        if (this.items[id] instanceof ToggleElement) {
+            this.items[id].show();
+        }
     }
 
     hideitem(id) {
-        this.items[id].hide();
+        if (id === undefined || id === null) {
+            return;
+        }
+        if (this.items[id] instanceof ToggleElement) {
+            this.items[id].hide();
+        }
     }
 
     activeItem(id) {
-        this.items[id].element.classList.add('active');
+        if (id === undefined || id === null) {
+            return;
+        }
+        if (this.items[id] instanceof ToggleElement) {
+            this.items[id].element.classList.add('active');
+        }
     }
 
 
     deactiveItem(id) {
-        this.items[id].element.classList.remove('active');
+        if (id === undefined || id === null) {
+            return;
+        }
+        if (this.items[id] instanceof ToggleElement) {
+            this.items[id].element.classList.remove('active');
+        }
     }
 
 
@@ -272,7 +292,7 @@ class ListGroup extends ToggleElement {
             this.element.removeChild(item.element);
             delete this.items[id];
             delete this.items[id];
-            this.nItems--;
+            //this.nItems--;
         }
     }
 
