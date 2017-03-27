@@ -145,28 +145,28 @@ class Gui extends EventEmitter {
             this._menuItems.push(item);
             Menu.setApplicationMenu(this._menu);
             return (this._menuItems.length - 1);
-        }else{
-          return -1;
+        } else {
+            return -1;
         }
     }
 
     removeMenuItem(item) {
         let idx = -1;
         if (item >= 0) {
-          idx = item;
-        }else{
-          let idx = this._menuItems.indexOf(item);
+            idx = item;
+        } else {
+            let idx = this._menuItems.indexOf(item);
         }
         if (idx < 0) return;
         this._menuItems.splice(idx, 1);
         this.reloadMenu();
     }
 
-    updateMenuItem(idx, item){
-      if (item && (idx >=0) && (idx<this._menuItems.length)){
-        this._menuItems[idx] = item;
-        this.reloadMenu();
-      }
+    updateMenuItem(idx, item) {
+        if (item && (idx >= 0) && (idx < this._menuItems.length)) {
+            this._menuItems[idx] = item;
+            this.reloadMenu();
+        }
     }
 
 

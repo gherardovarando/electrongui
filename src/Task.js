@@ -379,7 +379,7 @@ Task.TaskDOMElement = class {
         this.task.on("progress", () => {
             this.progressBar.stopWaiting();
             this.progressBar.setBar(this.task.progress);
-            this.finishTimeContainer.innerHTML = `<strong>Expeted finish in: </strong>${util.timeInterval(this.task.estimateFinishTime())}`;
+            this.finishTimeContainer.innerHTML = `<strong>Expeted finish in: </strong>${util.parseTimeInterval(this.task.estimateFinishTime())}`;
         });
     }
 
