@@ -123,7 +123,7 @@ class ExtensionsManager extends GuiExtension {
         this.addMenuItem(menuitem);
         this.sidebar.addItem({
             id: extension.constructor.name,
-            icon: extension.icon,
+            icon: `${extension.icon} fa-2x`,
             image: extension.image,
             title: extension.constructor.name,
             toggle: true,

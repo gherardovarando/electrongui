@@ -34,7 +34,7 @@ const toggleButtonId = 'tasksPageToggleButton';
 const gui = require('./gui.js');
 
 
-class tasksPage extends GuiExtension {
+class TasksViewer extends GuiExtension {
 
     constructor() {
         super({
@@ -138,4 +138,4 @@ class tasksPage extends GuiExtension {
 
 }
 
-module.exports = tasksPage;
+module.exports = TasksViewer;
