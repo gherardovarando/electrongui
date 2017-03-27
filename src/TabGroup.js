@@ -25,7 +25,7 @@ class TabGroup extends ToggleElement {
 
     constructor(parent) {
         if (parent.appendChild && (typeof parent.id === 'string')) {
-            let element = util.div(null, `tab-group`);
+            let element = util.div(`tab-group`);
             super(element);
             this.tabItems = {};
             this.appendTo(parent);
@@ -38,7 +38,7 @@ class TabGroup extends ToggleElement {
             cssclass = `${cssclass} active`;
         }
 
-        let tabItem = util.div(config.name, cssclass);
+        let tabItem = util.div(cssclass, config.name);
         tabItem.addEventListener('click', () => {
             if (!tabItem.classList.contains(`active`)) {
                 Object.keys(this.tabItems).map((key) => {

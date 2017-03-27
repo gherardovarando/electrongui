@@ -35,7 +35,7 @@ class FlexLayout extends ToggleElement {
      *  in percentage of the first container.
      */
     constructor(parent, type, firstContainerSize) {
-        let element = util.div(null, 'flex-layout');
+        let element = util.div('flex-layout');
         super(element);
 
         let isDragging = false;
@@ -44,7 +44,7 @@ class FlexLayout extends ToggleElement {
         element.appendChild(this.firstContainer);
 
         let drag = util.div();
-        drag.appendChild(util.div(null, 'line'));
+        drag.appendChild(util.div('line'));
         element.appendChild(drag);
 
         this.lastContainer = util.div();
