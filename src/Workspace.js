@@ -57,7 +57,7 @@ class Workspace extends GuiExtension {
         });
 
         gui.header.actionsContainer.addButton({
-            id:'save',
+            id: 'save',
             groupId: 'basetools',
             icon: 'fa fa-save',
             action: () => {
@@ -100,14 +100,25 @@ class Workspace extends GuiExtension {
     }
 
     addSpace(extension, object, overwrite) {
-        if (object) {
-            if (!overwrite && this.spaces[extension.constructor.name]) return;
-            this.spaces[extension.constructor.name] = object;
+        if (extension instanceof GuiExtension) {
+            if (object) {
+                if (!overwrite && this.spaces[extension.constructor.name]) return;
+                this.spaces[extension.constructor.name] = object;
 
-        } else {
-            if (extension._space) {
-                this.addSpace(extension, extension._space);
+            } else {
+                if (extension._space) {
+                    this.addSpace(extension, extension._space);
+                }
             }
+        }
+    }
+
+    getSpace(extension) {
+
+        if (extension instanceof GuiExtension) {
+            return this.spaces[extension.constructor.name];
+        } else if (typeof extension === 'string') {
+            return this.spaces[extension];
         }
     }
 
