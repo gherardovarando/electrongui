@@ -20,7 +20,7 @@
 
 const Task = require('./Task.js');
 const EventEmitter = require('events');
-const util = require('util');
+const util = require('./util');
 let instance = null;
 
 /**
