@@ -154,10 +154,10 @@ class ListGroup extends ToggleElement {
             }
         }
 
-        if (typeof options.onmouseover  === 'function'){
-          li.onmouseover = (e) =>{
-            options.onmouseover(item,e);
-          }
+        if (typeof options.onmouseover === 'function') {
+            li.onmouseover = (e) => {
+                options.onmouseover(item, e);
+            }
         }
 
         item.key = options.key; //set the search key
@@ -256,13 +256,23 @@ class ListGroup extends ToggleElement {
         this.forEach(it => it.element.classList.remove('active'));
     }
 
-    hideDetails(item) {
+    hideDetails(id) {
+        if (id === undefined || id === null) {
+            return;
+        }
+        this.items[id].details.hide();
+    }
 
+    showDetails(id) {
+        if (id === undefined || id === null) {
+            return;
+        }
+        this.items[id].details.show();
     }
 
     hideAllDetails() {
         this.forEach((it) => {
-            it.hideDetails();
+            it.details.hide();
         });
     }
 
