@@ -20,6 +20,7 @@
 
 exports.selectInput = function(options) {
     let inp = document.createElement('SELECT');
+    option.id = options.id || '';
     inp.className = options.className;
     inp.onchange = () => {
         if (typeof options.onchange === 'function') {
@@ -57,8 +58,9 @@ exports.selectInput = function(options) {
 
     if (options.parent) {
         if (options.parent.appendChild) {
-            let l = document.createElement('DIV');
+            let l = document.createElement('LABEL');
             l.className = 'input-label';
+            l.htmlFor = options.id;
             l.innerHTML = options.label;
             l.appendChild(inp);
             options.parent.appendChild(l);
@@ -72,7 +74,7 @@ exports.selectInput = function(options) {
 exports.input = function(options) {
     let inp = document.createElement('INPUT');
     inp.type = options.type || 'text';
-    inp.id = options.id;
+    inp.id = options.id || '';
     inp.className = options.className;
     inp.value = options.value;
     if (inp.type === 'date') {
@@ -81,6 +83,7 @@ exports.input = function(options) {
     inp.placeholder = options.placeholder || '';
     inp.min = options.min;
     inp.max = options.max;
+    inp.title = options.title || options.label || '';
     inp.step = options.step;
     inp.checked = options.checked;
     inp.readOnly = options.readOnly || false;
@@ -114,8 +117,9 @@ exports.input = function(options) {
 
     if (options.parent) {
         if (options.parent.appendChild) {
-            let l = document.createElement('DIV');
+            let l = document.createElement('LABEL');
             l.className = 'input-label';
+            l.htmlFor = options.id || '';
             l.innerHTML = options.label;
             l.appendChild(inp);
             options.parent.appendChild(l);

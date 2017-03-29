@@ -188,6 +188,12 @@ class ListGroup extends ToggleElement {
         }
     }
 
+    clean() {
+        this.forEach((it) => {
+            removeItem(it);
+        });
+    }
+
 
     setTitle(id, newtitle) {
         if (id === undefined || id === null) {
@@ -287,7 +293,14 @@ class ListGroup extends ToggleElement {
         if (id === undefined || id === null) {
             return;
         }
-        let item = this.items[id];
+        let item;
+        if (id instanceof ToggleElement) {
+            item = this.items[id];
+        } else if (typeof id === 'string') {
+            item = this.items[id];
+        } else {
+            return;
+        }
         if (item === undefined || item === null) {
             return;
         }
