@@ -107,10 +107,11 @@ class Gui extends EventEmitter {
         Menu.setApplicationMenu(this._menu);
     }
 
-    viewTrick() {
+    viewTrick() { //force the element to be arranged properly, fix some problem with leaflet's map
         let size = this.win.getSize();
         this.win.setSize(size[0] + 1, size[1] + 1);
-        this.win.setSize(size[0] - 1, size[1] - 1);
+        this.win.setSize(size[0] , size[1] );
+        //fix for windows behaviour, in linux is ok
     }
 
 
