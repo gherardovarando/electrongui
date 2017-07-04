@@ -154,7 +154,7 @@ class ExtensionsManager extends GuiExtension {
         });
 
         extension.on('show', () => {
-            gui.viewTrick();
+            //gui.viewTrick();
             this.hide(); //hide the extensions manager
             //and all the other extensions:
             Object.keys(this.extensions).map((k) => {

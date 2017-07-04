@@ -67,14 +67,16 @@ class ListGroup extends ToggleElement {
 
         //title
         if (options.title) {
+            let title;
             if (typeof options.title.appendChild === 'function') {
-                body.appendChild(options.title);
+                title = options.title.element || options.title;
             } else {
-                let title = document.createElement('STRONG');
+                title = document.createElement('STRONG');
                 title.innerHTML = options.title;
-                body.appendChild(title);
                 options.key = `${options.key} ${options.title}`;
             }
+            body.appendChild(title);
+            item._title = title;
         }
 
         //subtitle
@@ -200,8 +202,8 @@ class ListGroup extends ToggleElement {
             return;
         }
         if (this.items[id] instanceof ToggleElement) {
-            this.removeKey(id, this.items[id].element.getElementsByTagName('STRONG')[0].innerHTML);
-            this.items[id].element.getElementsByTagName('STRONG')[0].innerHTML = newtitle;
+            this.removeKey(id, this.items[id]._title.innerHTML);
+            this.items[id]._title.innerHTML = newtitle;
             this.setKey(id, newtitle, true);
         }
     }
