@@ -212,15 +212,14 @@ class ListGroup extends ToggleElement {
             return;
         }
         if (this.items[id] instanceof ToggleElement) {
-<<<<<<< HEAD
             this.removeKey(id, this.items[id]._title.innerHTML);
             this.items[id]._title.innerHTML = newtitle;
-=======
-            this.removeKey(id, this.items[id].element.getElementsByClassName('list-group-item-title')[0].innerHTML);
-            this.removeKey(id, this.items[id].element.getElementsByClassName('list-group-item-title')[0].value);
-            this.items[id].element.getElementsByClassName('list-group-item-title')[0].innerHTML = newtitle;
-            this.items[id].element.getElementsByClassName('list-group-item-title')[0].value = newtitle;
->>>>>>> 50afb272e40eae51dadccf94596d0518cad5de53
+
+            // this.removeKey(id, this.items[id].element.getElementsByClassName('list-group-item-title')[0].innerHTML);
+            // this.removeKey(id, this.items[id].element.getElementsByClassName('list-group-item-title')[0].value);
+            // this.items[id].element.getElementsByClassName('list-group-item-title')[0].innerHTML = newtitle;
+            // this.items[id].element.getElementsByClassName('list-group-item-title')[0].value = newtitle;
+
             this.setKey(id, newtitle, true);
         }
     }
