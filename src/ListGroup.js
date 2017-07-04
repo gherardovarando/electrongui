@@ -46,7 +46,9 @@ class ListGroup extends ToggleElement {
         let detailsContainer = util.div('details');
         li.appendChild(detailsContainer);
 
-        options.id = options.id || `${this.nItems}`;
+        if (options.id === null || options.id === undefined) {
+            options.id = this.nItems++;
+        }
         options.key = options.key || '';
         li.id = `${this.id}Item${options.id}`;
 
@@ -70,9 +72,17 @@ class ListGroup extends ToggleElement {
             let title;
             if (typeof options.title.appendChild === 'function') {
                 title = options.title.element || options.title;
+                body.appendChild(options.title);
+                if (options.title.classList) {
+                    options.title.classList.add('list-group-item-title');
+                } else if (options.title.element && options.title.element.classList) {
+                    options.title.element.classList.add('list-group-item-title');
+                }
             } else {
                 title = document.createElement('STRONG');
                 title.innerHTML = options.title;
+                title.classList.add('list-group-item-title');
+                body.appendChild(title);
                 options.key = `${options.key} ${options.title}`;
             }
             body.appendChild(title);
@@ -202,8 +212,15 @@ class ListGroup extends ToggleElement {
             return;
         }
         if (this.items[id] instanceof ToggleElement) {
+<<<<<<< HEAD
             this.removeKey(id, this.items[id]._title.innerHTML);
             this.items[id]._title.innerHTML = newtitle;
+=======
+            this.removeKey(id, this.items[id].element.getElementsByClassName('list-group-item-title')[0].innerHTML);
+            this.removeKey(id, this.items[id].element.getElementsByClassName('list-group-item-title')[0].value);
+            this.items[id].element.getElementsByClassName('list-group-item-title')[0].innerHTML = newtitle;
+            this.items[id].element.getElementsByClassName('list-group-item-title')[0].value = newtitle;
+>>>>>>> 50afb272e40eae51dadccf94596d0518cad5de53
             this.setKey(id, newtitle, true);
         }
     }
@@ -229,6 +246,9 @@ class ListGroup extends ToggleElement {
     activeItem(id) {
         if (id === undefined || id === null) {
             return;
+        }
+        if (id instanceof ToggleElement) {
+            id.element.classList.add('active');
         }
         if (this.items[id] instanceof ToggleElement) {
             this.items[id].element.classList.add('active');

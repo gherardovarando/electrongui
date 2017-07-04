@@ -83,6 +83,12 @@ exports.input = function(options) {
     inp.placeholder = options.placeholder || '';
     inp.min = options.min;
     inp.max = options.max;
+    if (options.width){
+      inp.width = options.width;
+    }
+    if (options.height){
+      inp.height = options.height;
+    }
     inp.title = options.title || options.label || '';
     inp.step = options.step;
     inp.checked = options.checked;
@@ -118,7 +124,6 @@ exports.input = function(options) {
     if (options.parent) {
         if (options.parent.appendChild) {
             let l = document.createElement('LABEL');
-            l.className = 'input-label';
             l.htmlFor = options.id || '';
             l.innerHTML = options.label;
             l.appendChild(inp);
