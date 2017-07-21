@@ -33,17 +33,19 @@ class GuiExtension extends ToggleElement {
         element.style.display = 'none'; //hide by default
         super(element);
         config = Object.assign({
-          icon: 'fa fa-cubes',
-          menuLabel: this.constructor.name
+            icon: 'fa fa-cubes',
+            menuLabel: this.constructor.name
         }, config);
         this.element.id = `${this.constructor.name}Pane`;
         this.id = this.constructor.name;
         this.icon = config.icon;
+        this.image = config.image;
+        this.author = config.author;
         gui.container.appendChild(this.element);
         this._menuIndx = -1;
         this._menu = new Menu();
-        if (config.menuTemplate){
-          this._menu =  Menu.buildFromTemplate(config.menuTemplate);
+        if (config.menuTemplate) {
+            this._menu = Menu.buildFromTemplate(config.menuTemplate);
         }
         this._menuItems = this._menu.items;
         this._menuLabel = config.menuLabel;

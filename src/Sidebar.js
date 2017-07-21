@@ -39,15 +39,51 @@ class Sidebar extends ToggleElement {
 
     }
 
-    addList(id) {
-        if (id === 'nav' || id === 'element' || id === 'parent') return;
-        this[id || 'list'] = new ListGroup(this.element);
-
+    addList() {
+        switch (typeof arguments[0]) {
+            case 'string':
+                let id = arguments[0];
+                if (id === 'nav' || id === 'element' || id === 'parent') return;
+                let list = new ListGroup(id || `${this.element.id}list`, this.element);
+                this[id || 'list'] = list;
+                this.appendChild(list);
+                break;
+            case 'object':
+                if (arguments[0] instanceof ListGroup) {
+                    this[arguments[0].id] = arguments[0];
+                    this.appendChild(arguments[0]);
+                } else {
+                    this['list'] = new ListGroup('list', this.element);
+                    this.appendChild(this['list']);
+                }
+            default:
+                this['list'] = new ListGroup('list', this.element);
+                this.appendChild(this['list']);
+        }
     }
 
-    addNav(id) {
-        if (id === 'list' || id === 'element' || id === 'parent') return;
-        this[id || 'nav'] = new NavGroup(this.element);
+    addNav() {
+        switch (typeof arguments[0]) {
+            case 'string':
+                let id = arguments[0];
+                if (id === 'list' || id === 'element' || id === 'parent') return;
+                let nav = new NavGroup(id || `${this.element.id}nav`, this.element);
+                this[id || 'nav'] = nav;
+                this.appendChild(nav);
+                break;
+            case 'object':
+                if (arguments[0] instanceof NavGroup) {
+                    this[arguments[0].id] = arguments[0];
+                    this.appendChild(arguments[0]);
+                } else {
+                    this['nav'] = new NavGroup(`nav`, this.element);
+                    this.appendChild(this['nav']);
+
+                }
+            default:
+                this['nav'] = new NavGroup(`nav`, this.element);
+                this.appendChild(this['nav']);
+        }
     }
 
 

@@ -53,8 +53,8 @@ class ExtensionsManager extends GuiExtension {
 
     activate() {
         this.sidebar = new Sidebar(this.element);
-        this.sidebar.addList();
-        this.sidebar.hide();
+        this.sidebar.addList('list');
+        //this.sidebar.hide();
         this.sidebar.list.addSearch({
             placeholder: 'Search extension'
         });
@@ -130,7 +130,7 @@ class ExtensionsManager extends GuiExtension {
             active: extension.active,
             onmouseover: () => {
                 this.pane.clear();
-                this.pane.appendChild(util.div(null, extension.constructor.name))
+                this.pane.appendChild(util.div('padded', `Author: ${extension.author}`))
                 this.pane.show();
             },
             onclick: {

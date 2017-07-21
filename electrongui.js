@@ -42,6 +42,7 @@ const ToggleElement = require('./src/ToggleElement.js');
 const TreeList = require('./src/TreeList.js');
 const util = require('./src/util.js');
 const Workspace = require('./src/Workspace.js');
+const colors = require('./src/Colors.js');
 
 exports.ButtonsContainer = ButtonsContainer;
 exports.ExtensionsManager = ExtensionsManager;
@@ -69,3 +70,4 @@ exports.util = util;
 exports.Workspace = Workspace;
 exports.Task = Task;
 exports.TaskManager = TaskManager;
+exports.colors = colors;

@@ -22,21 +22,22 @@ const util = require('./util.js');
 const ToggleElement = require('./ToggleElement.js');
 
 class NavGroup extends ToggleElement {
-    constructor(parent) {
-        if (parent.appendChild && (typeof parent.id === 'string')) {
-            //if (document.getElementById(`${parent.id}Nav`)) return;
-            let element = document.createElement('NAV');
-            element.className = 'nav-group';
-            element.id = `${parent.id}Nav`;
-            super(element);
-            this.id = `${parent.id}Nav`;
-            this.items = {};
-            this.nItems = 0;
-            this.title = " ";
-            let h5 = document.createElement("H5");
-            h5.className = "nav-group-title";
-            h5.innerHTML = this.title;
-            this.element.appendChild(h5);
+    constructor(id, parent) {
+
+        //if (document.getElementById(`${parent.id}Nav`)) return;
+        let element = document.createElement('NAV');
+        element.className = 'nav-group';
+        element.id = `${id}`;
+        super(element);
+        this.id = `${id}`;
+        this.items = {};
+        this.nItems = 0;
+        this.title = " ";
+        let h5 = document.createElement("H5");
+        h5.className = "nav-group-title";
+        h5.innerHTML = this.title;
+        this.element.appendChild(h5);
+        if (typeof parent.appendChild === 'function') {
             this.appendTo(parent)
         }
     }

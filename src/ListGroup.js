@@ -22,16 +22,30 @@ const util = require('./util.js');
 const ToggleElement = require('./ToggleElement.js');
 
 class ListGroup extends ToggleElement {
-    constructor(parent) {
-        if (parent.appendChild) {
-            let element = document.createElement('UL');
-            element.className = 'list-group';
-            element.id = `${parent.id}List`;
-            super(element);
-            this.id = `${parent.id}List`;
-            this.items = {};
-            this.nItems = 0;
-            this.appendTo(parent);
+    constructor() {
+        let id;
+        let parent;
+        if (typeof arguments[0] == 'string') {
+            id = arguments[0];
+            if (arguments[1]) {
+                if (arguments[1].appendChild) {
+                    parent = arguments[0];
+                }
+            }
+        } else if (arguments[0].appendChild) {
+            parent = arguments[0];
+        }
+        let element = document.createElement('UL');
+        element.className = 'list-group';
+        element.id = `${id}`;
+        super(element);
+        this.id = `${id}`;
+        this.items = {};
+        this.nItems = 0;
+        if (parent) {
+            if (typeof parent.appendChild === 'function') {
+                this.appendTo(parent);
+            }
         }
     }
 
@@ -299,7 +313,9 @@ class ListGroup extends ToggleElement {
 
     hideAllDetails() {
         this.forEach((it) => {
-            it.details.hide();
+            if (it.details instanceof ToggleElement) {
+                it.details.hide();
+            }
         });
     }
 
@@ -316,11 +332,9 @@ class ListGroup extends ToggleElement {
         }
         let item;
         if (id instanceof ToggleElement) {
-            item = this.items[id];
-        } else if (typeof id === 'string') {
-            item = this.items[id];
+            item = id;
         } else {
-            return;
+            item = this.items[id];
         }
         if (item === undefined || item === null) {
             return;

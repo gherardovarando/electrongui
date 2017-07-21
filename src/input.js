@@ -18,10 +18,62 @@
 
 'use strict';
 
+
+
+
+exports.checkButton = function(options) {
+    let cont = document.createElement('DIV');
+    cont.classList.add('btn-group');
+    let inp = document.createElement('BUTTON');
+    inp.className = options.className || '';
+    inp.id = options.id || '';
+    inp.classList.add('btn');
+    inp.classList.add('check-button');
+    if (options.active) {
+        inp.classList.add('active');
+    }
+    options.id = options.id || '';
+    inp.id = options.id;
+    inp.type = 'button';
+    inp.innerHTML = options.text;
+    inp.onclick = () => {
+        if (inp.classList.contains('active')) {
+            inp.classList.remove('active');
+
+            if (typeof options.onactivate === 'function') {
+                options.ondeactivate(inp, inp.classList.contains('active'));
+            }
+        } else {
+            inp.classList.add('active');
+            if (typeof options.ondeactivate === 'function') {
+                options.onactivate(inp);
+            }
+        }
+        if (typeof options.onclick === 'function') {
+            options.onclik(inp, !inp.classList.contains('active'));
+        }
+    }
+    if (options.autofocus) {
+        inp.autofocus = true;
+    }
+    cont.appendChild(inp);
+    if (options.parent) {
+        if (options.parent.appendChild) {
+            options.parent.appendChild(cont);
+        }
+    } else {
+        return cont;
+    }
+}
+
+
 exports.selectInput = function(options) {
     let inp = document.createElement('SELECT');
-    option.id = options.id || '';
-    inp.className = options.className;
+    options.id = options.id || '';
+    inp.className = options.className || '';
+    if (options.autofocus) {
+        inp.autofocus = true;
+    }
     inp.onchange = () => {
         if (typeof options.onchange === 'function') {
             options.onchange(inp);
@@ -77,17 +129,20 @@ exports.input = function(options) {
     inp.id = options.id || '';
     inp.className = options.className;
     inp.value = options.value;
+    if (options.autofocus) {
+        inp.autofocus = true;
+    }
     if (inp.type === 'date') {
         inp.valueAsDate = options.valueAsDate; //for type=date
     }
     inp.placeholder = options.placeholder || '';
     inp.min = options.min;
     inp.max = options.max;
-    if (options.width){
-      inp.width = options.width;
+    if (options.width) {
+        inp.width = options.width;
     }
-    if (options.height){
-      inp.height = options.height;
+    if (options.height) {
+        inp.height = options.height;
     }
     inp.title = options.title || options.label || '';
     inp.step = options.step;
@@ -114,7 +169,11 @@ exports.input = function(options) {
             options.ondblclick(inp, event);
         }
     }
-
+    inp.onfocusout = (event) => {
+        if (typeof options.onfocusout === 'function') {
+            options.onfocusout(inp, event);
+        }
+    }
     inp.onclick = (event) => {
         if (typeof options.onclick === 'function') {
             options.onclick(inp, event);
@@ -124,6 +183,7 @@ exports.input = function(options) {
     if (options.parent) {
         if (options.parent.appendChild) {
             let l = document.createElement('LABEL');
+            l.className = 'input-label';
             l.htmlFor = options.id || '';
             l.innerHTML = options.label;
             l.appendChild(inp);

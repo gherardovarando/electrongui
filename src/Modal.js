@@ -21,12 +21,14 @@
 
 const ToggleElement = require('./ToggleElement');
 const util = require('./util.js');
+const gui = require('./gui.js');
 class Modal extends ToggleElement {
 
     constructor(options) {
         options = options || {};
         let element = document.createElement('DIV');
         element.className = 'modal';
+        element.zindex = 10000;
 
         let content = document.createElement('DIV');
         content.className = 'modal-content';
@@ -53,11 +55,41 @@ class Modal extends ToggleElement {
                 ev.preventDefault();
             }
         }
-        content.style.width = options.width || content.style.width;
-        content.style.height = options.height || content.style.height;
+
+        element.addEventListener('click', () => {
+            this.destroy();
+        });
+
+        content.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+
+        element.autofocus = true;
+        element.addEventListener("keydown", (e) => {
+            if (e.keyCode == 13) {  //enter
+                if (typeof options.onsubmit === 'function') {
+                    options.onsubmit();
+                }
+                this.destroy();
+            }
+            if (e.keyCode == 27 ) {  //escape or supr
+                if (typeof options.oncancel === 'function') {
+                    options.oncancel();
+                }
+                this.destroy();
+            }
+        });
+
+        content.style.width = options.width || 'auto';
+        content.style.height = options.height || 'auto';
+        content.style.maxwidth = '90%';
         element.appendChild(content);
-        document.getElementsByTagName('BODY')[0].appendChild(element);
+        //document.getElementsByTagName('BODY')[0].appendChild(element);
+        options.parent = options.parent || gui.container;
+        options.parent.appendChild(element);
         super(element);
+        this.options = options;
         this.content = content;
         this.addTitle(options.title);
         this.addBody(options.body);
@@ -66,19 +98,23 @@ class Modal extends ToggleElement {
 
     destroy() {
         this.hide();
-        document.getElementsByTagName('BODY')[0].removeChild(this.element);
+        this.clear();
+        //document.getElementsByTagName('BODY')[0].removeChild(this.element);
+        this.options.parent.removeChild(this.element);
     }
 
     addTitle(title) {
         this.header = document.createElement('DIV');
         this.header.className = 'modal-header';
         this.header.innerHTML = title;
-        let ic = util.icon('icon icon-cancel-circled pull-right ');
-        ic.role = 'button';
-        ic.onclick = () => {
-            this.destroy();
-        }
-        this.header.appendChild(ic);
+        // if (!this.options.noCloseIcon) {
+        //     let ic = util.icon('icon icon-cancel-circled pull-right ');
+        //     ic.role = 'button';
+        //     ic.onclick = () => {
+        //         this.destroy();
+        //     }
+        //     this.header.appendChild(ic);
+        // }
         this.content.insertBefore(this.header, this.content.firstChild);
     }
 
@@ -114,12 +150,15 @@ class Modal extends ToggleElement {
         util.empty(this.element, this.element.firstChild);
     }
 
-    show(){
-      super.show();
+    show() {
+        super.show();
     }
 
 
 }
+
+
+
 
 
 module.exports = Modal;

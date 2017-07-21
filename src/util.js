@@ -25,6 +25,27 @@ const {
 const os = require('os');
 
 
+exports.findKeyId = function(x, obj, tag) {
+    tag = tag || '_id';
+    for (let i in obj) {
+        if (obj[i][tag] === x) return i;
+    }
+}
+
+
+exports.nextKey = function(obj) {
+    let finish = false;
+    let key = 0;
+    while (!finish) {
+        if (Object.keys(obj).indexOf(`${key}`) >= 0) {
+            key++;
+        } else {
+            finish = true;
+        }
+    }
+    return key;
+}
+
 exports.parseTimeInterval = function(s) {
     if (s < 1000) {
         return `${s.toPrecision(3)} milliseconds`;

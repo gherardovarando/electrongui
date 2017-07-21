@@ -23,36 +23,45 @@ const util = require('./util');
 class ToggleElement extends EventEmitter {
     constructor(element) {
         super();
-        if (!element){
-          element = util.div();
+        if (!element) {
+            element = util.div();
         }
         this.element = element;
         this.id = element.id;
     }
 
-    appendTo(par){
-      if (!this.element) return;
-      if (!par) return;
-      if (typeof par.appendChild === 'function'){
-        par.appendChild(this.element);
-        this.parent = par;
-      }
+    appendTo(par) {
+        if (!this.element) return;
+        if (!par) return;
+        if (typeof par.appendChild === 'function') {
+            par.appendChild(this.element);
+            this.parent = par;
+        }
     }
 
-    appendChild(el){
-      if (this.element){
-        if (el.element){
-          this.element.appendChild(el.element);
+    appendChild(el) {
+        if (this.element) {
+            if (el.element) {
+                this.element.appendChild(el.element);
+            } else if (el.appendChild) {
+                this.element.appendChild(el);
+            }
         }
-        else if (el.appendChild) {
-          this.element.appendChild(el);
+    }
+
+    removeChild(el) {
+        if (this.element) {
+            if (el.element) {
+                this.element.removeChild(el.element);
+            } else if (el.appendChild) {
+                this.element.removeChild(el);
+            }
         }
-      }
     }
 
 
     clear() {
-     util.empty(this.element,this.element.firstChild);
+        util.empty(this.element, this.element.firstChild);
     }
 
     show() {
@@ -82,7 +91,7 @@ class ToggleElement extends EventEmitter {
         let opt;
         if (options.buttonsContainer) {
             opt = {
-                text : options.text,
+                text: options.text,
                 id: options.id || this.id,
                 icon: options.icon,
                 toggle: false,
