@@ -38,9 +38,9 @@ class SplitPane extends ToggleElement {
 
     }
 
-    showBottom() {
-        this.bottom.style.height = "50%";
-        this.top.style.height = "50%";
+    showBottom(x) {
+        this.bottom.style.height = `${x||70}%`;
+        this.top.style.height = `${(100-x)||30}%`;
     }
 
     hideBottom() {

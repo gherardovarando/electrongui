@@ -61,9 +61,10 @@ exports.checkButton = function(options) {
         if (options.parent.appendChild) {
             options.parent.appendChild(cont);
         }
-    } else {
-        return cont;
     }
+
+    return inp;
+
 }
 
 
@@ -117,9 +118,10 @@ exports.selectInput = function(options) {
             l.appendChild(inp);
             options.parent.appendChild(l);
         }
-    } else {
-        return inp;
     }
+
+    return inp;
+
 }
 
 
@@ -189,7 +191,7 @@ exports.input = function(options) {
             l.appendChild(inp);
             options.parent.appendChild(l);
         }
-    } else {
-        return inp;
     }
+    return inp;
+
 }

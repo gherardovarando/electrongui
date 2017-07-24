@@ -67,17 +67,17 @@ class Modal extends ToggleElement {
 
         element.autofocus = true;
         element.addEventListener("keydown", (e) => {
-            if (e.keyCode == 13) {  //enter
+            if (e.keyCode == 13) { //enter
+                this.destroy();
                 if (typeof options.onsubmit === 'function') {
                     options.onsubmit();
                 }
-                this.destroy();
             }
-            if (e.keyCode == 27 ) {  //escape or supr
+            if (e.keyCode == 27) { //escape or supr
+                this.destroy();
                 if (typeof options.oncancel === 'function') {
                     options.oncancel();
                 }
-                this.destroy();
             }
         });
 
