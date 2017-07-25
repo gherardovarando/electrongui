@@ -14,8 +14,8 @@
     "electron",
     "gui"
   ],
-  "author": "Gherardo Varando <gherardo.varando@gmail.com>",
-  "license": "GPL-3.0",
+  "author": "Gherardo Varando <gherardo.varando@gmail.com>, Mario Juez <mjuez@fi.upm.es>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gherardovarando/electrongui/issues"
   },

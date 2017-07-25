@@ -1,13 +1,6 @@
-# electrongui
-#### by  gherardo.varando <gherardo.varando@gmail.com> and  Mario Juez <mjuez@fi.upm.es>
+The MIT License (MIT)
 
-**electrongui** is a skeleton for GUI written in JS/Node/electron framework.
-It is made of several classes and utilities.
-The main entry point is the ``gui`` singleton (instance of ``Gui`` class) that is an empty GUI with header, footer and a central pane.
-
-
-## License
-Copyright (c) 2017 Gherardo Varando (gherardo.varando@gmail.com), Mario Juez (mario.juez@fi.upm.es)
+Copyright (c) 2017 Gherardo Varando (gherardo.varando@gmail.com), Mario Juez (mjuez@fi.upm.es)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
