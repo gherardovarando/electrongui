@@ -37,11 +37,13 @@ class FolderSelector extends ToggleElement {
      */
     constructor(id,options) {
         options = options || {};
+        options.text = options.text || "Choose folder";
+        options.icon = options.icon || "fa fa-folder-open";
         let element = document.createElement("DIV");
         id = id || "folderinput";
         super(element);
 
-        this.outputFolderPath = undefined;
+        this.outputFolderPath = options.value;
 
         this.folderInput = document.createElement("INPUT");
         this.folderInput.id = id;
@@ -52,7 +54,7 @@ class FolderSelector extends ToggleElement {
 
         let btnSelectFolder = document.createElement("BUTTON");
         btnSelectFolder.className = "btn btn-default";
-        btnSelectFolder.innerHTML = "<span class=\"fa fa-folder-open\"></span> Choose folder";
+        btnSelectFolder.innerHTML = `<span class=" ${options.icon}  "></span> ${options.text}` ;
         btnSelectFolder.onclick = (e) => {
             this.folderInput.click();
         };
