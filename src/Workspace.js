@@ -26,7 +26,6 @@ const {
   dialog
 } = require('electron').remote;
 const util = require('./util.js');
-//const {TreeList} = require('TreeList');
 const GuiExtension = require('./GuiExtension.js');
 let gui = require('./gui');
 

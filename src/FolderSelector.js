@@ -30,56 +30,58 @@ const ToggleElement = require('./ToggleElement.js');
  */
 class FolderSelector extends ToggleElement {
 
-    /**
-     * Creates a FolderSelector.
-     *
-     * @param {string} id - HTML element id.
-     */
-    constructor(id,options) {
-        options = options || {};
-        options.text = options.text || "Choose folder";
-        options.icon = options.icon || "fa fa-folder-open";
-        let element = document.createElement("DIV");
-        id = id || "folderinput";
-        super(element);
+  /**
+   * Creates a FolderSelector.
+   *
+   * @param {string} id - HTML element id.
+   */
+  constructor(id, options) {
+    options = options || {};
+    options.text = options.text || "Choose folder";
+    options.icon = options.icon || "fa fa-folder-open";
+    let element = document.createElement("DIV");
+    element.className = options.className || '';
+    element.title = options.title || '';
+    id = id || "folderinput";
+    super(element);
 
-        this.outputFolderPath = options.value;
+    this.outputFolderPath = options.value;
 
-        this.folderInput = document.createElement("INPUT");
-        this.folderInput.id = id;
-        this.folderInput.type = "file";
-        this.folderInput.className = "folderselector";
-        this.folderInput.webkitdirectory = true;
-        element.appendChild(this.folderInput);
+    this.folderInput = document.createElement("INPUT");
+    this.folderInput.id = id;
+    this.folderInput.type = "file";
+    this.folderInput.className = "folderselector";
+    this.folderInput.webkitdirectory = true;
+    element.appendChild(this.folderInput);
 
-        let btnSelectFolder = document.createElement("BUTTON");
-        btnSelectFolder.className = "btn btn-default";
-        btnSelectFolder.innerHTML = `<span class=" ${options.icon}  "></span> ${options.text}` ;
-        btnSelectFolder.onclick = (e) => {
-            this.folderInput.click();
-        };
-        element.appendChild(btnSelectFolder);
+    let btnSelectFolder = document.createElement("BUTTON");
+    btnSelectFolder.className = "btn btn-default";
+    btnSelectFolder.innerHTML = `<span class=" ${options.icon}  "></span> ${options.text}`;
+    btnSelectFolder.onclick = (e) => {
+      this.folderInput.click();
+    };
+    element.appendChild(btnSelectFolder);
 
-        this.selectedFolder = document.createElement("DIV");
-        this.selectedFolder.innerHTML = options.label || "Please, choose an output folder.";
-        element.appendChild(this.selectedFolder);
+    this.selectedFolder = document.createElement("DIV");
+    this.selectedFolder.innerHTML = options.label || "Please, choose an output folder.";
+    element.appendChild(this.selectedFolder);
 
-        this.folderInput.onchange = (e) => {
-            if (this.folderInput.files[0]) {
-                this.outputFolderPath = this.folderInput.files[0].path;
-                this.selectedFolder.innerHTML = this.outputFolderPath;
-            }
-        };
-    }
+    this.folderInput.onchange = (e) => {
+      if (this.folderInput.files[0]) {
+        this.outputFolderPath = this.folderInput.files[0].path;
+        this.selectedFolder.innerHTML = this.outputFolderPath;
+      }
+    };
+  }
 
-    /**
-     * Gets the selected folder path.
-     *
-     * @returns {string} a path to the selected folder.
-     */
-    getFolderRoute() {
-        return this.outputFolderPath;
-    }
+  /**
+   * Gets the selected folder path.
+   *
+   * @returns {string} a path to the selected folder.
+   */
+  getFolderRoute() {
+    return this.outputFolderPath;
+  }
 
 }
 
