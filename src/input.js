@@ -148,7 +148,7 @@ exports.input = function(options) {
     if (options.height) {
         inp.height = options.height;
     }
-    inp.title = options.title || options.label || '';
+    inp.title = options.title || options.label || options.placeholder || '';
     inp.step = options.step;
     inp.checked = options.checked;
     inp.readOnly = options.readOnly || false;

@@ -35,7 +35,6 @@ class Workspace extends GuiExtension {
       icon: 'fa fa-database'
     });
     options = options || {};
-    this.locked = true;
     window.addEventListener('beforeunload', (e) => {
       storage.set('workspace', this.spaces, (error) => {});
     });

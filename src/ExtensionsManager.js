@@ -21,7 +21,8 @@
 "use strict";
 const {
   Menu,
-  MenuItem
+  MenuItem,
+  dialog
 } = require('electron').remote;
 const fs = require('fs');
 const path = require('path');
@@ -30,6 +31,7 @@ const Sidebar = require('./Sidebar.js');
 const ToggleElement = require('./ToggleElement.js');
 const util = require('./util.js');
 const gui = require('./gui');
+const storage = require('electron-json-storage');
 
 
 class ExtensionsManager extends GuiExtension {
@@ -41,6 +43,11 @@ class ExtensionsManager extends GuiExtension {
         label: 'Manager',
         click: () => {
           this.show();
+        }
+      },{
+        label: 'Install Extension',
+        click: ()=>{
+          this.installExtension();
         }
       }, {
         type: 'separator'
@@ -69,6 +76,25 @@ class ExtensionsManager extends GuiExtension {
   }
 
 
+  installExtension(){
+     dialog.showOpenDialog({
+       title: 'Select the extension main .js file or the relative package.json',
+       buttonlabel: 'Install',
+       filters: [
+         {name: 'javascript', extensions: ['js','JS']},
+         {name: 'package json', extensions: ['json', 'JSON']}
+       ],
+       openDirectory: false,
+       openFile: true
+     },(filePaths)=>{
+       let p = filePaths[0];
+       this.loadExtension(p,(ext)=>{
+         ext.info.manuallyinstalled = true;
+       });
+     });
+  }
+
+
   loadExtension(extPath, cl) {
     let ext;
     if (typeof extPath === 'string') {
@@ -76,7 +102,7 @@ class ExtensionsManager extends GuiExtension {
         let tmp = require(extPath);
         if (tmp.prototype instanceof GuiExtension) {
           ext = new tmp();
-          this.addExtension(this.extensions[ext.constructor.name]);
+          //this.addExtension(this.extensions[ext.constructor.name]);
         }
       } catch (e) {
         console.log(e);
@@ -130,8 +156,12 @@ class ExtensionsManager extends GuiExtension {
       active: extension.active,
       onmouseover: () => {
         this.pane.clear();
-        if (extension.author) {
-          this.pane.appendChild(util.div('padded', `Author: ${extension.author}`));
+        if (extension.info) {
+          this.pane.appendChild(util.div('padded', `Author: ${extension.info.author}`));
+          this.pane.appendChild(util.div('padded',extension.info.note));
+          if (extension.info.manuallyinstalled){
+            this.pane.appendChild(util.div('cell', 'Manually installed'));
+          }
         }
         this.pane.show();
       },

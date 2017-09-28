@@ -28,11 +28,11 @@ class Modal extends ToggleElement {
   constructor(options) {
     options = options || {};
     let element = document.createElement('DIV');
-    element.className = 'modal';
-    element.zindex = 10000;
+    element.style = 'z-index: 100; top: 0;left: 0;width: 100%;height: 100%;overflow: 100%;background-color: rgb(0, 0, 0);background-color: rgba(0, 0, 0, 0.4);position: absolute;text-align: center;';
+    //element.zindex = 10000;
 
     let content = document.createElement('DIV');
-    content.className = 'modal-content';
+    content.style = 'position: relative; display: inline-block; text-align: left;background-color: #F6F6F5;margin: 0 auto; border: 1px solid #888; width: auto;height: 100%;max-width: 80%; -webkit-animation-name: animatetop; -webkit-animation-duration: 0.4s; animation-name: animatetop; animation-duration: 0.4s; border-radius: 0 0 5px 5px;';
 
     if (options.draggable) {
       content.draggable = true;
@@ -109,7 +109,7 @@ class Modal extends ToggleElement {
 
   addTitle(title) {
     this.header = document.createElement('DIV');
-    this.header.className = 'modal-header';
+    this.header.style = ' padding: 2px 16px; background-color: #F6F6F5; top: 0; position: relative; border-radius: 5px 5px 0 0; font-weight: bold;';
     this.header.innerHTML = title;
     // if (!this.options.noCloseIcon) {
     //     let ic = util.icon('icon icon-cancel-circled pull-right ');
@@ -125,7 +125,9 @@ class Modal extends ToggleElement {
   addBody(body) {
     if (body) {
       if (body.appendChild) {
-        body.className = body.className + ' modal-body';
+        body.style.paddingtop='2px';
+        body.style.paddingbottom='16px';
+        body.style.overflow='auto';
         this.content.appendChild(body);
         this.body = body;
       } else if (typeof body === 'string') {
@@ -139,24 +141,20 @@ class Modal extends ToggleElement {
   addFooter(footer) {
     if (footer) {
       if (footer.appendChild) {
-        footer.className = footer.className + ' modal-footer';
+        footer.style.paddingbottom = '10px';
+        footer.style.paddingtop = '20px';
+        footer.style.bottom = 0;
+        footer.style.position='relative';
         this.content.appendChild(footer);
         this.footer = footer;
       } else if (typeof footer === 'string') {
-        this.footee = document.createElement('DIV');
+        this.footer = document.createElement('DIV');
         this.footer.innerHTML = footer;
         this.content.appendChild(this.footer);
       }
     }
   }
 
-  clear() {
-    util.empty(this.element, this.element.firstChild);
-  }
-
-  show() {
-    super.show();
-  }
 
 
 }
