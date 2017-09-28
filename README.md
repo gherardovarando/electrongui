@@ -21,8 +21,8 @@
    - [ExtensionManager](#extensionmanager)
    - [TaskManager](#taskmanager)
  - [Utilities](#utilities)
-  - [util](#util)
-  - [input](#input)
+   - [util](#util)
+   - [input](#input)
 
 ## Basic Elements
 
@@ -405,6 +405,97 @@ remove the sidebar.
 ## Utilities
 
 ### util
+
+Just a collection of utilities.
+``const {util} = require('electrongui');``
+
+#### ``util.findKeyId(x, obj, tag)``
+
+suppose to have an object as
+```
+let a = {
+  one: {
+    id : 145
+  },
+  two: {
+    id : 23
+  },
+  three: {
+    id: 45
+  }
+}
+```
+
+And you want to find the sub-object with properties ``id`` equal to 23.
+
+```
+let target =util.findKeyId(23, a, 'id');
+console.log(a[target]) // { id: 23}
+```
+
+#### `util.nextKey(obj)`
+- `obj` an object
+
+find the first numeric key that is available to assign a new property in the object.
+
+#### `util.parseTimeInterval(s)`
+- `s` number, milliseconds
+
+return a human readable string of time from a millisecond value.
+
+#### `util.div(className, text)`
+
+create a div html element
+
+#### `util.setProgress(value)`
+
+set progress with electron progress bar.
+
+#### `util.stringify(object)`
+
+Stringify an object.
+
+#### `util.isNode()`
+
+return true if we are in Node.
+
+#### `util.isElectron()`
+
+#### `util.sum(v)`
+
+Sum all values in the array `v`.
+
+#### `util.mean(v)`
+
+compute the mean of the array `v`.
+
+#### `util.clone(obj)`
+
+Clone an object.
+
+#### `util.notifyOS(text)`
+
+Emit a OS dependent notification with the given text.
+
+#### `util.readJSON(filename, callback, error)`
+
+async read a json file and call callback over the resulting object.
+
+#### `util.readJSONsync(filename,error)`
+
+sync read a json file and return the object.
+
+#### `util.empty(parent,child)`
+
+remove all the child of `parent` starting from `child`.
+
+#### `util.isIcon(icon)`
+
+Decide if an element is an icon.
+
+#### `util.icon(icon)`
+
+create and icon element starting from a string if able otherwise return an empty DIV.
 
 ### input
 
