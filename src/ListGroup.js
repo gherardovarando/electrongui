@@ -367,12 +367,16 @@ class ListGroup extends ToggleElement {
     input.style.minHeight = '0px';
     input.style.height = options.height || '20px';
     input.placeholder = options.placeholder || 'Search';
-    input.onblur=()=>{
-      this.showAll();
-      input.value = '';
-      if (options.toggle){
-        this.search.hide();
-      }
+    input.onblur = () => {
+
+      setTimeout(() => {
+        this.showAll();
+        input.value = '';
+        if (options.toggle) {
+          this.search.hide();
+        }
+      }, 10);
+
     };
     input.onsearch = () => {
       this.showAll();
@@ -391,7 +395,7 @@ class ListGroup extends ToggleElement {
     this.search = new ToggleElement(li);
 
 
-    if (options.hide){
+    if (options.hide) {
       this.search.hide();
     }
 
