@@ -189,6 +189,7 @@ class ListGroup extends ToggleElement {
 
     item.key = options.key; //set the search key
     this.element.appendChild(li);
+    item._id = options.id;
     this.items[options.id] = item;
     this.nItems++;
   }
@@ -217,9 +218,10 @@ class ListGroup extends ToggleElement {
 
   clean() {
     this.forEach((it) => {
-      removeItem(it);
+      this.removeItem(it);
     });
   }
+
 
 
   setTitle(id, newtitle) {
@@ -339,6 +341,7 @@ class ListGroup extends ToggleElement {
     let item;
     if (id instanceof ToggleElement) {
       item = id;
+      id = item._id;
     } else {
       item = this.items[id];
     }
