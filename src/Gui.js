@@ -194,10 +194,10 @@ class Gui extends EventEmitter {
         x: bounds.x + 0,
         y: bounds.y + 40,
         width: bounds.width,
-        height: bounds.height
+        height: 600
       });
     });
-    child.loadURL(url || 'https://github.com')
+    child.loadURL('https://github.com')
   }
 
 
