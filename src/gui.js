@@ -23,11 +23,10 @@
 const Gui = require('./Gui.js');
 const ToggleElement = require('./ToggleElement.js');
 
+
 let gui = null;
-
-
 if (!gui) {
-    gui = new Gui();
+  gui = new Gui();
 }
 
 module.exports = gui;
