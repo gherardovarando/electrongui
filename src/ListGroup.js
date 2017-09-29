@@ -364,7 +364,16 @@ class ListGroup extends ToggleElement {
     let input = document.createElement('INPUT');
     input.className = 'form-control';
     input.type = 'search';
+    input.style.minHeight = '0px';
+    input.style.height = options.height || '20px';
     input.placeholder = options.placeholder || 'Search';
+    input.onblur=()=>{
+      this.showAll();
+      input.value = '';
+      if (options.toggle){
+        this.search.hide();
+      }
+    };
     input.onsearch = () => {
       this.showAll();
       let val = input.value;
@@ -379,7 +388,14 @@ class ListGroup extends ToggleElement {
 
     li.appendChild(input);
     this.element.insertBefore(li, this.element.firstChild);
-    this.search = input;
+    this.search = new ToggleElement(li);
+
+
+    if (options.hide){
+      this.search.hide();
+    }
+
+
   }
 
 }
