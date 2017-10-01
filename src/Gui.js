@@ -176,28 +176,29 @@ class Gui extends EventEmitter {
     options = options || {};
     let size = this.win.getSize();
     options.parent = this.win
-    child = new BrowserWindow(options);
+    let child = new BrowserWindow(options);
     child.once('ready-to-show', () => {
       child.show()
     });
-    let bounds = this.win.getBounds();
-    let conb = this.container.element.getBoundingClientRect();
-    child.setBounds({
-      x: bounds.x + 0,
-      y: bounds.y + 30,
-      width: bounds.width,
-      height: bounds.height
-    });
-    this.win.on('move',()=>{
-      let bounds = this.win.getBounds();
-      child.setBounds({
-        x: bounds.x + 0,
-        y: bounds.y + 40,
-        width: bounds.width,
-        height: 600
-      });
-    });
-    child.loadURL('https://github.com')
+    // let bounds = this.win.getBounds();
+    // let conb = this.container.element.getBoundingClientRect();
+    // child.setBounds({
+    //   x: bounds.x + 0,
+    //   y: bounds.y + 30,
+    //   width: bounds.width,
+    //   height: bounds.height
+    // });
+    // this.win.on('move',()=>{
+    //   let bounds = this.win.getBounds();
+    //   child.setBounds({
+    //     x: bounds.x + 0,
+    //     y: bounds.y + 40,
+    //     width: bounds.width,
+    //     height: 600
+    //   });
+    // });
+    child.loadURL(url);
+    return child;
   }
 
 
