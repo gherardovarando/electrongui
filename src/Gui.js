@@ -21,6 +21,7 @@
 
 const EventEmitter = require('events');
 const ProgressBar = require('./ProgressBar');
+const util = require('./util');
 const fs = require('fs');
 const {
   Menu,
@@ -33,49 +34,60 @@ let child;
 
 
 class Header extends ToggleElement {
-  constructor(element) {
+  constructor(element, parent) {
     super(element);
     this.id = element.id;
-    let actionsContainer;
-    if (element.getElementsByClassName("toolbar-actions")[0]) {
-      actionsContainer = element.getElementsByClassName("toolbar-actions")[0];
-    } else {
-      actionsContainer = document.createElement("DIV");
-      actionsContainer.className = 'toolbar-actions';
-      actionsContainer.id = "header-actions";
-      this.element.appendChild(actionsContainer);
-    }
+    let actionsContainer = document.createElement("DIV");
+    actionsContainer.className = 'toolbar-actions';
+    actionsContainer.id = "header-actions";
+    this.element.appendChild(actionsContainer);
     this.actionsContainer = new ButtonsContainer(actionsContainer);
+    if (parent) {
+      this.appendTo(parent);
+    }
   }
 
-  setTitle(title) {
-    let tl = this.element.getElementsByClassName('title')[0];
-    if (tl) {
-      tl.innerHTML = title;
-    } else {
-      tl = document.createElement('H1');
-      tl.className = 'title';
-      tl.innerHTML = title;
-      let cont = this.element.getElementsByClassName('toolbar-actions')[0];
-      if (cont) {
-        this.element.insertBefore(tl, cont);
-      } else {
-        this.element.appendChild(tl);
-      }
-    }
-  }
+  // setTitle(title) {
+  //   let tl = this.element.getElementsByClassName('title')[0];
+  //   if (tl) {
+  //     tl.innerHTML = title;
+  //   } else {
+  //     tl = document.createElement('H1');
+  //     tl.className = 'title';
+  //     tl.innerHTML = title;
+  //     let cont = this.element.getElementsByClassName('toolbar-actions')[0];
+  //     if (cont) {
+  //       this.element.insertBefore(tl, cont);
+  //     } else {
+  //       this.element.appendChild(tl);
+  //     }
+  //   }
+  // }
 
   addProgressBar() {
     this.progressBar = new ProgressBar(this.element);
+  }
+
+  addNotificationBar() {
+    this.notificationBar = new ToggleElement(document.createElement('DIV'));
+    this.notificationBar.element.className = 'pull-right';
+    this.notificationBar.message = document.createElement('STRONG');
+    this.notificationBar.element.appendChild(this.notificationBar.message);
+    this.element.appendChild(this.notificationBar.element);
   }
 }
 
 
 
 class Footer extends ToggleElement {
-  constructor(element) {
+  constructor(element, parent) {
     super(element);
+    if (parent) {
+      this.appendTo(parent);
+    }
   }
+
+
   addNotificationBar() {
     this.notificationBar = new ToggleElement(document.createElement('DIV'));
     this.notificationBar.element.className = 'pull-right';
@@ -94,26 +106,25 @@ class Footer extends ToggleElement {
 class Gui extends EventEmitter {
   constructor() {
     super();
-    let header = document.getElementsByClassName("toolbar-header")[0];
-    header.id = "header";
     this.win = require('electron').remote.getCurrentWindow();
-    this.container = new ToggleElement(document.getElementsByClassName("window-content")[0]);
-    this.header = new Header(header);
-    let footer = document.getElementsByClassName("toolbar-footer")[0];
-    footer.id = "footer";
-    this.footer = new Footer(footer);
-    this.footer.addProgressBar();
+    let ap = util.div('window app');
+    this.header = new Header(util.div("toolbar toolbar-header"), ap);
+    this.container = new ToggleElement(util.div("window-content"));
+    this.container.appendTo(ap)
+    this.footer = new Footer(util.div("toolbar toolbar-footer"), ap);
+    //this.header.addProgressBar();
     this.footer.addNotificationBar();
     this._menuItems = [];
     this._menu = new Menu();
-    Menu.setApplicationMenu(this._menu);
+    document.getElementsByTagName('body')[0].appendChild(ap);
   }
+
 
   viewTrick() { //force the element to be arranged properly, fix some problem with leaflet's map
     let size = this.win.getSize();
     this.win.setSize(size[0] + 1, size[1] + 1);
     this.win.setSize(size[0], size[1]);
-    //fix for windows behaviour, in linux is ok
+    //fix for windows behaviour, in linux is ok, if window is not maximise
   }
 
 
@@ -122,16 +133,16 @@ class Gui extends EventEmitter {
   }
 
   setProgress(prog) {
-    this.stopWaiting();
-    this.footer.progressBar.setBar(prog);
+    //this.stopWaiting();
+    //this.header.progressBar.setBar(prog);
   }
 
   startWaiting() {
-    this.footer.progressBar.startWaiting();
+    //this.header.progressBar.startWaiting();
   }
 
   stopWaiting() {
-    this.footer.progressBar.stopWaiting();
+    //this.header.progressBar.stopWaiting();
   }
 
   reloadMenu() {

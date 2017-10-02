@@ -57,7 +57,7 @@ class TasksViewer extends GuiExtension {
 
         this.toggleButton = this.buttonsContainer.buttons[`${toggleButtonId}`];
         this.progressBar = new ProgressBar(this.toggleButton);
-        this.progressBar.setHeight(3);
+        this.progressBar.setHeight(4);
 
         this.addPane();
         this.appendChild(this.pane);
