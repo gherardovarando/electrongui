@@ -142,7 +142,8 @@ class Gui extends EventEmitter {
   }
 
   stopWaiting() {
-    //this.header.progressBar.stopWaiting();
+  //  this.header.progressBar.stopWaiting();
+  //  this.header.progressBar.setBar(0);
   }
 
   reloadMenu() {

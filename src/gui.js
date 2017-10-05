@@ -21,7 +21,6 @@
 'use strict';
 
 const Gui = require('./Gui.js');
-const ToggleElement = require('./ToggleElement.js');
 
 
 let gui = null;

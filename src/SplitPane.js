@@ -22,34 +22,35 @@
 
 const ToggleElement = require('./ToggleElement');
 
+
 class SplitPane extends ToggleElement {
     constructor(element) {
         super(element);
         this.element.className = 'pane';
-        this.top = document.createElement('DIV');
-        this.top.className = 'h-pane-top';
-        this.top.style.height = "100%";
-        this.element.appendChild(this.top);
+        this.top = new ToggleElement(document.createElement('DIV'));
+        this.top.element.className = 'h-pane-top';
+        this.top.element.style.height = "100%";
+        this.appendChild(this.top);
 
-        this.bottom = document.createElement('DIV');
-        this.bottom.className = 'h-pane-bottom';
-        this.bottom.style.height = "0%";
-        this.element.appendChild(this.bottom);
+        this.bottom = new ToggleElement(document.createElement('DIV'));
+        this.bottom.element.className = 'h-pane-bottom';
+        this.bottom.element.style.height = "0%";
+        this.appendChild(this.bottom);
 
     }
 
     showBottom(x) {
-        this.bottom.style.height = `${x||70}%`;
-        this.top.style.height = `${(100-x)||30}%`;
+        this.bottom.element.style.height = `${x||70}%`;
+        this.top.element.style.height = `${(100-x)||30}%`;
     }
 
     hideBottom() {
-        this.top.style.height = "100%";
-        this.bottom.style.height = "0%";
+        this.top.element.style.height = "100%";
+        this.bottom.element.style.height = "0%";
     }
 
     toggleBottom() {
-        if (this.bottom.style.height == "0%") {
+        if (this.bottom.element.style.height == "0%") {
             this.showBottom();
         } else {
             this.hideBottom();

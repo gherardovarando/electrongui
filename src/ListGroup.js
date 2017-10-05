@@ -370,12 +370,12 @@ class ListGroup extends ToggleElement {
     input.onblur = () => {
 
       setTimeout(() => {
-        this.showAll();
-        input.value = '';
         if (options.toggle) {
+          this.showAll();
+          input.value = '';
           this.search.hide();
         }
-      }, 10);
+      }, 50);
 
     };
     input.onsearch = () => {
