@@ -27,11 +27,10 @@ const {
 } = require('electron').remote;
 const util = require('./util.js');
 const GuiExtension = require('./GuiExtension.js');
-let gui = require('./gui');
 
 class Workspace extends GuiExtension {
-  constructor(options) {
-    super({
+  constructor(gui,options) {
+    super(gui,{
       icon: 'fa fa-database'
     });
     options = options || {};
@@ -60,7 +59,7 @@ class Workspace extends GuiExtension {
       }
     });
 
-    gui.header.actionsContainer.addButton({
+    this.gui.header.actionsContainer.addButton({
       id: 'save',
       groupId: 'basetools',
       icon: 'fa fa-save',
@@ -69,7 +68,7 @@ class Workspace extends GuiExtension {
       }
     });
 
-    gui.header.actionsContainer.addButton({
+    this.gui.header.actionsContainer.addButton({
       id: 'load',
       groupId: 'basetools',
       icon: 'fa fa-folder-open-o',
@@ -85,7 +84,7 @@ class Workspace extends GuiExtension {
     // this.addToggleButton({
     //     groupId: 'basetools',
     //     icon: 'fa fa-cubes',
-    //     buttonsContainer: gui.header.actionsContainer
+    //     buttonsContainer: this.gui.header.actionsContainer
     // });
 
 
@@ -93,8 +92,8 @@ class Workspace extends GuiExtension {
 
   deactivate() {
     //this.removeToggleButton();
-    gui.header.actionsContainer.removeButton('save');
-    gui.header.actionsContainer.removeButton('load');
+    this.gui.header.actionsContainer.removeButton('save');
+    this.gui.header.actionsContainer.removeButton('load');
     this.clear();
     super.deactivate();
   }
@@ -222,17 +221,17 @@ class Workspace extends GuiExtension {
         let cl = callback;
 
         if (fileName === undefined) {
-          gui.notify("You didn't save the workspace");
+          this.gui.notify("Workspace not saved");
           return;
         }
 
         fs.writeFile(fileName, content, (err) => {
           if (err) {
-            gui.notify("An error ocurred creating the file " + err.message)
+            this.gui.notify("An error ocurred creating the file " + err.message)
           }
           this.spaces.workspace.path = fileName;
           storage.set('workspace', this.spaces);
-          gui.notify(`The workspace has been succesfully saved`);
+          this.gui.notify(`The workspace has been succesfully saved`);
           if (cl) {
             cl();
           }
@@ -264,7 +263,7 @@ class Workspace extends GuiExtension {
       try {
         wk = util.readJSONsync(file[0]);
       } catch (e) {
-        gui.notify(e);
+        this.gui.notify(e);
         return;
       }
       try {
@@ -275,7 +274,7 @@ class Workspace extends GuiExtension {
         storage.set('workspace', this.spaces);
         this.emit('load');
       } catch (e) {
-        gui.notify(e);
+        this.gui.notify(e);
       }
     });
   }

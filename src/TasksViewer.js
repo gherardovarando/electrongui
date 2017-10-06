@@ -33,13 +33,12 @@ const ProgressBar = require('./ProgressBar.js');
 const icon = "fa fa-tasks";
 const toggleButtonId = 'tasksPageToggleButton';
 
-const gui = require('./gui.js');
 
 
 class TasksViewer extends GuiExtension {
 
-    constructor() {
-        super({
+    constructor(gui) {
+        super(gui,{
             icon: icon
         });
     }
@@ -48,7 +47,7 @@ class TasksViewer extends GuiExtension {
 
         this.addToggleButton({
             id: toggleButtonId,
-            buttonsContainer: gui.header.actionsContainer,
+            buttonsContainer: this.gui.header.actionsContainer,
             className: 'btn btn-default',
             groupClassName: 'pull-right',
             groupId: 'tasksPage',
@@ -96,7 +95,7 @@ class TasksViewer extends GuiExtension {
 
 
         taskManager.on("progress", (p) => {
-            gui.setProgress(p);
+            this.gui.setProgress(p);
             util.setProgress(p);
             this.progressBar.setBar(p);
         });

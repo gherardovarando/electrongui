@@ -22,7 +22,6 @@
 
 const ToggleElement = require('./ToggleElement');
 const util = require('./util.js');
-const gui = require('./gui.js');
 class Modal extends ToggleElement {
 
   constructor(options) {
@@ -89,8 +88,7 @@ class Modal extends ToggleElement {
     content.style.height = options.height || 'auto';
     content.style.maxwidth = '90%';
     element.appendChild(content);
-    //document.getElementsByTagName('BODY')[0].appendChild(element);
-    options.parent = options.parent || gui.container;
+    options.parent = options.parent || document.getElementsByTagName('BODY')[0];
     options.parent.appendChild(element);
     super(element);
     this.options = options;

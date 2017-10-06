@@ -30,7 +30,6 @@ const ButtonsContainer = require('./ButtonsContainer.js');
 const ProgressBar = require('./ProgressBar.js');
 const input = require('./input.js');
 const dateFormat = require('dateformat');
-const gui = require('./gui.js');
 const util = require('./util.js');
 
 /**

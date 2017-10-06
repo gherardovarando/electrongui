@@ -30,14 +30,13 @@ const GuiExtension = require('./GuiExtension');
 const Sidebar = require('./Sidebar.js');
 const ToggleElement = require('./ToggleElement.js');
 const util = require('./util.js');
-const gui = require('./gui');
 const storage = require('electron-json-storage');
 
 
 class ExtensionsManager extends GuiExtension {
 
-  constructor() {
-    super({
+  constructor(gui) {
+    super(gui,{
       menuLabel: 'Extensions',
       menuTemplate: [{
         label: 'Manager',
@@ -54,7 +53,7 @@ class ExtensionsManager extends GuiExtension {
       }]
     });
     this.extensions = {};
-    gui.extensions = this.extensions;
+    this.gui.extensions = this.extensions;
     this.activate();
   }
 
@@ -70,9 +69,10 @@ class ExtensionsManager extends GuiExtension {
     this.pane = new ToggleElement(document.createElement('DIV'));
     this.element.appendChild(this.pane.element);
     this.appendMenu();
-    gui.on('load:extension', (e) => {
+    this.gui.on('load:extension', (e) => {
       this.addExtension(e.extension);
     });
+    super.activate();
   }
 
 
@@ -101,7 +101,7 @@ class ExtensionsManager extends GuiExtension {
       try {
         let tmp = require(extPath);
         if (tmp.prototype instanceof GuiExtension) {
-          ext = new tmp();
+          ext = new tmp(this.gui);
           //this.addExtension(this.extensions[ext.constructor.name]);
         }
       } catch (e) {

@@ -26,10 +26,9 @@ const {
   Menu,
   MenuItem
 } = require('electron').remote;
-let gui = require('./gui.js');
 
 class GuiExtension extends ToggleElement {
-  constructor(config) {
+  constructor(gui, config) {
     let element = document.createElement('DIV');
     element.className = 'pane-group';
     element.style.display = 'none'; //hide by default
@@ -47,7 +46,7 @@ class GuiExtension extends ToggleElement {
     }, config.info);
     this.image = config.image;
     this.author = config.author;
-    gui.container.appendChild(this.element);
+    this.gui = gui;
     this._menuIndx = -1;
     this._menu = new Menu();
     if (config.menuTemplate) {
@@ -60,18 +59,20 @@ class GuiExtension extends ToggleElement {
       type: 'submenu',
       submenu: this._menu
     });
-    gui.emit('load:extension', {
+    this.gui.emit('load:extension', {
       extension: this
     });
   }
 
   activate() {
+    this.gui.container.appendChild(this.element);
     this.active = true;
     this.emit('activate');
     return this.active;
   }
 
   deactivate() {
+    this.gui.container.removeChild(this.element);
     this.hide();
     this.clear();
     this.removeMenu();
@@ -103,7 +104,7 @@ class GuiExtension extends ToggleElement {
     if (item) {
       this._menuItems.push(item);
       this._buildMenuItem();
-      gui.updateMenuItem(this._menuIndx, this._menuItem);
+      this.gui.updateMenuItem(this._menuIndx, this._menuItem);
     }
   }
 
@@ -113,19 +114,19 @@ class GuiExtension extends ToggleElement {
       if (idx < 0) return;
       this._menuItems.splice(idx, 1);
       this._buildMenuItem();
-      gui.updateMenuItem(this._menuIndx, this._menuItem);
+      this.gui.updateMenuItem(this._menuIndx, this._menuItem);
     }
   }
 
   appendMenu() {
     if (this._menuIndx >= 0) return false;
     this._buildMenuItem();
-    this._menuIndx = gui.addMenuItem(this._menuItem);
+    this._menuIndx = this.gui.addMenuItem(this._menuItem);
     return true;
   }
 
   removeMenu() {
-    gui.removeMenuItem(this._menuIndx);
+    this.gui.removeMenuItem(this._menuIndx);
     this._menuIndx = -1;
   }
 
