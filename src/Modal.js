@@ -26,11 +26,20 @@ class Modal extends ToggleElement {
 
   constructor(options) {
     options = options || {}
-    let element = document.createElement('DIV');
-    element.style = 'z-index: 100; top: 0;left: 0;width: 100%;height: 100%;overflow: 100%;background-color: rgb(0, 0, 0);background-color: rgba(0, 0, 0, 0.4);position: absolute;text-align: center;'
+    let element = util.div('modal')
+    element.style.right = options.baseright || '0'
+    element.style.left = options.baseleft || '0'
+    element.style.top = options.basetop || '0'
+    element.style.bottom = options.basebottom || '0'
+    element.style['background-color'] = options.backgroundcolor || 'rgba(0,0,0,0.4)'
+    element.style.height = options.baseheight || '100%'
+    element.style.width = options.basewidth || '100%'
 
-    let content = document.createElement('DIV')
-    content.style = 'position: relative; display: inline-block; text-align: left;background-color: #F6F6F5;margin: 0 auto; border: 1px solid #888; width: auto;height: 100%;max-width: 80%; -webkit-animation-name: animatetop; -webkit-animation-duration: 0.4s; animation-name: animatetop; animation-duration: 0.4s; border-radius: 0 0 5px 5px;'
+    let content = util.div('modal-content')
+    content.style.width = options.width || 'auto'
+    content.style.height = options.height || 'auto'
+    content.style.maxwidth = options.maxwidth || '100%'
+    content.style.maxheight = options.maxheight || '100%'
 
     if (options.draggable) {
       content.draggable = true
@@ -56,7 +65,7 @@ class Modal extends ToggleElement {
     }
 
     element.addEventListener('click', () => {
-      this.destroy()
+        if (!options.permanent) this.destroy()
       if (typeof options.oncancel === 'function') {
         options.oncancel()
       }
@@ -73,19 +82,17 @@ class Modal extends ToggleElement {
         if (typeof options.onsubmit === 'function') {
           options.onsubmit()
         }
-        this.destroy()
+          if (!options.permanent) this.destroy()
       }
       if (e.keyCode == 27) { //escape or supr
         if (typeof options.oncancel === 'function') {
           options.oncancel()
         }
-        this.destroy()
+          if (!options.permanent) this.destroy()
       }
     });
 
-    content.style.width = options.width || 'auto'
-    content.style.height = options.height || 'auto'
-    content.style.maxwidth = '90%'
+
     element.appendChild(content)
     options.parent = options.parent || document.getElementsByTagName('BODY')[0]
     options.parent.appendChild(element)

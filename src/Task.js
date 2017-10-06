@@ -236,8 +236,7 @@ Task.TaskDOMElement = class {
 
     this.cancelContainer = document.createElement("DIV")
     this.cancelContainer.className = "cancel-container"
-    this.btnCancel = document.createElement("I")
-    this.btnCancel.className = "fa fa-times-circle fa-2x"
+    this.btnCancel = util.icon('fa fa-times-circle fa-2x danger')
     this.btnCancel.onclick = () => {
       dialog.showMessageBox({
         title: 'Warning!',
@@ -258,18 +257,18 @@ Task.TaskDOMElement = class {
     this.element.appendChild(this.mainInfoContainer)
 
     this.additionalInfoContainer = document.createElement("DIV")
-    this.additionalInfoContainer.className = "additional-info-container"
-    this.additionalInfoGrid = new Grid(2, 4)
-    this.statusElement = document.createElement("DIV")
+    this.additionalInfoContainer.className = "additional-info-container cell-conteiner"
+    this.additionalInfoGrid = new Grid(8, 1)
+    this.statusElement = util.div('cell')
     this.additionalInfoGrid.addElement(this.statusElement)
-    this.failureInfoElement = document.createElement("DIV")
+    this.failureInfoElement = util.div('cell')
     this.additionalInfoGrid.addElement(this.failureInfoElement)
 
-    this.startTimeContainer = document.createElement("DIV")
+    this.startTimeContainer = util.div('cell')
     this.startTimeContainer.innerHTML = `<strong>Started on: </strong>${dateFormat(this.task.startTime, format)}`
     this.addAditionalInformation(this.startTimeContainer)
 
-    this.finishTimeContainer = document.createElement("DIV")
+    this.finishTimeContainer = util.div('cell')
     this.finishTimeContainer.innerHTML = `<strong>Expeted finish on: </strong> ??`
     this.addAditionalInformation(this.finishTimeContainer)
 
@@ -334,7 +333,7 @@ Task.TaskDOMElement = class {
     actionButton.innerHTML = this.task.customAction["caption"]
     actionButton.className = "btn btn-positive"
     actionButton.onclick = this.task.customAction["onclick"]
-    this.actionButtonContainer.appendChild(actionButton)
+    //this.actionButtonContainer.appendChild(actionButton)
   }
 
   /**
