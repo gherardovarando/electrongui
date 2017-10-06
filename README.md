@@ -13,7 +13,6 @@
    - [ListGroup](#listgroup)
    - [NavGroup](#navgroup)
    - [Sidebar](#sidebar)
-   -
  - [Gui and Extensions](#gui-and-extensions)
    - [Gui](#gui)
    - [GuiExtension](#guiextension)
@@ -408,7 +407,7 @@ remove the sidebar.
 ### util
 
 Just a collection of utilities.
-``const {util} = require('electrongui');``
+``const {util} = require('electrongui')``
 
 #### ``util.findKeyId(x, obj, tag)``
 
@@ -430,7 +429,7 @@ let a = {
 And you want to find the sub-object with properties ``id`` equal to 23.
 
 ```
-let target =util.findKeyId(23, a, 'id');
+let target =util.findKeyId(23, a, 'id')
 console.log(a[target]) // { id: 23}
 ```
 
@@ -500,6 +499,55 @@ create and icon element starting from a string if able otherwise return an empty
 
 ### input
 
+` const {input} = require('electrongui')`
+
+####  `input.checkButton(options)`
+- `options` checkButton options object:
+  - `className` string
+  - `id` string
+  - `active` logical
+  - `text` string, the text of the button
+  - `icon` icon
+  - `onclick` function(btn, active), callback on the click event
+  - `onactivate` function(btn, active)
+  - `ondeactivate` function(btn, active)
+  - `autofocus` logical
+  - `parent` HTML element or ToggleElement
+  - `makeContainer` logical, if a button container should be created (works only if parent is set)
+
+return the HTML element.
+
+#### `input.selectInput(options)`
+- `options` selectInput options object:
+  - `className`
+  - `id`
+  - `onchange`
+  - `onblur`
+  - `oninput`
+  - `choices` object or array with choices (option html element will be created for every field):
+     - ` { choice1: value1, choice2:value2  }  `
+  - `parent` HTML element or ToggleElement
+
+
+#### `input.input(options)`
+- `options` input options object:
+  - `type` string, like the HTML input element
+  - `id`
+  - `label`
+  - `placeholder`
+  - `className`
+  - `value`
+  - `autofocus`
+  - `min`
+  - `max`
+  - `width`
+  - `height`
+  - `title`
+  - `step`
+  - `checked` logical
+  - `readOnly` logical
+  - `onchange`, `onblur`, `oninput`, `ondblclick`, `onfocusout`, `onclick`, `oncontextmenu` function
+  - `parent` HTML element or ToggleElement
 
 
 ## License
