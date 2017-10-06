@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Mario Juez (mjuez@fi.upm.es)
+// Copyright (c) 2016 Mario Juez (mjuez@fi.upm.es), Gherardo Varando (gherardo.varando@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ const Sidebar = require('./Sidebar.js');
 const GuiExtension = require('./GuiExtension.js');
 const ToggleElement = require('./ToggleElement.js');
 const Table = require('./Table.js');
-const taskManager = require('./TaskManager.js');
+const TaskManager = require('./TaskManager.js');
 const Task = require('./Task.js');
 const util = require('./util.js');
 const ProgressBar = require('./ProgressBar.js');
@@ -33,109 +33,107 @@ const ProgressBar = require('./ProgressBar.js');
 const icon = "fa fa-tasks";
 const toggleButtonId = 'tasksPageToggleButton';
 
-
-
 class TasksViewer extends GuiExtension {
 
-    constructor(gui) {
-        super(gui,{
-            icon: icon
-        });
-    }
+  constructor(gui) {
+    super(gui, {
+      icon: icon
+    });
+  }
 
-    activate() {
+  activate() {
 
-        this.addToggleButton({
-            id: toggleButtonId,
-            buttonsContainer: this.gui.header.actionsContainer,
-            className: 'btn btn-default',
-            groupClassName: 'pull-right',
-            groupId: 'tasksPage',
-            icon: icon
-        });
+    this.addToggleButton({
+      id: toggleButtonId,
+      buttonsContainer: this.gui.header.actionsContainer,
+      className: 'btn btn-default',
+      groupClassName: 'pull-right',
+      groupId: 'tasksPage',
+      icon: icon
+    });
 
-        this.toggleButton = this.buttonsContainer.buttons[`${toggleButtonId}`];
-        this.progressBar = new ProgressBar(this.toggleButton);
-        this.progressBar.setHeight(4);
+    this.toggleButton = this.buttonsContainer.buttons[`${toggleButtonId}`];
+    this.progressBar = new ProgressBar(this.toggleButton);
+    this.progressBar.setHeight(4);
 
-        this.addPane();
-        this.appendChild(this.pane);
+    this.addPane();
+    this.appendChild(this.pane);
 
-        this.taskManagerChangeListener = (...args) => {
-            if (args.length === 1) {
-                let taskId = args[0];
-                let task = taskManager.tasks[taskId].task;
-                let domElement = taskManager.tasks[taskId].domElement.element;
+    this.taskManagerChangeListener = (...args) => {
+      if (args.length === 1) {
+        let taskId = args[0];
+        let task = this.gui.taskManager.tasks[taskId].task;
+        let domElement = this.gui.taskManager.tasks[taskId].domElement.element;
 
-                if (task.status === Task.Status.RUNNING || task.status === Task.Status.CREATED) {
-                    if (!this.runningTasksContainer.contains(domElement)) {
-                        this.runningTasksContainer.insertBefore(domElement, this.runningTasksContainer.firstChild);
-                    }
-                } else {
-                    if (this.runningTasksContainer.contains(domElement)) {
-                        this.runningTasksContainer.removeChild(domElement);
-                    }
-                    if (!this.finishedTasksContainer.contains(domElement)) {
-                        this.finishedTasksContainer.insertBefore(domElement, this.finishedTasksContainer.firstChild);
-                    }
-                }
-            }
-        };
+        if (task.status === Task.Status.RUNNING || task.status === Task.Status.CREATED) {
+          if (!this.runningTasksContainer.contains(domElement)) {
+            this.runningTasksContainer.insertBefore(domElement, this.runningTasksContainer.firstChild);
+          }
+        } else {
+          if (this.runningTasksContainer.contains(domElement)) {
+            this.runningTasksContainer.removeChild(domElement);
+          }
+          if (!this.finishedTasksContainer.contains(domElement)) {
+            this.finishedTasksContainer.insertBefore(domElement, this.finishedTasksContainer.firstChild);
+          }
+        }
+      }
+    };
 
-        this.taskRemovedListener = (...args) => {
-            if (args.length === 1) {
-                let domElement = args[0].element;
-                if (this.finishedTasksContainer.contains(domElement)) {
-                    this.finishedTasksContainer.removeChild(domElement);
-                }
-            }
-        };
-        taskManager.on("change", this.taskManagerChangeListener);
-        taskManager.on("task.removed", this.taskRemovedListener);
+    this.taskRemovedListener = (...args) => {
+      if (args.length === 1) {
+        let domElement = args[0].element;
+        if (this.finishedTasksContainer.contains(domElement)) {
+          this.finishedTasksContainer.removeChild(domElement);
+        }
+      }
+    };
+    this.gui.taskManager.on("change", this.taskManagerChangeListener);
+    this.gui.taskManager.on("task.removed", this.taskRemovedListener);
 
 
-        taskManager.on("progress", (p) => {
-            this.gui.setProgress(p);
-            util.setProgress(p);
-            this.progressBar.setBar(p);
-        });
+    this.gui.taskManager.on("progress", (p) => {
+      this.gui.setProgress(p);
+      util.setProgress(p);
+      this.progressBar.setBar(p);
+    });
 
-        super.activate();
+    super.activate();
 
-    }
+  }
 
-    deactivate() {
-        this.element.removeChild(this.pane.element);
-        this.removeToggleButton(toggleButtonId);
-        taskManager.removeListener("change", this.taskManagerChangeListener);
-        taskManager.removeListener("task.removed", this.taskRemovedListener);
-        super.deactivate();
-    }
+  deactivate() {
+    this.element.removeChild(this.pane.element);
+    this.removeToggleButton(toggleButtonId);
+    this.gui.taskManager.removeListener("change", this.taskManagerChangeListener);
+    this.gui.taskManager.removeListener("task.removed", this.taskRemovedListener);
+    super.deactivate();
+  }
 
-    show() {
-        super.show();
-    }
+  show() {
+    super.show();
+  }
 
-    addPane() {
-        this.pane = new ToggleElement(util.div('pane tasks-pane'));
-        this.addSections();
-        this.pane.show();
-    }
+  addPane() {
+    this.pane = new ToggleElement(util.div('pane tasks-pane'));
+    this.addSections();
+    this.pane.show();
+  }
 
-    addSections() {
-        let leftContainer = util.div('left-container');
-        let rightContainer = util.div('right-container');
-        let runningTasksHeader = util.div('tasks-header','Running tasks');
-        let finishedTasksHeader = util.div('tasks-header','Finished tasks');
-        this.runningTasksContainer = util.div('running-tasks-container');
-        this.finishedTasksContainer = util.div('running-tasks-container');
-        leftContainer.appendChild(runningTasksHeader);
-        leftContainer.appendChild(this.runningTasksContainer);
-        rightContainer.appendChild(finishedTasksHeader);
-        rightContainer.appendChild(this.finishedTasksContainer);
-        this.pane.element.appendChild(leftContainer);
-        this.pane.element.appendChild(rightContainer);
-    }
+  addSections() {
+    let leftContainer = util.div('left-container');
+    let rightContainer = util.div('right-container');
+    let runningTasksHeader = util.div('tasks-header', 'Running tasks');
+    let finishedTasksHeader = util.div('tasks-header', 'Finished tasks');
+    this.runningTasksContainer = util.div('running-tasks-container');
+    this.finishedTasksContainer = util.div('running-tasks-container');
+    leftContainer.appendChild(runningTasksHeader);
+    leftContainer.appendChild(this.runningTasksContainer);
+    rightContainer.appendChild(finishedTasksHeader);
+    rightContainer.appendChild(this.finishedTasksContainer);
+    this.pane.element.appendChild(leftContainer);
+    this.pane.element.appendChild(rightContainer);
+  }
 
 }
 

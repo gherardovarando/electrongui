@@ -30,6 +30,7 @@ const {
 } = require('electron').remote;
 const ToggleElement = require('./ToggleElement');
 const ButtonsContainer = require('./ButtonsContainer');
+const TaskManager = require('./TaskManager');
 let child;
 
 
@@ -116,6 +117,7 @@ class Gui extends EventEmitter {
     this.footer.addNotificationBar();
     this._menuItems = [];
     this._menu = new Menu();
+    this.taskManager = new TaskManager();
     document.getElementsByTagName('body')[0].appendChild(ap);
   }
 
@@ -142,8 +144,8 @@ class Gui extends EventEmitter {
   }
 
   stopWaiting() {
-  //  this.header.progressBar.stopWaiting();
-  //  this.header.progressBar.setBar(0);
+    //  this.header.progressBar.stopWaiting();
+    //  this.header.progressBar.setBar(0);
   }
 
   reloadMenu() {
