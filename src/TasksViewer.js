@@ -64,6 +64,9 @@ class TasksViewer extends GuiExtension {
     this.toggleButton = this.buttonsContainer.buttons[`${toggleButtonId}`]
     this.progressBar = new ProgressBar(this.toggleButton)
     this.progressBar.setHeight(4)
+    this.gui.container.element.addEventListener('click',()=>{
+      this.modal.hide()
+    })
 
     this.addPane()
 
@@ -131,10 +134,21 @@ class TasksViewer extends GuiExtension {
     this.modalBar = new ProgressBar(footer)
     bc.addButton({
       text: '',
+      icon: 'fa fa-ban',
+      className: 'btn btn-negative',
+      action: ()=>{
+         this.gui.taskManager.cancelAllTasks()
+         this.progressBar.setBar(0)
+      },
+      groupId: 'groupfootermodaltask',
+      groupClassName: 'btn-group'
+    })
+    bc.addButton({
+      text: '',
       icon: 'fa fa-trash',
       className: 'btn btn-default',
       action: ()=>{
-
+         util.empty(this.finishedTasksContainer,this.finishedTasksContainer.firstChild)
       },
       groupId: 'groupfootermodaltask',
       groupClassName: 'btn-group'

@@ -192,41 +192,30 @@ Task.TaskDOMElement = class {
       }
     }
 
-    this.element = document.createElement("DIV")
-    this.element.className = "task-container"
-    this.mainInfoContainer = document.createElement("DIV")
-    this.mainInfoContainer.className = "main-info-container"
+    this.element = util.div('task-container')
+    this.mainInfoContainer = util.div('main-info-container')
 
-    this.statusIconContainer = document.createElement("DIV")
-    this.statusIconContainer.className = "status-icon-container"
+    this.statusIconContainer = util.div('status-icon-container')
     this.statusIconContainer.onclick = openDetails
     this.statusIcon = document.createElement("I")
     this.statusIconContainer.appendChild(this.statusIcon)
     this.mainInfoContainer.appendChild(this.statusIconContainer)
 
-    this.middleContainer = document.createElement("DIV")
-    this.middleContainer.className = "middle-container"
+    this.middleContainer = util.div('middle-container')
     this.middleContainer.onclick = openDetails
 
-    this.taskDataTableContainer = document.createElement("DIV")
-    this.taskDataTableContainer.className = "task-data-table-container"
-    this.taskDataContainer = document.createElement("DIV")
-    this.taskDataContainer.className = "task-data-container"
-    this.nameContainer = document.createElement("DIV")
-    this.nameContainer.className = "name-container"
-    this.nameContainer.innerHTML = task.name
+    this.taskDataTableContainer = util.div('task-data-table-container')
+    this.taskDataContainer = util.div('task-data-container')
+    this.nameContainer = util.div('name-container', task.name)
     this.taskDataContainer.appendChild(this.nameContainer)
 
-    this.detailsContainer = document.createElement("DIV")
-    this.detailsContainer.className = "details-container"
-    this.detailsContainer.innerHTML = task.details
+    this.detailsContainer = util.div('details-container', task.details)
     this.taskDataContainer.appendChild(this.detailsContainer)
     this.taskDataTableContainer.appendChild(this.taskDataContainer)
 
 
 
-    this.actionButtonContainer = document.createElement("DIV")
-    this.actionButtonContainer.className = "action-button-container"
+    this.actionButtonContainer = util.div('action-button-container')
     this.taskDataTableContainer.appendChild(this.actionButtonContainer)
     this.middleContainer.appendChild(this.taskDataTableContainer)
 
@@ -234,37 +223,38 @@ Task.TaskDOMElement = class {
     this.progressBar.startWaiting()
     this.mainInfoContainer.appendChild(this.middleContainer)
 
-    this.cancelContainer = document.createElement("DIV")
-    this.cancelContainer.className = "cancel-container"
-    this.btnCancel = util.icon('fa fa-times-circle fa-2x danger')
-    this.btnCancel.onclick = () => {
-      dialog.showMessageBox({
-        title: 'Warning!',
-        type: 'warning',
-        buttons: ['No', "Yes"],
-        message: `This action cannot be undone. Continue?`,
-        noLink: true
-      }, (id) => {
-        if (id > 0) {
-          if (!this.task.cancel()) {
-            this.task.emit("remove")
-          }
-        }
-      })
-    }
-    this.cancelContainer.appendChild(this.btnCancel)
-    this.mainInfoContainer.appendChild(this.cancelContainer)
+    // this.cancelContainer = document.createElement("DIV")
+    // this.cancelContainer.className = "cancel-container"
+    // this.btnCancel = util.icon('fa fa-times-circle fa-2x danger')
+    // this.btnCancel.onclick = () => {
+    //   dialog.showMessageBox({
+    //     title: 'Warning!',
+    //     type: 'warning',
+    //     buttons: ['No', "Yes"],
+    //     message: `This action cannot be undone. Continue?`,
+    //     noLink: true
+    //   }, (id) => {
+    //     if (id > 0) {
+    //       if (!this.task.cancel()) {
+    //         this.task.emit("remove")
+    //       }
+    //     }
+    //   })
+    // }
+    // this.cancelContainer.appendChild(this.btnCancel)
+    // this.mainInfoContainer.appendChild(this.cancelContainer)
+    this.mainInfoContainer.appendChild(util.icon(task.icon || ''))
     this.element.appendChild(this.mainInfoContainer)
 
     this.additionalInfoContainer = document.createElement("DIV")
-    this.additionalInfoContainer.className = "additional-info-container cell-conteiner"
+    this.additionalInfoContainer.className = "additional-info-container"
     this.additionalInfoGrid = new Grid(8, 1)
-    this.statusElement = util.div('cell')
+    this.statusElement = util.div('')
     this.additionalInfoGrid.addElement(this.statusElement)
-    this.failureInfoElement = util.div('cell')
+    this.failureInfoElement = util.div('')
     this.additionalInfoGrid.addElement(this.failureInfoElement)
 
-    this.startTimeContainer = util.div('cell')
+    this.startTimeContainer = util.div('')
     this.startTimeContainer.innerHTML = `<strong>Started on: </strong>${dateFormat(this.task.startTime, format)}`
     this.addAditionalInformation(this.startTimeContainer)
 
@@ -288,29 +278,28 @@ Task.TaskDOMElement = class {
    * - A task with CANCELLED status will show a red exclamation.
    */
   _configureByStatus() {
-    this.statusElement.innerHTML = "<strong>Status: </strong>"
-
+    this.statusElement.innerHTML = ''
     switch (this.task.status) {
       case Task.Status.CREATED:
         this.statusElement.innerHTML += "CREATED"
-        this.statusIcon.className = "fa fa-cogs fa-2x"
+        this.statusIcon.className = "fa fa-cogs"
         break
       case Task.Status.RUNNING:
         this.statusElement.innerHTML += "RUNNING"
-        this.statusIcon.className = "fa fa-circle-o-notch fa-spin fa-2x"
+        this.statusIcon.className = "fa fa-circle-o-notch fa-spin"
         break
       case Task.Status.COMPLETED:
         this.statusElement.innerHTML += "COMPLETED"
-        this.statusIcon.className = "fa fa-check fa-2x completed"
+        this.statusIcon.className = "fa fa-check completed"
         break
       case Task.Status.FAILED:
         this.statusElement.innerHTML += "FAILED"
         this.failureInfoElement.innerHTML = this.task.failureInfo
-        this.statusIcon.className = "fa fa-exclamation-triangle fa-2x wrong"
+        this.statusIcon.className = "fa fa-exclamation-triangle wrong"
         break
       case Task.Status.CANCELLED:
         this.statusElement.innerHTML += "CANCELLED"
-        this.statusIcon.className = "fa fa-exclamation-triangle fa-2x wrong"
+        this.statusIcon.className = "fa fa-exclamation-triangle wrong"
         break
     }
   }
@@ -350,17 +339,17 @@ Task.TaskDOMElement = class {
 
     this.task.on("run", () => {
       this._configureByStatus()
-      this.startTimeContainer.innerHTML = `<strong>Started on: </strong>${dateFormat(this.task.startTime, format)}`
+      //this.startTimeContainer.innerHTML = `<strong>Started on: </strong>${dateFormat(this.task.startTime, format)}`
     })
 
     this.task.on("success", () => {
       this._configureByStatus()
       this.progressBar.stopWaiting()
       this.progressBar.setBar(100)
-      this.finishTimeContainer.innerHTML = `<strong>Finished on: </strong>${dateFormat(this.task.finishTime, format)}`
-      if (Object.keys(this.task.customAction).length > 0) {
-        this._addActionButton()
-      }
+      //this.finishTimeContainer.innerHTML = `<strong>Finished on: </strong>${dateFormat(this.task.finishTime, format)}`
+      // if (Object.keys(this.task.customAction).length > 0) {
+      //   this._addActionButton()
+      // }
     })
 
     this.task.on("fail", () => {

@@ -99,6 +99,10 @@ class TaskManager extends EventEmitter {
    * @param {Task} task - Binding target task.
    */
   _bindEventListeners(task) {
+
+    task.on('run', ()=>{
+      this.emit("change", task.id)
+    })
     task.on("success", () => {
       this.emit("change", task.id)
     })
