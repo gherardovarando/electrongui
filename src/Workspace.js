@@ -18,99 +18,99 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-"use strict";
-const storage = require('electron-json-storage');
-const ToggleElement = require('./ToggleElement');
-const fs = require('fs');
+"use strict"
+const storage = require('electron-json-storage')
+const ToggleElement = require('./ToggleElement')
+const fs = require('fs')
 const {
   dialog
-} = require('electron').remote;
-const util = require('./util.js');
-const GuiExtension = require('./GuiExtension.js');
+} = require('electron').remote
+const util = require('./util.js')
+const GuiExtension = require('./GuiExtension.js')
 
 class Workspace extends GuiExtension {
   constructor(gui,options) {
     super(gui,{
       icon: 'fa fa-database'
-    });
-    options = options || {};
+    })
+    options = options || {}
     window.addEventListener('beforeunload', (e) => {
-      storage.set('workspace', this.spaces, (error) => {});
-    });
-    let a = 0;
+      storage.set('workspace', this.spaces, (error) => {})
+    })
+    let a = 0
     setInterval(() => {
-      storage.set('workspace', this.spaces, (error) => {});
-    }, options.syncinterval || 30000);
-    this.activate();
+      storage.set('workspace', this.spaces, (error) => {})
+    }, options.syncinterval || 30000)
+    this.activate()
   }
 
   activate() {
-    super.activate();
+    super.activate()
     this.spaces = {
       workspace: {
         path: ''
       }
-    };
+    }
     storage.get('workspace', (error, data) => {
-      if (error) return;
+      if (error) return
       if (data.workspace) {
-        this.spaces = data || this.spaces;
-        this.emit('load');
+        this.spaces = data || this.spaces
+        this.emit('load')
       }
-    });
+    })
 
     this.gui.header.actionsContainer.addButton({
       id: 'save',
       groupId: 'basetools',
       icon: 'fa fa-save',
       action: () => {
-        this.save();
+        this.save()
       }
-    });
+    })
 
     this.gui.header.actionsContainer.addButton({
       id: 'load',
       groupId: 'basetools',
       icon: 'fa fa-folder-open-o',
       action: () => {
-        this.loadChecking();
+        this.loadChecking()
       }
-    });
-    //this.pane = new ToggleElement(document.createElement('DIV'));
-    //this.pane.element.className = 'pane padded';
-    //this.treeView = new TreeList(this.pane.element, this.spaces);
-    //this.element.appendChild(this.pane.element);
+    })
+    //this.pane = new ToggleElement(document.createElement('DIV'))
+    //this.pane.element.className = 'pane padded'
+    //this.treeView = new TreeList(this.pane.element, this.spaces)
+    //this.element.appendChild(this.pane.element)
 
     // this.addToggleButton({
     //     groupId: 'basetools',
     //     icon: 'fa fa-cubes',
     //     buttonsContainer: this.gui.header.actionsContainer
-    // });
+    // })
 
 
   }
 
   deactivate() {
-    //this.removeToggleButton();
-    this.gui.header.actionsContainer.removeButton('save');
-    this.gui.header.actionsContainer.removeButton('load');
-    this.clear();
-    super.deactivate();
+    //this.removeToggleButton()
+    this.gui.header.actionsContainer.removeButton('save')
+    this.gui.header.actionsContainer.removeButton('load')
+    this.clear()
+    super.deactivate()
   }
 
   show() {
-    //super.show();
+    //super.show()
   }
 
   addSpace(extension, object, overwrite) {
     if (extension instanceof GuiExtension) {
       if (object) {
-        if (!overwrite && this.spaces[extension.constructor.name]) return;
-        this.spaces[extension.constructor.name] = object;
+        if (!overwrite && this.spaces[extension.constructor.name]) return
+        this.spaces[extension.constructor.name] = object
 
       } else {
         if (extension._space) {
-          this.addSpace(extension, extension._space);
+          this.addSpace(extension, extension._space)
         }
       }
     }
@@ -118,9 +118,9 @@ class Workspace extends GuiExtension {
 
   getSpace(extension) {
     if (extension instanceof GuiExtension) {
-      return this.spaces[extension.constructor.name];
+      return this.spaces[extension.constructor.name]
     } else if (typeof extension === 'string') {
-      return this.spaces[extension];
+      return this.spaces[extension]
     }
   }
 
@@ -129,28 +129,28 @@ class Workspace extends GuiExtension {
       workspace: {
         path: path || ''
       }
-    };
-    this.emit('load');
+    }
+    this.emit('load')
   }
 
   reg() {
-    storage.set('workspace', this.spaces);
+    storage.set('workspace', this.spaces)
   }
 
   safequit() {
     storage.set('workspace', this.spaces, (error) => {
-      app.quit();
-    });
+      app.quit()
+    })
   }
 
   removeSpace(extension) {
-    delete this.spaces[extension.constructor.name];
+    delete this.spaces[extension.constructor.name]
   }
 
   newChecking() {
     if (Object.keys(this.spaces).length < 2) {
-      this.load();
-      return;
+      this.load()
+      return
     }
     dialog.showMessageBox({
       title: 'Save workspace?',
@@ -163,19 +163,19 @@ class Workspace extends GuiExtension {
       if (id > 0) {
         if (id > 1) {
           this.save(this.spaces.workspace.path, () => {
-            this.newWorkspace();
-          });
+            this.newWorkspace()
+          })
         } else {
-          this.newWorkspace();
+          this.newWorkspace()
         }
       }
-    });
+    })
   }
 
   loadChecking() {
     if (Object.keys(this.spaces).length < 2) {
-      this.load();
-      return;
+      this.load()
+      return
     }
     dialog.showMessageBox({
       title: 'Save workspace?',
@@ -188,27 +188,27 @@ class Workspace extends GuiExtension {
       if (id > 0) {
         if (id > 1) {
           this.save(this.spaces.workspace.path, () => {
-            this.load();
-          });
+            this.load()
+          })
         } else {
-          this.load();
+          this.load()
         }
       }
-    });
+    })
   }
 
 
   save(path, callback) {
-    let content = JSON.stringify(this.spaces);
+    let content = JSON.stringify(this.spaces)
     if (typeof path === 'string' && path != '') {
       fs.writeFile(path, content, () => {
-        this.spaces.workspace.path = path;
-        storage.set('workspace', this.spaces);
+        this.spaces.workspace.path = path
+        storage.set('workspace', this.spaces)
         if (callback) {
-          callback(path);
+          callback(path)
         }
-      });
-      return;
+      })
+      return
     }
     dialog.showSaveDialog({
         title: 'Save the  current Workspace',
@@ -218,38 +218,38 @@ class Workspace extends GuiExtension {
         }]
       },
       (fileName) => {
-        let cl = callback;
+        let cl = callback
 
         if (fileName === undefined) {
-          this.gui.notify("Workspace not saved");
-          return;
+          this.gui.notify("Workspace not saved")
+          return
         }
 
         fs.writeFile(fileName, content, (err) => {
           if (err) {
             this.gui.notify("An error ocurred creating the file " + err.message)
           }
-          this.spaces.workspace.path = fileName;
-          storage.set('workspace', this.spaces);
-          this.gui.notify(`The workspace has been succesfully saved`);
+          this.spaces.workspace.path = fileName
+          storage.set('workspace', this.spaces)
+          this.gui.notify(`The workspace has been succesfully saved`)
           if (cl) {
-            cl();
+            cl()
           }
-        });
-      });
+        })
+      })
   }
 
 
   load(path) {
     if (typeof path === 'string' && path != '') {
-      wk = util.readJSONsync(path);
-      this.spaces = wk;
-      storage.set('workspace', this.spaces);
+      wk = util.readJSONsync(path)
+      this.spaces = wk
+      storage.set('workspace', this.spaces)
       this.spaces.workspace = this.spaces.workspace || {
         path: ''
-      };
-      this.emit('load');
-      return;
+      }
+      this.emit('load')
+      return
     }
     dialog.showOpenDialog({
       title: "Load a Workspace",
@@ -259,28 +259,28 @@ class Workspace extends GuiExtension {
       }],
       properties: ['openFile']
     }, (file) => {
-      let wk;
+      let wk
       try {
-        wk = util.readJSONsync(file[0]);
+        wk = util.readJSONsync(file[0])
       } catch (e) {
-        this.gui.notify(e);
-        return;
+        this.gui.notify(e)
+        return
       }
       try {
-        this.spaces = wk;
+        this.spaces = wk
         this.spaces.workspace = this.spaces.workspace || {
           path: ''
-        };
-        storage.set('workspace', this.spaces);
-        this.emit('load');
+        }
+        storage.set('workspace', this.spaces)
+        this.emit('load')
       } catch (e) {
-        this.gui.notify(e);
+        this.gui.notify(e)
       }
-    });
+    })
   }
 
 
 }
 
 
-module.exports = Workspace;
+module.exports = Workspace

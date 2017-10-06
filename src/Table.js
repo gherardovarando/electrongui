@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-"use strict";
+"use strict"
 
-const ToggleElement = require('./ToggleElement.js');
-const {dialog} = require('electron').remote;
-const json2csv = require('json2csv');
-const fs = require('fs');
+const ToggleElement = require('./ToggleElement.js')
+const {dialog} = require('electron').remote
+const json2csv = require('json2csv')
+const fs = require('fs')
 
 /**
  * This class transforms data into an HTML table.
@@ -38,14 +38,14 @@ class Table extends ToggleElement {
      * Creates a Table.
      */
     constructor() {
-        var element = document.createElement('TABLE');
-        element.className = "table-striped";
-        super(element);
-        this.thead = document.createElement('THEAD');
-        this.tbody = document.createElement('TBODY');
-        this.columnNames = [];
-        element.appendChild(this.thead);
-        element.appendChild(this.tbody);
+        var element = document.createElement('TABLE')
+        element.className = "table-striped"
+        super(element)
+        this.thead = document.createElement('THEAD')
+        this.tbody = document.createElement('TBODY')
+        this.columnNames = []
+        element.appendChild(this.thead)
+        element.appendChild(this.tbody)
     }
 
     /**
@@ -64,33 +64,33 @@ class Table extends ToggleElement {
      */
     addRow(rowData) {
         if (!this.thead.hasChildNodes()) {
-            this.setHeader(rowData);
+            this.setHeader(rowData)
         }
 
-        let tr = document.createElement('TR');
+        let tr = document.createElement('TR')
 
         this.columnNames.map((columnName) => {
             if (Object.keys(rowData).indexOf(columnName) >= 0) {
-                let td = document.createElement('TD');
-                td.innerHTML = rowData[columnName].col_value;
-                tr.appendChild(td);
+                let td = document.createElement('TD')
+                td.innerHTML = rowData[columnName].col_value
+                tr.appendChild(td)
             } else {
-                let td = document.createElement('TD');
-                tr.appendChild(td);
+                let td = document.createElement('TD')
+                tr.appendChild(td)
             }
-        });
+        })
 
         Object.keys(rowData).map((key) => {
             if (this.columnNames.indexOf(key) < 0) {
-                this.addColHead(key);
-                let td = document.createElement('TD');
-                td.innerHTML = rowData[key].col_value;
-                tr.appendChild(td);
+                this.addColHead(key)
+                let td = document.createElement('TD')
+                td.innerHTML = rowData[key].col_value
+                tr.appendChild(td)
             }
 
-        });
+        })
 
-        this.tbody.appendChild(tr);
+        this.tbody.appendChild(tr)
     }
 
     /**
@@ -99,12 +99,12 @@ class Table extends ToggleElement {
      * @param {Object} rowData - Row data.
      */
     setHeader(rowData) {
-        let tr = document.createElement('TR');
-        this.thead.tr = tr;
+        let tr = document.createElement('TR')
+        this.thead.tr = tr
         Object.keys(rowData).map((key) => {
-            this.addColHead(rowData[key].col_name);
-        });
-        this.thead.appendChild(tr);
+            this.addColHead(rowData[key].col_name)
+        })
+        this.thead.appendChild(tr)
     }
 
     /**
@@ -113,10 +113,10 @@ class Table extends ToggleElement {
      * @param {string} colName - Column name.
      */
     addColHead(colName) {
-        let th = document.createElement('TH');
-        th.innerHTML = colName;
-        this.columnNames.push(colName);
-        this.thead.tr.appendChild(th);
+        let th = document.createElement('TH')
+        th.innerHTML = colName
+        this.columnNames.push(colName)
+        this.thead.tr.appendChild(th)
     }
 
     /**
@@ -127,16 +127,16 @@ class Table extends ToggleElement {
      */
     exportToCSV(dialogTitle) {
         if (this.thead.hasChildNodes()) {
-            var fields = Array.from(this.thead.firstChild.children).map((child) => child.innerHTML);
+            var fields = Array.from(this.thead.firstChild.children).map((child) => child.innerHTML)
 
             if (this.tbody.hasChildNodes()) {
                 var rows = Array.from(this.tbody.children).map((tr) => {
-                    var row = {};
+                    var row = {}
                     Object.keys(fields).map((key) => {
-                        row[fields[key]] = tr.children[key].innerHTML;
-                    });
-                    return row;
-                });
+                        row[fields[key]] = tr.children[key].innerHTML
+                    })
+                    return row
+                })
 
                 dialog.showSaveDialog({
                     title: dialogTitle,
@@ -149,12 +149,12 @@ class Table extends ToggleElement {
                     let cont = json2csv({
                         data: rows,
                         fields: fields
-                    });
-                    fs.writeFile(filename, cont);
-                });
+                    })
+                    fs.writeFile(filename, cont)
+                })
             }
         }
     }
 }
 
-module.exports = Table;
+module.exports = Table

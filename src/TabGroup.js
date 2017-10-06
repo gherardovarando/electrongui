@@ -18,49 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-'use strict';
+'use strict'
 
-const util = require('./util.js');
-const ToggleElement = require('./ToggleElement.js');
+const util = require('./util.js')
+const ToggleElement = require('./ToggleElement.js')
 
 class TabGroup extends ToggleElement {
 
     constructor(parent) {
         if (parent.appendChild && (typeof parent.id === 'string')) {
-            let element = util.div(`tab-group`);
-            super(element);
-            this.tabItems = {};
-            this.appendTo(parent);
+            let element = util.div(`tab-group`)
+            super(element)
+            this.tabItems = {}
+            this.appendTo(parent)
         }
     }
 
     addItem(config) {
-        let cssclass = `tab-item`;
+        let cssclass = `tab-item`
         if(Object.keys(this.tabItems).length === 0){
-            cssclass = `${cssclass} active`;
+            cssclass = `${cssclass} active`
         }
 
-        let tabItem = util.div(cssclass, config.name);
+        let tabItem = util.div(cssclass, config.name)
         tabItem.addEventListener('click', () => {
             if (!tabItem.classList.contains(`active`)) {
                 Object.keys(this.tabItems).map((key) => {
                     if (this.tabItems[key].classList.contains(`active`)) {
-                        this.tabItems[key].classList.remove(`active`);
+                        this.tabItems[key].classList.remove(`active`)
                     }
-                });
+                })
 
-                tabItem.classList.add(`active`);
+                tabItem.classList.add(`active`)
             }
-        });
-        this.tabItems[config.id] = tabItem;
-        this.element.appendChild(tabItem);
+        })
+        this.tabItems[config.id] = tabItem
+        this.element.appendChild(tabItem)
     }
 
     addClickListener(id, listener) {
-        let tabItem = this.tabItems[id];
-        tabItem.addEventListener('click', listener);
+        let tabItem = this.tabItems[id]
+        tabItem.addEventListener('click', listener)
     }
 
 }
 
-module.exports = TabGroup;
+module.exports = TabGroup

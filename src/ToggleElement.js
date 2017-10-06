@@ -18,35 +18,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-'use strict';
-const EventEmitter = require('events');
-const util = require('./util');
+'use strict'
+const EventEmitter = require('events')
+const util = require('./util')
 
 class ToggleElement extends EventEmitter {
     constructor(element) {
-        super();
+        super()
         if (!element) {
-            element = util.div();
+            element = util.div()
         }
-        this.element = element;
-        this.id = element.id;
+        this.element = element
+        this.id = element.id
     }
 
     appendTo(par) {
-        if (!this.element) return;
-        if (!par) return;
+        if (!this.element) return
+        if (!par) return
         if (typeof par.appendChild === 'function') {
-            par.appendChild(this.element);
-            this.parent = par;
+            par.appendChild(this.element)
+            this.parent = par
         }
     }
 
     appendChild(el) {
         if (this.element) {
             if (el.element) {
-                this.element.appendChild(el.element);
+                this.element.appendChild(el.element)
             } else if (el.appendChild) {
-                this.element.appendChild(el);
+                this.element.appendChild(el)
             }
         }
     }
@@ -54,43 +54,43 @@ class ToggleElement extends EventEmitter {
     removeChild(el) {
         if (this.element) {
             if (el.element) {
-                this.element.removeChild(el.element);
+                this.element.removeChild(el.element)
             } else if (el.appendChild) {
-                this.element.removeChild(el);
+                this.element.removeChild(el)
             }
         }
     }
 
 
     clear() {
-        util.empty(this.element, this.element.firstChild);
+        util.empty(this.element, this.element.firstChild)
     }
 
     show() {
-        this.element.style.display = "";
-        this.emit('show');
+        this.element.style.display = ""
+        this.emit('show')
     }
 
     hide() {
-        this.element.style.display = "none";
-        this.emit('hide');
+        this.element.style.display = "none"
+        this.emit('hide')
     }
 
 
     toggle() {
         if (this.element.style.display === 'none') {
-            this.show();
+            this.show()
         } else {
-            this.hide();
+            this.hide()
         }
     }
 
     isHidden() {
-        return this.element.style.display === 'none';
+        return this.element.style.display === 'none'
     }
 
     addToggleButton(options) {
-        let opt;
+        let opt
         if (options.buttonsContainer) {
             opt = {
                 text: options.text,
@@ -101,34 +101,31 @@ class ToggleElement extends EventEmitter {
                 groupId: options.groupId,
                 groupClassName: options.groupClassName,
                 action: () => {
-                    if (options.action) {
-                        options.action();
-                    }
-                    this.toggle();
-
+                    if (typeof options.action === 'function') options.action()
+                    this.toggle()
                 }
-            };
-            options.buttonsContainer.addButton(opt);
-            this.buttonsContainer = options.buttonsContainer;
+            }
+            options.buttonsContainer.addButton(opt)
+            this.buttonsContainer = options.buttonsContainer
 
             this.on('show', (e) => {
                 if (this.buttonsContainer.buttons[opt.id]) {
-                    this.buttonsContainer.buttons[opt.id].classList.add('active');
+                    this.buttonsContainer.buttons[opt.id].classList.add('active')
                 }
-            });
+            })
 
             this.on('hide', (e) => {
                 if (this.buttonsContainer.buttons[opt.id]) {
-                    this.buttonsContainer.buttons[opt.id].classList.remove('active');
+                    this.buttonsContainer.buttons[opt.id].classList.remove('active')
                 }
-            });
+            })
         }
 
 
     }
     removeToggleButton(id) {
-        this.buttonsContainer.removeButton(id || this.id);
+        this.buttonsContainer.removeButton(id || this.id)
     }
 }
 
-module.exports = ToggleElement;
+module.exports = ToggleElement

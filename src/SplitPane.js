@@ -18,42 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-"use strict";
+"use strict"
 
-const ToggleElement = require('./ToggleElement');
+const ToggleElement = require('./ToggleElement')
 
 
 class SplitPane extends ToggleElement {
     constructor(element) {
-        super(element);
-        this.element.className = 'pane';
-        this.top = new ToggleElement(document.createElement('DIV'));
-        this.top.element.className = 'h-pane-top';
-        this.top.element.style.height = "100%";
-        this.appendChild(this.top);
+        super(element)
+        this.element.className = 'pane'
+        this.top = new ToggleElement(document.createElement('DIV'))
+        this.top.element.className = 'h-pane-top'
+        this.top.element.style.height = "100%"
+        this.appendChild(this.top)
 
-        this.bottom = new ToggleElement(document.createElement('DIV'));
-        this.bottom.element.className = 'h-pane-bottom';
-        this.bottom.element.style.height = "0%";
-        this.appendChild(this.bottom);
+        this.bottom = new ToggleElement(document.createElement('DIV'))
+        this.bottom.element.className = 'h-pane-bottom'
+        this.bottom.element.style.height = "0%"
+        this.appendChild(this.bottom)
 
     }
 
     showBottom(x) {
-        this.bottom.element.style.height = `${x||70}%`;
-        this.top.element.style.height = `${(100-x)||30}%`;
+        this.bottom.element.style.height = `${x||70}%`
+        this.top.element.style.height = `${(100-x)||30}%`
     }
 
     hideBottom() {
-        this.top.element.style.height = "100%";
-        this.bottom.element.style.height = "0%";
+        this.top.element.style.height = "100%"
+        this.bottom.element.style.height = "0%"
     }
 
     toggleBottom() {
         if (this.bottom.element.style.height == "0%") {
-            this.showBottom();
+            this.showBottom()
         } else {
-            this.hideBottom();
+            this.hideBottom()
         }
     }
 
@@ -61,4 +61,4 @@ class SplitPane extends ToggleElement {
 }
 
 
-module.exports = SplitPane;
+module.exports = SplitPane

@@ -17,10 +17,10 @@
  // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  // SOFTWARE.
-'use strict';
+'use strict'
 
-const ToggleElement = require('./ToggleElement.js');
-const util = require('./util.js');
+const ToggleElement = require('./ToggleElement.js')
+const util = require('./util.js')
 
 class FlexLayout extends ToggleElement {
 
@@ -36,81 +36,81 @@ class FlexLayout extends ToggleElement {
      *  in percentage of the first container.
      */
     constructor(parent, type, firstContainerSize) {
-        let element = util.div('flex-layout');
-        super(element);
+        let element = util.div('flex-layout')
+        super(element)
 
-        let isDragging = false;
+        let isDragging = false
 
-        this.firstContainer = util.div();
-        element.appendChild(this.firstContainer);
+        this.firstContainer = util.div()
+        element.appendChild(this.firstContainer)
 
-        let drag = util.div();
-        drag.appendChild(util.div('line'));
-        element.appendChild(drag);
+        let drag = util.div()
+        drag.appendChild(util.div('line'))
+        element.appendChild(drag)
 
-        this.lastContainer = util.div();
-        element.appendChild(this.lastContainer);
+        this.lastContainer = util.div()
+        element.appendChild(this.lastContainer)
 
         if (type === FlexLayout.Type.HORIZONTAL) {
-            this.firstContainer.className = 'horizontal-container';
-            this.firstContainer.style.width = `${firstContainerSize}%`;
-            this.lastContainer.className = 'horizontal-container right';
-            this.lastContainer.style.width = `${100 - firstContainerSize}%`;
-            drag.className = 'drag-h';
+            this.firstContainer.className = 'horizontal-container'
+            this.firstContainer.style.width = `${firstContainerSize}%`
+            this.lastContainer.className = 'horizontal-container right'
+            this.lastContainer.style.width = `${100 - firstContainerSize}%`
+            drag.className = 'drag-h'
         } else if (type === FlexLayout.Type.VERTICAL) {
-            this.firstContainer.className = 'vertical-container';
-            this.firstContainer.style.height = `${firstContainerSize}%`;
-            this.lastContainer.className = 'vertical-container bottom';
-            this.lastContainer.style.height = `${100 - firstContainerSize}%`;
-            drag.className = 'drag-v';
+            this.firstContainer.className = 'vertical-container'
+            this.firstContainer.style.height = `${firstContainerSize}%`
+            this.lastContainer.className = 'vertical-container bottom'
+            this.lastContainer.style.height = `${100 - firstContainerSize}%`
+            drag.className = 'drag-v'
         }
 
-        parent.appendChild(element);
+        parent.appendChild(element)
 
         //
         // EVENTS
         //
 
         drag.onmousedown = () => {
-            isDragging = true;
+            isDragging = true
             if (type === FlexLayout.Type.HORIZONTAL) {
-                this.firstContainer.style.cursor = 'col-resize';
-                this.lastContainer.style.cursor = 'col-resize';
+                this.firstContainer.style.cursor = 'col-resize'
+                this.lastContainer.style.cursor = 'col-resize'
             } else if (type === FlexLayout.Type.VERTICAL) {
-                this.firstContainer.style.cursor = 'row-resize';
-                this.lastContainer.style.cursor = 'row-resize';
+                this.firstContainer.style.cursor = 'row-resize'
+                this.lastContainer.style.cursor = 'row-resize'
             }
-        };
+        }
 
         element.onmousemove = (e) => {
             if (isDragging) {
-                let sumPercentages = this.firstContainer + this.lastContainer;
-                let elemRect = element.getBoundingClientRect();
+                let sumPercentages = this.firstContainer + this.lastContainer
+                let elemRect = element.getBoundingClientRect()
                 if (type === FlexLayout.Type.HORIZONTAL) {
-                    let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100;
-                    let percentageRight = 100 - percentageLeft;
+                    let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100
+                    let percentageRight = 100 - percentageLeft
                     if (percentageRight > 3 && percentageRight < 97) {
-                        this.firstContainer.style.width = `${percentageLeft}%`;
-                        this.lastContainer.style.width = `${percentageRight}%`;
+                        this.firstContainer.style.width = `${percentageLeft}%`
+                        this.lastContainer.style.width = `${percentageRight}%`
                     }
                 } else if (type === FlexLayout.Type.VERTICAL) {
-                    let percentageTop = ((e.pageY - elemRect.top) / element.offsetHeight) * 100;
-                    let percentageBottom = 100 - percentageTop;
+                    let percentageTop = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
+                    let percentageBottom = 100 - percentageTop
                     if (percentageBottom > 3 && percentageBottom < 97) {
-                        this.firstContainer.style.height = `${percentageTop}%`;
-                        this.lastContainer.style.height = `${percentageBottom}%`;
+                        this.firstContainer.style.height = `${percentageTop}%`
+                        this.lastContainer.style.height = `${percentageBottom}%`
                     }
                 }
             }
-        };
+        }
 
         document.onmouseup = () => {
             if (isDragging) {
-                this.firstContainer.style.cursor = null;
-                this.lastContainer.style.cursor = null;
-                isDragging = false;
+                this.firstContainer.style.cursor = null
+                this.lastContainer.style.cursor = null
+                isDragging = false
             }
-        };
+        }
     }
 
     /**
@@ -119,7 +119,7 @@ class FlexLayout extends ToggleElement {
      *  appended.
      */
     appendToFirstContainer(element) {
-        this.firstContainer.appendChild(element);
+        this.firstContainer.appendChild(element)
     }
 
     /**
@@ -128,7 +128,7 @@ class FlexLayout extends ToggleElement {
      *  appended.
      */
     appendToLastContainer(element) {
-        this.lastContainer.appendChild(element);
+        this.lastContainer.appendChild(element)
     }
 }
 
@@ -137,4 +137,4 @@ FlexLayout.Type = {
     VERTICAL: 1
 }
 
-module.exports = FlexLayout;
+module.exports = FlexLayout

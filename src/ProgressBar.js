@@ -17,79 +17,79 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-'use strict';
+'use strict'
 
-const ToggleElement = require('./ToggleElement');
+const ToggleElement = require('./ToggleElement')
 
 
 // ProgressBar <- Bar (ToggleElement)
 class ProgressBar extends ToggleElement {
     constructor(parent) {
-        let element = document.createElement('DIV');
-        element.className = 'progress-bar-container';
-        parent.appendChild(element);
-        super(element);
-        this.parent = parent;
-        this.value = 0;
-        this.bar = new ToggleElement(document.createElement('DIV'));
-        this.bar.element.className = 'progress-bar';
-        this.element.appendChild(this.bar.element);
+        let element = document.createElement('DIV')
+        element.className = 'progress-bar-container'
+        parent.appendChild(element)
+        super(element)
+        this.parent = parent
+        this.value = 0
+        this.bar = new ToggleElement(document.createElement('DIV'))
+        this.bar.element.className = 'progress-bar'
+        this.element.appendChild(this.bar.element)
     }
 
 
     setHeight(h){
-      this.element.style.height = `${h}px`;
-      this.bar.element.style.height = `${h}px`;
+      this.element.style.height = `${h}px`
+      this.bar.element.style.height = `${h}px`
     }
 
     // value  in  [0,100]
     setBar(value) {
-        if (isNaN(value)) return;
-        this.value = value;
-        this.bar.element.style.width = `${value}%`;
-        this.element.title = `${parseInt(value)}%`;
-        this.showBar();
+        if (isNaN(value)) return
+        this.value = value
+        this.bar.element.style.width = `${value}%`
+        this.element.title = `${parseInt(value)}%`
+        this.showBar()
     }
 
     startWaiting() {
-        let direction = 0.5;
-        let currentPosition = 0;
+        let direction = 0.5
+        let currentPosition = 0
         this.interval = setInterval(() => {
-            let width = 10;
-            currentPosition += direction;
+            let width = 10
+            currentPosition += direction
             if (currentPosition >= 100 - width || currentPosition <= 0) {
-                direction *= -1;
+                direction *= -1
             }
-            this.bar.element.style.width = `${width}%`;
-            this.bar.element.style.left = `${currentPosition}%`;
-        }, 15);
+            this.bar.element.style.width = `${width}%`
+            this.bar.element.style.left = `${currentPosition}%`
+        }, 15)
     }
 
     stopWaiting() {
-        clearInterval(this.interval);
-        this.bar.element.style.left = `0%`;
+        clearInterval(this.interval)
+        this.bar.element.style.left = `0%`
     }
 
     hideBar() {
-        this.bar.hide();
+        this.bar.hide()
     }
 
     showBar() {
-        this.bar.show();
+        this.bar.show()
     }
 
     setColor(color) {
-        this.bar.element.style['background-color'] = color || '#4fa8df';
+        this.bar.element.style['background-color'] = color || '#4fa8df'
     }
 
     remove() {
-        this.parent.removeChild(this.element);
+        this.parent.removeChild(this.element)
     }
 
     add() {
-        this.parent.appendChild(this.element);
+        this.parent.appendChild(this.element)
     }
 
 }
 
-module.exports = ProgressBar;
+module.exports = ProgressBar

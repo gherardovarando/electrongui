@@ -17,180 +17,180 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-'use strict';
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 const {
-    app
-} = require('electron').remote;
-const os = require('os');
+  app
+} = require('electron').remote
+const os = require('os')
 
 
 exports.findKeyId = function(x, obj, tag) {
-    tag = tag || '_id';
-    for (let i in obj) {
-        if (obj[i][tag] === x) return i;
-    }
+  tag = tag || '_id'
+  for (let i in obj) {
+    if (obj[i][tag] === x) return i
+  }
 }
 
 
 exports.nextKey = function(obj) {
-    let finish = false;
-    let key = 0;
-    while (!finish) {
-        if (Object.keys(obj).indexOf(`${key}`) >= 0) {
-            key++;
-        } else {
-            finish = true;
-        }
+  let finish = false
+  let key = 0
+  while (!finish) {
+    if (Object.keys(obj).indexOf(`${key}`) >= 0) {
+      key++
+    } else {
+      finish = true
     }
-    return key;
+  }
+  return key
 }
 
 exports.parseTimeInterval = function(s) {
-    if (s < 1000) {
-        return `${s.toPrecision(3)} milliseconds`;
-    } else if (s < 60000) {
-        return `${(s/1000).toPrecision(2)} seconds`;
-    } else if (s < 3600000) {
-        return `${(s/60000).toPrecision(2)} minutes`;
-    } else if (s < 86400000) {
-        return `${(s/3600000).toPrecision(2)} hours`;
-    } else {
-        return `${(s/86400000).toPrecision(3)} days`;
-    }
+  if (s < 1000) {
+    return `${s.toPrecision(3)} milliseconds`
+  } else if (s < 60000) {
+    return `${(s/1000).toPrecision(2)} seconds`
+  } else if (s < 3600000) {
+    return `${(s/60000).toPrecision(2)} minutes`
+  } else if (s < 86400000) {
+    return `${(s/3600000).toPrecision(2)} hours`
+  } else {
+    return `${(s/86400000).toPrecision(3)} days`
+  }
 }
 
 
 exports.div = function(className, text) {
-    if (document) {
-        let t = document.createElement('DIV');
-        if (text) {
-            t.innerHTML = text;
-        }
-        if (className) {
-            t.className = className;
-        }
-        return t;
+  if (document) {
+    let t = document.createElement('DIV')
+    if (text) {
+      t.innerHTML = text
     }
+    if (className) {
+      t.className = className
+    }
+    return t
+  }
 }
 
 exports.setProgress = function(val) {
-    require('electron').remote.getCurrentWindow().setProgressBar(val / 100);
+  require('electron').remote.getCurrentWindow().setProgressBar(val / 100)
 }
 
 exports.stringify = function(object) {
-    if (object) {
-        return (JSON.stringify(object).replace(/\u007D/g, '').replace(/\u007B/g, '').replace(/\u0022/g, ''));
-    }
-    return null;
+  if (object) {
+    return (JSON.stringify(object).replace(/\u007D/g, '').replace(/\u007B/g, '').replace(/\u0022/g, ''))
+  }
+  return null
 }
 
 exports.isNode = function() {
-    if (typeof module !== 'undefined' && module.exports) {
-        return true;
-    } else {
-        return false;
-    }
+  if (typeof module !== 'undefined' && module.exports) {
+    return true
+  } else {
+    return false
+  }
 }
 
 exports.isElectron = function() {
-    if (process.versions.electron) {
-        return true;
-    } else {
-        return false;
-    }
+  if (process.versions.electron) {
+    return true
+  } else {
+    return false
+  }
 }
 
 
 exports.sum = function(v) {
-    let sum = v.reduce((a, b) => {
-        if (isNaN(b)) return a;
-        return a + b;
-    }, 0);
-    return sum;
+  let sum = v.reduce((a, b) => {
+    if (isNaN(b)) return a
+    return a + b
+  }, 0)
+  return sum
 }
 
 
 exports.mean = function(v) {
-    let n = v.reduce((a, b) => {
-        if (isNaN(b)) return a;
-        return a + 1;
-    }, 0);
-    let sum = exports.sum(v);
-    return (sum / n);
+  let n = v.reduce((a, b) => {
+    if (isNaN(b)) return a
+    return a + 1
+  }, 0)
+  let sum = exports.sum(v)
+  return (sum / n)
 }
 
 exports.clone = function(obj) {
-    return Object.assign({}, obj);
-    //return JSON.parse(JSON.stringify(obj));
+  return Object.assign({}, obj)
 }
 
 exports.notifyOS = function(text) {
-    var notif = new window.Notification(`${app.getName()}`, {
-        body: text
-    });
+  var notif = new window.Notification(`${app.getName()}`, {
+    body: text
+  })
 }
 
 exports.readJSON = function(filename, callback, error) {
-    fs.readFile(filename, 'utf-8', function(err, data) {
-        if (err) {
-            error(err);
-            return;
-        }
-        var obj = JSON.parse(data);
-        callback(obj);
-    });
+  fs.readFile(filename, 'utf-8', function(err, data) {
+    if (err) {
+      error(err)
+      return
+    }
+    var obj = JSON.parse(data)
+    callback(obj)
+  })
 }
 
 exports.readJSONsync = function(filename, error) {
-    let data;
-    try {
-        data = fs.readFileSync(filename, 'utf-8');
-        return JSON.parse(data);
-    } catch (err) {
-        if (error) {
-            error(err);
-        }
-        return null;
+  let data
+  try {
+    data = fs.readFileSync(filename, 'utf-8')
+    return JSON.parse(data)
+  } catch (err) {
+    if (error) {
+      error(err)
     }
+    return null
+  }
 }
 
 exports.empty = function(parent, child) {
-    if (parent) {
-        if (child) {
-            parent.removeChild(child);
-            this.empty(parent, parent.firstChild);
-        }
+  if (parent && typeof parent.removeChild === 'function') {
+    if (child) {
+      parent.removeChild(child)
+      this.empty(parent, parent.firstChild)
     }
+  }
 }
 
 exports.isIcon = function(icon) {
-    if (icon) {
-        if (icon.className) {
-            if (icon.className.includes('fa') | icon.className.includes('icon')) return true;
-        }
+  if (icon) {
+    if (icon.className) {
+      if (icon.className.includes('fa') | icon.className.includes('icon')) return true
     }
-    return false;
+  }
+  return false
 }
 
 exports.icon = function(icon) {
-    if (this.isIcon(icon)) return icon;
-    if (typeof icon === 'string') {
-        let ic;
-        if (icon.includes('fa')) {
-            ic = document.createElement('I');
-            ic.className = icon;
-        } else if (icon.includes('icon')) {
-            ic = document.createElement('SPAN');
-            ic.className = icon;
-        } else {
-            ic = document.createElement('SPAN');
-        }
-        return ic;
+  if (!document) return
+  if (this.isIcon(icon)) return icon
+  if (typeof icon === 'string') {
+    let ic
+    if (icon.includes('fa')) {
+      ic = document.createElement('I')
+      ic.className = icon
+    } else if (icon.includes('icon')) {
+      ic = document.createElement('SPAN')
+      ic.className = icon
     } else {
-        return document.createElement('DIV');
+      ic = document.createElement('SPAN')
     }
+    return ic
+  } else {
+    return document.createElement('DIV')
+  }
 
 }
 
@@ -198,14 +198,14 @@ exports.icon = function(icon) {
 //     if (typeof obj[x] === 'undefined') {
 //         for (let i in l) {
 //             if (typeof obj[l[i]] != 'undefined') {
-//                 obj[x] = obj[l[i]];
-//                 break;
+//                 obj[x] = obj[l[i]]
+//                 break
 //             }
 //         }
 //
 //     }
 //     for (let i in l) {
-//         delete obj[l[i]];
+//         delete obj[l[i]]
 //     }
 // }
 
@@ -226,94 +226,94 @@ exports.icon = function(icon) {
 //      * @param {function(string)} next - Callback for returning JSON Configuration file path.
 //      */
 //     createJSONConfiguration = function(sourcePath, destinationPath, mode, layerType, next) {
-//         let template;
+//         let template
 //
 //         let dimPromise = new Promise((resolveDim, rejectDim) => {
 //             if (mode === Util.Layers.Mode.FOLDER) {
 //                 fs.readdir(sourcePath, (err, files) => {
-//                     let aImage;
-//                     let allStatsPromises = [];
-//                     let xValues = [];
-//                     let yValues = [];
+//                     let aImage
+//                     let allStatsPromises = []
+//                     let xValues = []
+//                     let yValues = []
 //
 //                     files.forEach(file => {
 //                         let statPromise = new Promise((resolveStat) => {
 //                             fs.stat(path.join(sourcePath, file), (err, stats) => {
 //                                 if (stats.isFile()) {
-//                                     let xRegex = /_X[0-9]+/g;
-//                                     let yRegex = /_Y[0-9]+/g;
+//                                     let xRegex = /_X[0-9]+/g
+//                                     let yRegex = /_Y[0-9]+/g
 //
-//                                     let xString = xRegex.exec(file);
-//                                     let yString = yRegex.exec(file);
+//                                     let xString = xRegex.exec(file)
+//                                     let yString = yRegex.exec(file)
 //
 //                                     if (xString == null || yString == null) {
-//                                         resolveStat();
+//                                         resolveStat()
 //                                     } else {
-//                                         let xNumRegex = /[0-9]+/g;
-//                                         let yNumRegex = /[0-9]+/g;
-//                                         let x = xNumRegex.exec(xString);
-//                                         let y = yNumRegex.exec(yString);
-//                                         xValues.push(x);
-//                                         yValues.push(y);
-//                                         if (aImage == null) aImage = file;
+//                                         let xNumRegex = /[0-9]+/g
+//                                         let yNumRegex = /[0-9]+/g
+//                                         let x = xNumRegex.exec(xString)
+//                                         let y = yNumRegex.exec(yString)
+//                                         xValues.push(x)
+//                                         yValues.push(y)
+//                                         if (aImage == null) aImage = file
 //                                         if (template == null) {
-//                                             let xSplit = file.split(xString);
-//                                             let tempTemplate = `${xSplit[0]}_X{x}${xSplit[1]}`;
-//                                             let ySplit = tempTemplate.split(yString);
-//                                             template = `${ySplit[0]}_Y{y}${ySplit[1]}`;
+//                                             let xSplit = file.split(xString)
+//                                             let tempTemplate = `${xSplit[0]}_X{x}${xSplit[1]}`
+//                                             let ySplit = tempTemplate.split(yString)
+//                                             template = `${ySplit[0]}_Y{y}${ySplit[1]}`
 //                                         }
-//                                         resolveStat();
+//                                         resolveStat()
 //                                     }
 //                                 } else {
-//                                     resolveStat();
+//                                     resolveStat()
 //                                 }
-//                             });
-//                         });
-//                         allStatsPromises.push(statPromise);
-//                     });
+//                             })
+//                         })
+//                         allStatsPromises.push(statPromise)
+//                     })
 //
 //                     Promise.all(allStatsPromises).then(() => {
-//                         let xMin = Math.min(...xValues);
-//                         let xMax = Math.max(...xValues);
-//                         let yMin = Math.min(...yValues);
-//                         let yMax = Math.max(...yValues);
-//                         let xTiles = xMax - xMin + 1;
-//                         let yTiles = yMax - yMin + 1;
+//                         let xMin = Math.min(...xValues)
+//                         let xMax = Math.max(...xValues)
+//                         let yMin = Math.min(...yValues)
+//                         let yMax = Math.max(...yValues)
+//                         let xTiles = xMax - xMin + 1
+//                         let yTiles = yMax - yMin + 1
 //                         Util.Image.getSize(path.join(sourcePath, aImage), (err, width, height) => {
 //                             if (!err) {
-//                                 let tileSize = Math.max(width, height);
-//                                 let size = Math.max(width * xTiles, height * yTiles);
-//                                 resolveDim([tileSize, size]);
+//                                 let tileSize = Math.max(width, height)
+//                                 let size = Math.max(width * xTiles, height * yTiles)
+//                                 resolveDim([tileSize, size])
 //                             } else {
-//                                 rejectDim(err);
+//                                 rejectDim(err)
 //                             }
-//                         });
-//                     });
-//                 });
+//                         })
+//                     })
+//                 })
 //             } else if (mode === Util.Layers.Mode.SINGLE_IMAGE) {
 //                 Util.Image.getSize(sourcePath, (err, width, height) => {
 //                     if (!err) {
-//                         let tileSize = Math.max(width, height);
-//                         let size = tileSize;
-//                         resolveDim([tileSize, size]);
+//                         let tileSize = Math.max(width, height)
+//                         let size = tileSize
+//                         resolveDim([tileSize, size])
 //                     } else {
-//                         rejectDim(err);
+//                         rejectDim(err)
 //                     }
-//                 });
+//                 })
 //             } else if (mode === Util.Layers.Mode.IMAGE_LIST) {
-//                 resolveDim([256, 256]); // temporary solution (bad sizes).
+//                 resolveDim([256, 256])   // temporary solution (bad sizes).
 //             }
-//         });
+//         })
 //
 //         dimPromise.then((size) => {
-//             let filename;
+//             let filename
 //             if (template != null) {
-//                 filename = template;
+//                 filename = template
 //             } else {
-//                 filename = path.basename(sourcePath);
+//                 filename = path.basename(sourcePath)
 //             }
 //
-//             let jsonConfig = {};
+//             let jsonConfig = {}
 //
 //             switch (layerType) {
 //                 case `points`:
@@ -325,7 +325,7 @@ exports.icon = function(icon) {
 //                         size: size[1],
 //                         pointsUrlTemplate: `points_${filename.replace(/ /g, "_")}.csv`
 //                     }
-//                     break;
+//                     break
 //
 //                 case `pixels`:
 //                     jsonConfig = {
@@ -338,11 +338,11 @@ exports.icon = function(icon) {
 //                         norm: size[2] || 1,
 //                         pixelsUrlTemplate: `holes_${filename.replace(/ /g, "_")}.txt`
 //                     }
-//                     break;
+//                     break
 //             }
 //
-//             next(jsonConfig);
-//         });
+//             next(jsonConfig)
+//         })
 //     }
 //
 // }
@@ -370,14 +370,14 @@ exports.icon = function(icon) {
 //      */
 //     getTotalSlices: function(imagePath) {
 //         if (imagePath.endsWith(".tif") || imagePath.endsWith(".tiff")) {
-//             let data = fs.readFileSync(imagePath);
+//             let data = fs.readFileSync(imagePath)
 //             let tiffImage = new Tiff({
 //                 buffer: data
-//             });
-//             return tiffImage.countDirectory();
+//             })
+//             return tiffImage.countDirectory()
 //         } else {
 //             // Only tiff images have more than one slice.
-//             return 1;
+//             return 1
 //         }
 //     },
 //
@@ -395,19 +395,19 @@ exports.icon = function(icon) {
 //                     try {
 //                         let tiffImage = new Tiff({
 //                             buffer: data
-//                         });
-//                         tiffImage.setDirectory(0);
-//                         next(null, tiffImage.toCanvas().width, tiffImage.toCanvas().height);
+//                         })
+//                         tiffImage.setDirectory(0)
+//                         next(null, tiffImage.toCanvas().width, tiffImage.toCanvas().height)
 //                     } catch (err) {
-//                         next(null, 256, 256); // default
+//                         next(null, 256, 256)   // default
 //                     }
 //                 } else {
-//                     next(err);
+//                     next(err)
 //                 }
-//             });
+//             })
 //         } else {
-//             let dim = sizeOf(imagePath);
-//             next(null, dim.width, dim.height);
+//             let dim = sizeOf(imagePath)
+//             next(null, dim.width, dim.height)
 //         }
 //     }
 //

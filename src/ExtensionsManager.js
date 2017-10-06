@@ -18,19 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-"use strict";
+"use strict"
 const {
   Menu,
   MenuItem,
   dialog
-} = require('electron').remote;
-const fs = require('fs');
-const path = require('path');
-const GuiExtension = require('./GuiExtension');
-const Sidebar = require('./Sidebar.js');
-const ToggleElement = require('./ToggleElement.js');
-const util = require('./util.js');
-const storage = require('electron-json-storage');
+} = require('electron').remote
+const fs = require('fs')
+const path = require('path') 
+const GuiExtension = require('./GuiExtension')
+const Sidebar = require('./Sidebar.js')
+const ToggleElement = require('./ToggleElement.js')
+const util = require('./util.js')
+const storage = require('electron-json-storage')
 
 
 class ExtensionsManager extends GuiExtension {
@@ -41,38 +41,38 @@ class ExtensionsManager extends GuiExtension {
       menuTemplate: [{
         label: 'Manager',
         click: () => {
-          this.show();
+          this.show()
         }
       },{
         label: 'Install Extension',
         click: ()=>{
-          this.installExtension();
+          this.installExtension()
         }
       }, {
         type: 'separator'
       }]
-    });
-    this.extensions = {};
-    this.gui.extensions = this.extensions;
-    this.activate();
+    })
+    this.extensions = {}
+    this.gui.extensions = this.extensions
+    this.activate()
   }
 
   activate() {
-    this.sidebar = new Sidebar(this.element);
-    this.sidebar.addList('list');
-    //this.sidebar.hide();
+    this.sidebar = new Sidebar(this.element)
+    this.sidebar.addList('list')
+    //this.sidebar.hide()
     this.sidebar.list.addSearch({
       placeholder: 'Search extension'
-    });
+    })
 
     //here put actions to load a new extension from custom file.
-    this.pane = new ToggleElement(document.createElement('DIV'));
-    this.element.appendChild(this.pane.element);
-    this.appendMenu();
+    this.pane = new ToggleElement(document.createElement('DIV'))
+    this.element.appendChild(this.pane.element)
+    this.appendMenu()
     this.gui.on('load:extension', (e) => {
-      this.addExtension(e.extension);
-    });
-    super.activate();
+      this.addExtension(e.extension)
+    })
+    super.activate()
   }
 
 
@@ -87,66 +87,66 @@ class ExtensionsManager extends GuiExtension {
        openDirectory: false,
        openFile: true
      },(filePaths)=>{
-       let p = filePaths[0];
+       let p = filePaths[0]
        this.loadExtension(p,(ext)=>{
-         ext.info.manuallyinstalled = true;
-       });
-     });
+         ext.info.manuallyinstalled = true
+       })
+     })
   }
 
 
   loadExtension(extPath, cl) {
-    let ext;
+    let ext
     if (typeof extPath === 'string') {
       try {
-        let tmp = require(extPath);
+        let tmp = require(extPath)
         if (tmp.prototype instanceof GuiExtension) {
-          ext = new tmp(this.gui);
-          //this.addExtension(this.extensions[ext.constructor.name]);
+          ext = new tmp(this.gui)
+          //this.addExtension(this.extensions[ext.constructor.name])
         }
       } catch (e) {
-        console.log(e);
-        ext = e;
+        console.log(e)
+        ext = e
       }
     } else {
-      ext = 'trying to load non path extension';
+      ext = 'trying to load non path extension'
     }
     if (typeof cl === 'function') {
-      cl(ext);
+      cl(ext)
     }
   }
 
   addTitle(title) {
-    this.sidebar.list.addTitle(title);
+    this.sidebar.list.addTitle(title)
   }
 
   hideAll() {
     Object.keys(this.extensions).map((name) => {
-      this.extensions[name].hide();
-    });
-    this.hide();
+      this.extensions[name].hide()
+    })
+    this.hide()
   }
 
 
 
   addExtension(extension) {
     if (this.extensions[extension.constructor.name] instanceof GuiExtension) {
-      this.extensions[extension.constructor.name].deactivate();
-      this.sidebar.list.removeItem(extension.constructor.name);
+      this.extensions[extension.constructor.name].deactivate()
+      this.sidebar.list.removeItem(extension.constructor.name)
     }
-    this.extensions[extension.constructor.name] = extension;
+    this.extensions[extension.constructor.name] = extension
     let menuitem = new MenuItem({
       label: extension.constructor.name,
       type: 'checkbox',
       click: (item) => {
         if (item.checked) {
-          extension.activate();
+          extension.activate()
         } else {
-          extension.deactivate();
+          extension.deactivate()
         }
       }
-    });
-    this.addMenuItem(menuitem);
+    })
+    this.addMenuItem(menuitem)
     this.sidebar.addItem({
       id: extension.constructor.name,
       icon: `${extension.icon} fa-2x`,
@@ -155,70 +155,70 @@ class ExtensionsManager extends GuiExtension {
       toggle: true,
       active: extension.active,
       onmouseover: () => {
-        this.pane.clear();
+        this.pane.clear()
         if (extension.info) {
-          this.pane.appendChild(util.div('padded', `Author: ${extension.info.author}`));
-          this.pane.appendChild(util.div('padded',extension.info.note));
+          this.pane.appendChild(util.div('padded', `Author: ${extension.info.author}`))
+          this.pane.appendChild(util.div('padded',extension.info.note))
           if (extension.info.manuallyinstalled){
-            this.pane.appendChild(util.div('cell', 'Manually installed'));
+            this.pane.appendChild(util.div('cell', 'Manually installed'))
           }
         }
-        this.pane.show();
+        this.pane.show()
       },
       onclick: {
         active: () => {
-          extension.activate();
+          extension.activate()
         },
         deactive: () => {
-          extension.deactivate();
+          extension.deactivate()
         }
       }
-    });
+    })
 
     extension.on('deactivate', () => {
-      this.sidebar.list.deactiveItem(extension.constructor.name);
-      menuitem.checked = false;
-    });
+      this.sidebar.list.deactiveItem(extension.constructor.name)
+      menuitem.checked = false
+    })
 
     extension.on('activate', () => {
-      this.sidebar.list.activeItem(extension.constructor.name);
-      menuitem.checked = true;
-    });
+      this.sidebar.list.activeItem(extension.constructor.name)
+      menuitem.checked = true
+    })
 
     extension.on('show', () => {
-      //gui.viewTrick();
-      this.hide(); //hide the extensions manager
+      //gui.viewTrick()
+      this.hide()  //hide the extensions manager
       //and all the other extensions:
       Object.keys(this.extensions).map((k) => {
         if (this.extensions[k] != extension) {
-          this.extensions[k].hide();
+          this.extensions[k].hide()
         }
-      });
-    });
+      })
+    })
 
     // extension.on('hide', () => {
     //     if (Object.keys(this.extensions).every((key) => {
-    //             return this.extensions[key].isHidden();
+    //             return this.extensions[key].isHidden()
     //         }) && this.isHidden()) {
     //     }
-    // });
+    // })
 
-    this.emit('add', extension);
+    this.emit('add', extension)
 
   }
 
   show() {
-    this.hideAll();
-    this.sidebar.show();
-    super.show();
+    this.hideAll()
+    this.sidebar.show()
+    super.show()
   }
 
 
   hide() {
     if (Object.keys(this.extensions).every((key) => {
-        this.extensions[key].isHidden();
+        this.extensions[key].isHidden()
       }) && this.isHidden()) {}
-    super.hide();
+    super.hide()
   }
 
 
@@ -228,4 +228,4 @@ class ExtensionsManager extends GuiExtension {
 
 }
 
-module.exports = ExtensionsManager;
+module.exports = ExtensionsManager

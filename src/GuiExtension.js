@@ -18,127 +18,127 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-'use strict';
+'use strict'
 
-const ToggleElement = require('./ToggleElement.js');
-const util = require('./util.js');
+const ToggleElement = require('./ToggleElement.js')
+const util = require('./util.js')
 const {
   Menu,
   MenuItem
-} = require('electron').remote;
+} = require('electron').remote
 
 class GuiExtension extends ToggleElement {
   constructor(gui, config) {
-    let element = document.createElement('DIV');
-    element.className = 'pane-group';
-    element.style.display = 'none'; //hide by default
-    super(element);
+    let element = document.createElement('DIV')
+    element.className = 'pane-group'
+    element.style.display = 'none'  //hide by default
+    super(element)
     config = Object.assign({
       icon: 'fa fa-cubes',
       menuLabel: this.constructor.name
-    }, config);
-    this.element.id = `${this.constructor.name}Pane`;
-    this.id = this.constructor.name;
-    this.icon = config.icon;
+    }, config)
+    this.element.id = `${this.constructor.name}Pane`
+    this.id = this.constructor.name
+    this.icon = config.icon
     this.info = Object.assign({
       author: 'undefined',
       keyword: []
-    }, config.info);
-    this.image = config.image;
-    this.author = config.author;
-    this.gui = gui;
-    this._menuIndx = -1;
-    this._menu = new Menu();
+    }, config.info)
+    this.image = config.image
+    this.author = config.author
+    this.gui = gui
+    this._menuIndx = -1
+    this._menu = new Menu()
     if (config.menuTemplate) {
-      this._menu = Menu.buildFromTemplate(config.menuTemplate);
+      this._menu = Menu.buildFromTemplate(config.menuTemplate)
     }
-    this._menuItems = this._menu.items;
-    this._menuLabel = config.menuLabel;
+    this._menuItems = this._menu.items
+    this._menuLabel = config.menuLabel
     this._menuItem = new MenuItem({
       label: this._menuLabel,
       type: 'submenu',
       submenu: this._menu
-    });
+    })
     this.gui.emit('load:extension', {
       extension: this
-    });
+    })
   }
 
   activate() {
-    this.gui.container.appendChild(this.element);
-    this.active = true;
-    this.emit('activate');
-    return this.active;
+    this.gui.container.appendChild(this.element)
+    this.active = true
+    this.emit('activate')
+    return this.active
   }
 
   deactivate() {
-    this.gui.container.removeChild(this.element);
-    this.hide();
-    this.clear();
-    this.removeMenu();
-    this.active = false;
-    this.emit('deactivate');
-    return this.active;
+    this.gui.container.removeChild(this.element)
+    this.hide()
+    this.clear()
+    this.removeMenu()
+    this.active = false
+    this.emit('deactivate')
+    return this.active
   }
 
   _buildMenuItem() {
-    this._menu = new Menu();
+    this._menu = new Menu()
     this._menuItems.map((item) => {
-      this._menu.append(item);
-    });
+      this._menu.append(item)
+    })
     this._menuItem = new MenuItem({
       label: this._menuLabel,
       type: 'submenu',
       submenu: this._menu
-    });
+    })
   }
 
   setMenuLabel(label) {
     if (typeof label === 'string') {
-      this._menuLabel = label;
+      this._menuLabel = label
     }
   }
 
 
   addMenuItem(item) {
     if (item) {
-      this._menuItems.push(item);
-      this._buildMenuItem();
-      this.gui.updateMenuItem(this._menuIndx, this._menuItem);
+      this._menuItems.push(item)
+      this._buildMenuItem()
+      this.gui.updateMenuItem(this._menuIndx, this._menuItem)
     }
   }
 
   removeMenuItem(item) {
     if (item) {
-      let idx = this._menuItems.indexOf(item);
-      if (idx < 0) return;
-      this._menuItems.splice(idx, 1);
-      this._buildMenuItem();
-      this.gui.updateMenuItem(this._menuIndx, this._menuItem);
+      let idx = this._menuItems.indexOf(item)
+      if (idx < 0) return
+      this._menuItems.splice(idx, 1)
+      this._buildMenuItem()
+      this.gui.updateMenuItem(this._menuIndx, this._menuItem)
     }
   }
 
   appendMenu() {
-    if (this._menuIndx >= 0) return false;
-    this._buildMenuItem();
-    this._menuIndx = this.gui.addMenuItem(this._menuItem);
-    return true;
+    if (this._menuIndx >= 0) return false
+    this._buildMenuItem()
+    this._menuIndx = this.gui.addMenuItem(this._menuItem)
+    return true
   }
 
   removeMenu() {
-    this.gui.removeMenuItem(this._menuIndx);
-    this._menuIndx = -1;
+    this.gui.removeMenuItem(this._menuIndx)
+    this._menuIndx = -1
   }
 
   show() {
-    super.show();
-    this.emit('show');
+    super.show()
+    this.emit('show')
   }
 
   hide() {
-    super.hide();
-    this.emit('hide');
+    super.hide()
+    this.emit('hide')
   }
 }
 
-module.exports = GuiExtension;
+module.exports = GuiExtension

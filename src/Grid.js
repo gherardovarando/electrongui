@@ -18,49 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-"use strict";
+"use strict"
 
-const ToggleElement = require('./ToggleElement.js');
+const ToggleElement = require('./ToggleElement.js')
 
 class Grid extends ToggleElement {
 
-    constructor(rows, columns) {
-        var element = document.createElement("TABLE");
-        element.className = "grid";
-        super(element);
+  constructor(rows, columns) {
+    var element = document.createElement("TABLE")
+    element.className = "grid"
+    super(element)
 
-        this.rows = rows;
-        this.columns = columns;
-        this.actualRow = 0;
-        this.actualColumn = 0;
+    this.rows = rows
+    this.columns = columns
+    this.actualRow = 0
+    this.actualColumn = 0
 
-        for (var i = 0; i < rows; i++) {
-            var row = document.createElement("TR");
-            for (var j = 0; j < columns; j++) {
-                var column = document.createElement("TD");
-                row.appendChild(column);
-            }
-            element.appendChild(row);
-        }
+    for (var i = 0; i < rows; i++) {
+      var row = document.createElement("TR")
+      for (var j = 0; j < columns; j++) {
+        var column = document.createElement("TD")
+        row.appendChild(column)
+      }
+      element.appendChild(row)
     }
+  }
 
-    addElement(element, row, column) {
-        if (row === undefined && column === undefined) {
-            row = this.actualRow;
-            column = this.actualColumn;
-            if (this.actualRow + 1 < this.rows) {
-                this.actualRow += 1;
-            } else if (this.actualColumn + 1 < this.columns) {
-                this.actualRow = 0;
-                this.actualColumn += 1;
-            } else {
-                return false;
-            }
-        }
-        var target = this.element.children[row].children[column];
-        target.appendChild(element);
-        return true;
+  addElement(element, row, column) {
+    if (row === undefined && column === undefined) {
+      row = this.actualRow
+      column = this.actualColumn
+      if (this.actualRow + 1 < this.rows) {
+        this.actualRow += 1
+      } else if (this.actualColumn + 1 < this.columns) {
+        this.actualRow = 0
+        this.actualColumn += 1
+      } else {
+        return false
+      }
     }
+    var target = this.element.children[row].children[column]
+    target.appendChild(element)
+    return true
+  }
 }
 
-module.exports = Grid;
+module.exports = Grid

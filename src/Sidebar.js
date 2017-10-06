@@ -17,25 +17,25 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-'use strict';
+'use strict'
 
-const ToggleElement = require('./ToggleElement.js');
-const ListGroup = require('./ListGroup.js');
-const NavGroup = require('./NavGroup.js');
-const util = require('./util.js');
+const ToggleElement = require('./ToggleElement.js')
+const ListGroup = require('./ListGroup.js')
+const NavGroup = require('./NavGroup.js')
+const util = require('./util.js')
 
 class Sidebar extends ToggleElement {
     constructor(parent, options) {
         options = Object.assign({
             className: ''
-        }, options);
+        }, options)
         if (parent.appendChild) {
-            let element = util.div(`sidebar ${options.className}`);
-            element.id = `${parent.id}Sidebar${parent.getElementsByClassName('sidebar').length}`;
-            super(element);
-            this.parent = parent;
-            this.hide();
-            parent.appendChild(element);
+            let element = util.div(`sidebar ${options.className}`)
+            element.id = `${parent.id}Sidebar${parent.getElementsByClassName('sidebar').length}`
+            super(element)
+            this.parent = parent
+            this.hide()
+            parent.appendChild(element)
         }
 
     }
@@ -43,47 +43,47 @@ class Sidebar extends ToggleElement {
     addList() {
         switch (typeof arguments[0]) {
             case 'string':
-                let id = arguments[0];
-                if (id === 'nav' || id === 'element' || id === 'parent') return;
-                let list = new ListGroup(id || `${this.element.id}list`, this.element);
-                this[id || 'list'] = list;
-                this.appendChild(list);
-                break;
+                let id = arguments[0]
+                if (id === 'nav' || id === 'element' || id === 'parent') return
+                let list = new ListGroup(id || `${this.element.id}list`, this.element)
+                this[id || 'list'] = list
+                this.appendChild(list)
+                break
             case 'object':
                 if (arguments[0] instanceof ListGroup) {
-                    this[arguments[0].id] = arguments[0];
-                    this.appendChild(arguments[0]);
+                    this[arguments[0].id] = arguments[0]
+                    this.appendChild(arguments[0])
                 } else {
-                    this['list'] = new ListGroup('list', this.element);
-                    this.appendChild(this['list']);
+                    this['list'] = new ListGroup('list', this.element)
+                    this.appendChild(this['list'])
                 }
             default:
-                this['list'] = new ListGroup('list', this.element);
-                this.appendChild(this['list']);
+                this['list'] = new ListGroup('list', this.element)
+                this.appendChild(this['list'])
         }
     }
 
     addNav() {
         switch (typeof arguments[0]) {
             case 'string':
-                let id = arguments[0];
-                if (id === 'list' || id === 'element' || id === 'parent') return;
-                let nav = new NavGroup(id || `${this.element.id}nav`, this.element);
-                this[id || 'nav'] = nav;
-                this.appendChild(nav);
-                break;
+                let id = arguments[0]
+                if (id === 'list' || id === 'element' || id === 'parent') return
+                let nav = new NavGroup(id || `${this.element.id}nav`, this.element)
+                this[id || 'nav'] = nav
+                this.appendChild(nav)
+                break
             case 'object':
                 if (arguments[0] instanceof NavGroup) {
-                    this[arguments[0].id] = arguments[0];
-                    this.appendChild(arguments[0]);
+                    this[arguments[0].id] = arguments[0]
+                    this.appendChild(arguments[0])
                 } else {
-                    this['nav'] = new NavGroup(`nav`, this.element);
-                    this.appendChild(this['nav']);
+                    this['nav'] = new NavGroup(`nav`, this.element)
+                    this.appendChild(this['nav'])
 
                 }
             default:
-                this['nav'] = new NavGroup(`nav`, this.element);
-                this.appendChild(this['nav']);
+                this['nav'] = new NavGroup(`nav`, this.element)
+                this.appendChild(this['nav'])
         }
     }
 
@@ -91,20 +91,20 @@ class Sidebar extends ToggleElement {
 
     addItem(options) {
         if (this.list) {
-            this.list.addItem(options);
+            this.list.addItem(options)
         } else if (this.nav) {
-            this.nav.addItem(options);
+            this.nav.addItem(options)
         } else {
-            this.addList();
-            this.addItem(options);
+            this.addList()  
+            this.addItem(options)
         }
     }
 
     remove() {
-        this.parent.removeChild(this.element);
+        this.parent.removeChild(this.element)
     }
 
 }
 
 
-module.exports = Sidebar;
+module.exports = Sidebar
