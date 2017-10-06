@@ -4,6 +4,22 @@
 
 **electrongui** is a skeleton for GUI written in JS/Node/electron framework. It is made of several classes and utilities. The main class is `Gui` that creates an empty interface on the current window. It is not compulsory to create an instance of `Gui` class and every other classes and utilities can be used independently. electrongui it is meant to be used in Rendered windows and not in the main electron process.
 
+#### How to use it
+
+- Add the [photonkit](http://photonkit.com/) css
+
+- Install electrongui with `npm`
+
+- Add (and modify to your taste) the `src/style/gui.css` file
+
+- In the Renderer process :
+```
+const {Gui} = require('electrongui')
+let gui = new Gui() // create the base gui structure
+gui.notify('Gui initialized!!!') //this message should appear in the footer
+```
+
+
 #### Index
  - [Basic Elements](#basic-elements)
    - [ToggleElement](#toggleelement)
