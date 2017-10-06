@@ -2,7 +2,7 @@
 
 ## by gherardo.varando [gherardo.varando@gmail.com](mailto:gherardo.varando@gmail.com) and Mario Juez [mjuez@fi.upm.es](mailto:mjuez@fi.upm.es)
 
-**electrongui** is a skeleton for GUI written in JS/Node/electron framework. It is made of several classes and utilities. The main entry point is the `gui` singleton (instance of `Gui` class) that is an empty GUI with header, footer and a central pane.
+**electrongui** is a skeleton for GUI written in JS/Node/electron framework. It is made of several classes and utilities. The main class is `Gui` that creates an empty interface on the current window.
 
 #### Index
  - [Basic Elements](#basic-elements)
@@ -17,8 +17,8 @@
  - [Gui and Extensions](#gui-and-extensions)
    - [Gui](#gui)
    - [GuiExtension](#guiextension)
-   - [Workspace](#workspace)
    - [ExtensionManager](#extensionmanager)
+   - [Workspace](#workspace)
    - [TaskManager](#taskmanager)
  - [Utilities](#utilities)
    - [util](#util)
@@ -195,7 +195,7 @@ new Modal({
   - `oncancel` function, it it will be call when the user press esc/canc or click outside of the modal.
   - `width` string, width of the modal, default to `'auto'`.
   - `height` string, height of the modal, default to `'auto'`.
-  - `parent` html element or toggle element, defualt to `gui.container`.
+  - `parent` html element or toggle element, default to the `body` element of the window.
 
 #### Methods
 
@@ -396,9 +396,10 @@ remove the sidebar.
 
 ### GuiExtension
 
+### ExtensionManager
+
 ### Workspace
 
-### ExtensionManager
 
 ### TaskManager
 
