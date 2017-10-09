@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Mario Juez (mjuez@fi.upm.es)
+// Copyright (c) 2016 Mario Juez (mjuez@fi.upm.es) Gherardo Varando (gherardo.varando@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -223,26 +223,26 @@ Task.TaskDOMElement = class {
     this.progressBar.startWaiting()
     this.mainInfoContainer.appendChild(this.middleContainer)
 
-    // this.cancelContainer = document.createElement("DIV")
-    // this.cancelContainer.className = "cancel-container"
-    // this.btnCancel = util.icon('fa fa-times-circle fa-2x danger')
-    // this.btnCancel.onclick = () => {
-    //   dialog.showMessageBox({
-    //     title: 'Warning!',
-    //     type: 'warning',
-    //     buttons: ['No', "Yes"],
-    //     message: `This action cannot be undone. Continue?`,
-    //     noLink: true
-    //   }, (id) => {
-    //     if (id > 0) {
-    //       if (!this.task.cancel()) {
-    //         this.task.emit("remove")
-    //       }
-    //     }
-    //   })
-    // }
-    // this.cancelContainer.appendChild(this.btnCancel)
-    // this.mainInfoContainer.appendChild(this.cancelContainer)
+    this.cancelContainer = document.createElement("DIV")
+    this.cancelContainer.className = "cancel-container"
+    this.btnCancel = util.icon('fa fa-times-circle  danger')
+    this.btnCancel.onclick = () => {
+      dialog.showMessageBox({
+        title: 'Warning!',
+        type: 'warning',
+        buttons: ['No', "Yes"],
+        message: `This action cannot be undone. Continue?`,
+        noLink: true
+      }, (id) => {
+        if (id > 0) {
+          if (!this.task.cancel()) {
+            this.task.emit("remove")
+          }
+        }
+      })
+    }
+    this.cancelContainer.appendChild(this.btnCancel)
+    this.mainInfoContainer.appendChild(this.cancelContainer)
     this.mainInfoContainer.appendChild(util.icon(task.icon || ''))
     this.element.appendChild(this.mainInfoContainer)
 
@@ -278,27 +278,28 @@ Task.TaskDOMElement = class {
    * - A task with CANCELLED status will show a red exclamation.
    */
   _configureByStatus() {
-    this.statusElement.innerHTML = ''
+    this.statusElement.display='none'
+    //this.statusElement.innerHTML = ''
     switch (this.task.status) {
       case Task.Status.CREATED:
-        this.statusElement.innerHTML += "CREATED"
-        this.statusIcon.className = "fa fa-cogs"
+        //this.statusElement.innerHTML += "CREATED"
+        this.statusIcon.className = "fa fa-circle-o-notch"
         break
       case Task.Status.RUNNING:
-        this.statusElement.innerHTML += "RUNNING"
+        //this.statusElement.innerHTML += "RUNNING"
         this.statusIcon.className = "fa fa-circle-o-notch fa-spin"
         break
       case Task.Status.COMPLETED:
-        this.statusElement.innerHTML += "COMPLETED"
-        this.statusIcon.className = "fa fa-check completed"
+        //this.statusElement.innerHTML += "COMPLETED"
+        this.statusIcon.className = "fa fa-check-square-o completed"
         break
       case Task.Status.FAILED:
-        this.statusElement.innerHTML += "FAILED"
+        //this.statusElement.innerHTML += "FAILED"
         this.failureInfoElement.innerHTML = this.task.failureInfo
         this.statusIcon.className = "fa fa-exclamation-triangle wrong"
         break
       case Task.Status.CANCELLED:
-        this.statusElement.innerHTML += "CANCELLED"
+        //this.statusElement.innerHTML += "CANCELLED"
         this.statusIcon.className = "fa fa-exclamation-triangle wrong"
         break
     }
@@ -339,17 +340,17 @@ Task.TaskDOMElement = class {
 
     this.task.on("run", () => {
       this._configureByStatus()
-      //this.startTimeContainer.innerHTML = `<strong>Started on: </strong>${dateFormat(this.task.startTime, format)}`
+      this.startTimeContainer.innerHTML = `<strong>Started on: </strong>${dateFormat(this.task.startTime, format)}`
     })
 
     this.task.on("success", () => {
       this._configureByStatus()
       this.progressBar.stopWaiting()
       this.progressBar.setBar(100)
-      //this.finishTimeContainer.innerHTML = `<strong>Finished on: </strong>${dateFormat(this.task.finishTime, format)}`
-      // if (Object.keys(this.task.customAction).length > 0) {
-      //   this._addActionButton()
-      // }
+      this.finishTimeContainer.innerHTML = `<strong>Finished on: </strong>${dateFormat(this.task.finishTime, format)}`
+      if (Object.keys(this.task.customAction).length > 0) {
+        this._addActionButton()
+      }
     })
 
     this.task.on("fail", () => {

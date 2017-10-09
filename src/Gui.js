@@ -67,6 +67,7 @@ class Header extends ToggleElement {
 
   addProgressBar() {
     this.progressBar = new ProgressBar(this.element)
+    return this
   }
 
   addNotificationBar() {
@@ -75,6 +76,7 @@ class Header extends ToggleElement {
     this.notificationBar.message = document.createElement('STRONG')
     this.notificationBar.element.appendChild(this.notificationBar.message)
     this.element.appendChild(this.notificationBar.element)
+    return this
   }
 }
 
@@ -95,10 +97,12 @@ class Footer extends ToggleElement {
     this.notificationBar.message = document.createElement('STRONG')
     this.notificationBar.element.appendChild(this.notificationBar.message)
     this.element.appendChild(this.notificationBar.element)
+    return this
   }
 
   addProgressBar() {
     this.progressBar = new ProgressBar(this.element)
+    return this
   }
 }
 
@@ -118,7 +122,7 @@ class Gui extends EventEmitter {
     this._menuItems = []
     this._menu = new Menu()
     this.taskManager = new TaskManager()
-    document.getElementsByTagName('body')[0].appendChild(ap)
+    util.body.appendChild(ap)
   }
 
 
@@ -154,6 +158,7 @@ class Gui extends EventEmitter {
       this._menu.append(item)
     })
     Menu.setApplicationMenu(this._menu)
+    return this
   }
 
   addMenuItem(item) {
@@ -165,6 +170,7 @@ class Gui extends EventEmitter {
     } else {
       return -1
     }
+    return this
   }
 
   removeMenuItem(item) {
@@ -177,6 +183,7 @@ class Gui extends EventEmitter {
     if (idx < 0) return
     this._menuItems.splice(idx, 1)
     this.reloadMenu()
+    return this
   }
 
   updateMenuItem(idx, item) {
@@ -184,6 +191,7 @@ class Gui extends EventEmitter {
       this._menuItems[idx] = item
       this.reloadMenu()
     }
+    return this
   }
 
   openChildWindow(url, options) {

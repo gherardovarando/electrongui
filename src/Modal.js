@@ -65,7 +65,7 @@ class Modal extends ToggleElement {
     }
 
     element.addEventListener('click', () => {
-        if (!options.permanent) this.destroy()
+      if (!options.permanent) this.destroy()
       if (typeof options.oncancel === 'function') {
         options.oncancel()
       }
@@ -82,25 +82,26 @@ class Modal extends ToggleElement {
         if (typeof options.onsubmit === 'function') {
           options.onsubmit()
         }
-          if (!options.permanent) this.destroy()
+        if (!options.permanent) this.destroy()
       }
       if (e.keyCode == 27) { //escape or supr
         if (typeof options.oncancel === 'function') {
           options.oncancel()
         }
-          if (!options.permanent) this.destroy()
+        if (!options.permanent) this.destroy()
       }
     });
 
 
     element.appendChild(content)
-    options.parent = options.parent || document.getElementsByTagName('BODY')[0]
+    options.parent = options.parent || util.body
     options.parent.appendChild(element)
     super(element)
     this.options = options
     this.content = content
     this.addTitle(options.title)
     this.addBody(options.body)
+    this.addFooter(options.footer)
     this.hide()
   }
 
@@ -111,51 +112,59 @@ class Modal extends ToggleElement {
   }
 
   addTitle(title) {
-    this.header = document.createElement('DIV')
-    this.header.style = ' padding: 2px 16px; background-color: #F6F6F5; top: 0; position: relative; border-radius: 5px 5px 0 0; font-weight: bold;'
-    this.header.innerHTML = title
-    // if (!this.options.noCloseIcon) {
-    //     let ic = util.icon('icon icon-cancel-circled pull-right ');
-    //     ic.role = 'button';
-    //     ic.onclick = () => {
-    //         this.destroy();
-    //     }
-    //     this.header.appendChild(ic);
-    // }
-    this.content.insertBefore(this.header, this.content.firstChild)
+    if (title) {
+      if (typeof title === 'string') {
+        this.header = util.div('modal-header')
+        this.header.innerHTML = title
+        this.content.insertBefore(this.header, this.content.firstChild)
+      } else if (title instanceof ToggleElement) {
+        this.header = title
+        this.content.insertBefore(this.header.element, this.content.firstChild)
+      } else if (title.appendChild) {
+        this.header = title
+        this.content.insertBefore(this.header, this.content.firstChild)
+      }
+    }
+    return this
+
   }
 
   addBody(body) {
     if (body) {
-      if (body.appendChild) {
-        body.style.paddingtop = '2px'
-        body.style.paddingbottom = '16px'
-        body.style.overflow = 'auto'
+      if (body instanceof ToggleElement) {
+        body.element.classList.add('modal-body')
+        body.appendTo(this.content)
+        this.body = body
+      } else if (body.appendChild) {
+        body.classList.add('modal-body')
         this.content.appendChild(body)
         this.body = body
       } else if (typeof body === 'string') {
-        this.body = document.createElement('DIV')
+        this.body = util.div('modal-body')
         this.body.innerHTML = body
         this.content.appendChild(this.body)
       }
     }
+    return this
   }
 
   addFooter(footer) {
     if (footer) {
-      if (footer.appendChild) {
-        footer.style.paddingbottom = '10px'
-        footer.style.paddingtop = '20px'
-        footer.style.bottom = 0
-        footer.style.position = 'relative'
+      if (footer instanceof ToggleElement) {
+        footer.element.classList.add('toolbar','toolbar-footer')
+        footer.appendTo(this.content)
+        this.footer = footer
+      } else if (footer.appendChild) {
+        footer.classList.add('toolbar','toolbar-footer')
         this.content.appendChild(footer)
         this.footer = footer
       } else if (typeof footer === 'string') {
-        this.footer = document.createElement('DIV')
+        this.footer = util.div('toolbar toolbar-footer')
         this.footer.innerHTML = footer
         this.content.appendChild(this.footer)
       }
     }
+    return this
   }
 
 

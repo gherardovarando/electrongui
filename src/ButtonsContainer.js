@@ -44,6 +44,7 @@ class ButtonsContainer extends ToggleElement {
     btn.id = `${this.id}Button${options.id}` //so the id is not the DOM id
     btn.className = `btn ${options.className}`
     btn.role = "button"
+    btn.title = options.title || options.text || ''
     if (typeof options.text === 'string') {
       btn.innerHTML = options.text
     }
@@ -96,6 +97,7 @@ class ButtonsContainer extends ToggleElement {
 
     this.buttons[options.id] = btn
     this.nButtons++
+    return btn
 
   }
 
@@ -134,6 +136,7 @@ class ButtonsContainer extends ToggleElement {
       })
     }
     this.element.appendChild(grp)
+    return grp
   }
 
   removeButtonGroup(id, force) {

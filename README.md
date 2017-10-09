@@ -13,6 +13,7 @@
 - Add (and modify to your taste) the `src/style/gui.css` file
 
 - In the Renderer process :
+
 ```
 const {Gui} = require('electrongui')
 let gui = new Gui() // create the base gui structure
@@ -51,11 +52,18 @@ Class that represent an html element that can be shown/hided and emit events acc
 All the `ToggleElement` instances are linked on creation to a HTML element. The element is accessible with `this.element`. If the element is not supplied on creation it will be created as an empty DIV element.
 
 ```
-const {ToggleElement} = require('electrongui');
-var el = document.createElelement('DIV');
-var togEl = new ToggleElement(el);
+let body = document.getElementsByTagName('body')[0]
+const {ToggleElement} = require('electrongui')
+var el = document.createElelement('DIV')
+var togEl = new ToggleElement(el, body)
 togEl.element === el \\ true
 ```
+
+#### Creation
+
+`new ToggleElement(element, parent)`
+- element HTMl element
+- parent HTMl element or ToggleElement
 
 #### Methods
 
@@ -64,34 +72,47 @@ togEl.element === el \\ true
 - `element` an HTML element or an instance of `ToggleElement`.
 
 Append `this.element` to `element`.
+Return `this`.
 
 ##### `appendChild(element)`
 
 - `element` an HTML element or an instance of `ToggleElement`.
 
 Append `element` as a child of `this.element`.
+Return `this`.
 
 ##### `removeChild(element)`
 
 - `element` an HTML element or an instance of `ToggleElement`.
 
 Remove `element` from the children of `this.element`.
+Return `this`.
+
+##### `remove()`
+
+Remove from the parent (if set with `this.appendTo(parent)`).
+Return `this`.
+
 
 ##### `clear()`
 
 Remove all the children of `this.element`.
+Return `this`.
 
 ##### `show()`
 
 Display the element, set `this.element.style.display = ''`.
+Return `this`.
 
 ##### `hide()`
 
 Display the element, set `this.element.style.display = 'none'`.
+Return `this`.
 
 ##### `toggle()`
 
 Display/hide the element.
+Return `this`.
 
 ##### `isHidden()`
 
@@ -111,6 +132,7 @@ return `true` if the element is hidden.
   - `action` function, action to perform on element toggling.
 
 Add a toggle button to a preexistent buttonsContainer.
+Return the button.
 
 ##### `removeToggleButton()`
 
@@ -165,6 +187,8 @@ btnContainer.addButton({
   - `groupId` string, the id of the button group, if not present it will be created.
   - `gropuClassName` string, the class name of the group id, it will be used only if the gropu id is not present and thus it will be created.
 
+Return the button element.
+
 
 ##### `removeButton(id, force)`
 - `id` string, the id of the button to remove.
@@ -175,6 +199,8 @@ btnContainer.addButton({
  - `className` css class of the group.
  - `id` id of the group.
 - `buttons` array of buttons options. If present all the respective buttons will be created and added to this group.  
+
+Return the button group element
 
 
 ##### `removeButtonGroup(id, force)`
@@ -204,12 +230,18 @@ new Modal({
 
 -`options`:
   - `draggable` logical, if the modal should be draggable.
-  - `title` string, title of the modal.
-  - `body` html element or ToggleElement the body of the modal
+  - `title` string, html element or ToggleElement, title of the modal.
+  - `body` html element or ToggleElement, the body of the modal
+  - `footer` string, html element or ToggleElement, footer of the modal.
   - `onsubmit` function, it will be call when the user press the enter key
   - `oncancel` function, it it will be call when the user press esc/canc or click outside of the modal.
   - `width` string, width of the modal, default to `'auto'`.
   - `height` string, height of the modal, default to `'auto'`.
+  - `maxWidth` string.
+  - `maxHeight` string.
+  - `baseright`, `baseleft`, `basetop` , `basebottom` options to position the modal (defualt to 0).
+  - `baseheight`, `basewidth` options for the size of the base of the modal (usally set to 100%).
+  - `backgroundcolor` defualt to `rgba(0,0,0,0.4)`.
   - `parent` html element or toggle element, default to the `body` element of the window.
 
 #### Methods
@@ -219,14 +251,17 @@ new Modal({
 Hide and destroy the modal.
 
 ##### `addTitle(title)`
-- `title` string
+- `title` string, HTML element or ToggleElement.
+Return `this`.
 
 ##### `addBody(body)`
-- `body` string or html element or toggle element.
+- `body` string or html element or ToggleElement.
+Return `this`.
 
 ##### `addFooter(footer)`
 
 -`footer` string or html element or toggle element.
+Return `this`.
 
 
 ### ProgressBar

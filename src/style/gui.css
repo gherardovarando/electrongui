@@ -216,7 +216,8 @@ input.list-input[readOnly] {
   margin: 0 auto;
   border: 1px solid #888;
   width: auto;
-  height: 100%;
+  height: auto;
+  max-height: 100%;
   max-width: 100%;
   overflow: auto;
   -webkit-animation-name: animatetop;
@@ -237,27 +238,17 @@ input.list-input[readOnly] {
   /*color: #f7f8f9;*/
   top: 0;
   position: relative;
-  border-radius: 5px 5px 0 0;
   font-weight: bold;
 }
 
-.modal-footer {
-  padding: 2px 12px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  bottom: 0;
-  position: relative;
-  border-radius: 0 0 5px 5px;
-  text-align: right;
-}
+
 
 .modal-footer input[type="button"], .modal-footer button {
   margin: 0 4px;
 }
 
 .modal-body {
-  padding: 2px 16px;
-  overflow: auto;
+
 }
 
 .vmiddle {
@@ -342,23 +333,12 @@ img.imageicon {
   padding-left: 5px;
 }
 
-.tasks-pane .left-container, .tasks-pane .right-container {
-  display: inline-block;
-  width: 50%;
+.tasks-pane {
+  width: 100%;
   height: auto;
-  min-height: 100%;
   box-sizing: border-box;
   vertical-align: top;
-  overflow: hidden;
-}
-
-.tasks-pane .left-container {
-  border-right: 1px solid #C2C0C2;
-}
-
-.tasks-pane .right-container {
-  border-left: 1px solid #C2C0C2;
-  margin-left: -1px;
+  display: block;
 }
 
 .tasks-header {
@@ -369,23 +349,39 @@ img.imageicon {
 
 .running-tasks-container, .finished-tasks-container {
   vertical-align: top;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .task-container {
   border-bottom: 1px solid #C2C0C2;
+  width: 100%;
 }
 
 .task-container .main-info-container {
   padding: 10px 0;
-  display: table;
+  display: flex;
 }
 
-.task-container .main-info-container .status-icon-container, .task-container .main-info-container .middle-container, .task-container .main-info-container .cancel-container {
-  display: table-cell;
+.task-container .main-info-container .cancel-container {
+  right: 0;
+  display: inline;
+  width: 10%;
+}
+
+.task-container .main-info-container .middle-container {
+  display: inline;
+  width: 80%;
+}
+
+.task-container .main-info-container .status-icon-container {
+  left: 0;
+  display: inline;
+  width: 10%;
 }
 
 .task-container .main-info-container .status-icon-container, .task-container .main-info-container .cancel-container {
-  width: 1%;
   padding: 0 10px;
   vertical-align: middle;
 }
@@ -400,18 +396,17 @@ img.imageicon {
 
 .task-container .main-info-container .middle-container .task-data-table-container {
   width: 100%;
-  display: table;
+  display: flex;
 }
 
 .task-container .main-info-container .middle-container .task-data-table-container .task-data-container {
-  display: table-cell;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .task-container .main-info-container .middle-container .task-data-table-container .action-button-container {
-  display: table-cell;
-  width: 1%;
   vertical-align: middle;
+  overflow-x: hidden;
 }
 
 .task-container .main-info-container .middle-container .name-container {
@@ -421,6 +416,7 @@ img.imageicon {
 .task-container .main-info-container .middle-container .details-container {
   font-size: 12px;
   padding-bottom: 5px;
+  text-overflow: ellipsis;
 }
 
 .task-container .additional-info-container {
@@ -723,6 +719,14 @@ img.imageicon {
   height: 100%;
   font-weight: bolder;
   font-family: monospace;
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  border-radius: 50%;
+  background-color: red;
 }
 
 .top-bar {

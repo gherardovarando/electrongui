@@ -63,6 +63,7 @@ class Workspace extends GuiExtension {
       id: 'save',
       groupId: 'basetools',
       icon: 'fa fa-save',
+      title: 'Save current workspace',
       action: () => {
         this.save()
       }
@@ -72,6 +73,7 @@ class Workspace extends GuiExtension {
       id: 'load',
       groupId: 'basetools',
       icon: 'fa fa-folder-open-o',
+      title: 'Load a workspace',
       action: () => {
         this.loadChecking()
       }

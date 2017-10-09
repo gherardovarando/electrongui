@@ -25,84 +25,76 @@ const NavGroup = require('./NavGroup.js')
 const util = require('./util.js')
 
 class Sidebar extends ToggleElement {
-    constructor(parent, options) {
-        options = Object.assign({
-            className: ''
-        }, options)
-        if (parent.appendChild) {
-            let element = util.div(`sidebar ${options.className}`)
-            element.id = `${parent.id}Sidebar${parent.getElementsByClassName('sidebar').length}`
-            super(element)
-            this.parent = parent
-            this.hide()
-            parent.appendChild(element)
-        }
+  constructor(parent, options) {
+    options = Object.assign({
+      className: ''
+    }, options)
+    let element = util.div(`sidebar ${options.className}`)
+    element.id = `${parent.id}Sidebar${parent.getElementsByClassName('sidebar').length}`
+    super(element, parent)
+  }
 
-    }
-
-    addList() {
-        switch (typeof arguments[0]) {
-            case 'string':
-                let id = arguments[0]
-                if (id === 'nav' || id === 'element' || id === 'parent') return
-                let list = new ListGroup(id || `${this.element.id}list`, this.element)
-                this[id || 'list'] = list
-                this.appendChild(list)
-                break
-            case 'object':
-                if (arguments[0] instanceof ListGroup) {
-                    this[arguments[0].id] = arguments[0]
-                    this.appendChild(arguments[0])
-                } else {
-                    this['list'] = new ListGroup('list', this.element)
-                    this.appendChild(this['list'])
-                }
-            default:
-                this['list'] = new ListGroup('list', this.element)
-                this.appendChild(this['list'])
-        }
-    }
-
-    addNav() {
-        switch (typeof arguments[0]) {
-            case 'string':
-                let id = arguments[0]
-                if (id === 'list' || id === 'element' || id === 'parent') return
-                let nav = new NavGroup(id || `${this.element.id}nav`, this.element)
-                this[id || 'nav'] = nav
-                this.appendChild(nav)
-                break
-            case 'object':
-                if (arguments[0] instanceof NavGroup) {
-                    this[arguments[0].id] = arguments[0]
-                    this.appendChild(arguments[0])
-                } else {
-                    this['nav'] = new NavGroup(`nav`, this.element)
-                    this.appendChild(this['nav'])
-
-                }
-            default:
-                this['nav'] = new NavGroup(`nav`, this.element)
-                this.appendChild(this['nav'])
-        }
-    }
-
-
-
-    addItem(options) {
-        if (this.list) {
-            this.list.addItem(options)
-        } else if (this.nav) {
-            this.nav.addItem(options)
+  addList() {
+    switch (typeof arguments[0]) {
+      case 'string':
+        let id = arguments[0]
+        if (id === 'nav' || id === 'element' || id === 'parent') return
+        let list = new ListGroup(id || `${this.element.id}list`, this.element)
+        this[id || 'list'] = list
+        this.appendChild(list)
+        break
+      case 'object':
+        if (arguments[0] instanceof ListGroup) {
+          this[arguments[0].id] = arguments[0]
+          this.appendChild(arguments[0])
         } else {
-            this.addList()  
-            this.addItem(options)
+          this['list'] = new ListGroup('list', this.element)
+          this.appendChild(this['list'])
         }
+      default:
+        this['list'] = new ListGroup('list', this.element)
+        this.appendChild(this['list'])
     }
+  }
 
-    remove() {
-        this.parent.removeChild(this.element)
+  addNav() {
+    switch (typeof arguments[0]) {
+      case 'string':
+        let id = arguments[0]
+        if (id === 'list' || id === 'element' || id === 'parent') return
+        let nav = new NavGroup(id || `${this.element.id}nav`, this.element)
+        this[id || 'nav'] = nav
+        this.appendChild(nav)
+        break
+      case 'object':
+        if (arguments[0] instanceof NavGroup) {
+          this[arguments[0].id] = arguments[0]
+          this.appendChild(arguments[0])
+        } else {
+          this['nav'] = new NavGroup(`nav`, this.element)
+          this.appendChild(this['nav'])
+
+        }
+      default:
+        this['nav'] = new NavGroup(`nav`, this.element)
+        this.appendChild(this['nav'])
     }
+  }
+
+
+
+  addItem(options) {
+    if (this.list) {
+      this.list.addItem(options)
+    } else if (this.nav) {
+      this.nav.addItem(options)
+    } else {
+      this.addList()
+      this.addItem(options)
+    }
+  }
+
+
 
 }
 

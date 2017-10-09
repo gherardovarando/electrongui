@@ -44,31 +44,40 @@ class TasksViewer extends GuiExtension {
   }
 
   activate() {
+    this.addPane()
 
-    this.addToggleButton({
-      id: toggleButtonId,
+    this.modal = new Modal({
+      permanent: true,
+      body: this.pane,
+      height: 'auto',
+      width: '100%',
+      basewidth: '300px',
+      baseheight: 'auto',
+      baseright: '0',
+      baseleft: 'auto',
+      basebottom: '',
+      parent: this.gui.container,
+      backgroundcolor: 'rgba(0,0,0,0)'
+    })
+
+    this.toggleButton = this.modal.addToggleButton({
       buttonsContainer: this.gui.header.actionsContainer,
+      id: toggleButtonId,
       className: 'btn btn-default',
       groupClassName: 'pull-right',
       groupId: 'tasksPage',
-      icon: icon
-    })
-    this.buttonsContainer.buttons[toggleButtonId].onclick = () => {
-      this.modal.toggle()
-    }
-
-    this.on('show', () => {
-      this.modal.hide()
+      icon: icon,
+      title: 'Tasks'
     })
 
-    this.toggleButton = this.buttonsContainer.buttons[`${toggleButtonId}`]
+
+
     this.progressBar = new ProgressBar(this.toggleButton)
     this.progressBar.setHeight(4)
-    this.gui.container.element.addEventListener('click',()=>{
+    this.gui.container.element.addEventListener('click', () => {
       this.modal.hide()
     })
 
-    this.addPane()
 
     this.taskManagerChangeListener = (...args) => {
       if (args.length === 1) {
@@ -99,6 +108,7 @@ class TasksViewer extends GuiExtension {
         }
       }
     }
+
     this.gui.taskManager.on("change", this.taskManagerChangeListener)
     this.gui.taskManager.on("task.removed", this.taskRemovedListener)
 
@@ -108,37 +118,20 @@ class TasksViewer extends GuiExtension {
       this.progressBar.setBar(p)
     })
 
-    this.modal = new Modal({
-      permanent: true,
-      title: '',
-      body: this.pane.element,
-      height: 'auto',
-      width: '100%',
-      basewidth: '300px',
-      baseheight: 'auto',
-      baseleft: 'auto',
-      basebottom: 'auto',
-      baseright: '0',
-      parent: this.gui.container,
-      backgroundcolor: 'rgba(0,0,0,0)'
-    })
-
-    this.element.classList.add('pane-group')
 
 
-
-    let footer = util.div('toolbar toolbar-footer')
+    let footer = util.div('toolbar toolbar-header')
     let btns = util.div('toolbar-actions')
     footer.id = 'modalfootertaskviewer'
     let bc = new ButtonsContainer(btns)
-    this.modalBar = new ProgressBar(footer)
+    //this.modalBar = new ProgressBar(footer)
     bc.addButton({
       text: '',
       icon: 'fa fa-ban',
       className: 'btn btn-negative',
-      action: ()=>{
-         this.gui.taskManager.cancelAllTasks()
-         this.progressBar.setBar(0)
+      action: () => {
+        this.gui.taskManager.cancelAllTasks()
+        this.progressBar.setBar(0)
       },
       groupId: 'groupfootermodaltask',
       groupClassName: 'btn-group'
@@ -147,14 +140,14 @@ class TasksViewer extends GuiExtension {
       text: '',
       icon: 'fa fa-trash',
       className: 'btn btn-default',
-      action: ()=>{
-         util.empty(this.finishedTasksContainer,this.finishedTasksContainer.firstChild)
+      action: () => {
+        util.empty(this.finishedTasksContainer, this.finishedTasksContainer.firstChild)
       },
       groupId: 'groupfootermodaltask',
       groupClassName: 'btn-group'
     })
     footer.appendChild(btns)
-    this.modal.addFooter(footer)
+    this.modal.addTitle(footer)
 
 
     super.activate()
@@ -162,8 +155,8 @@ class TasksViewer extends GuiExtension {
   }
 
   deactivate() {
+    this.modal.removeToggleButton(toggleButtonId)
     this.modal.destroy()
-    this.removeToggleButton(toggleButtonId)
     this.gui.taskManager.removeListener("change", this.taskManagerChangeListener)
     this.gui.taskManager.removeListener("task.removed", this.taskRemovedListener)
     super.deactivate()
@@ -171,22 +164,17 @@ class TasksViewer extends GuiExtension {
 
 
   addPane() {
-    this.pane = new ToggleElement(util.div('pane tasks-pane'))
-    this.pane.element.style.width = '100%'
-    this.pane.element.style.overflow='auto'
-    this.addSections()
-
-  }
-
-  addSections() {
+    this.pane = util.div('tasks-pane')
     this.runningTasksContainer = util.div('running-tasks-container')
     this.finishedTasksContainer = util.div('running-tasks-container')
 
-    this.pane.appendChild(util.div('tasks-header', 'Running'))
+    //this.pane.appendChild(util.div('tasks-header', 'Running'))
     this.pane.appendChild(this.runningTasksContainer)
-    this.pane.appendChild(util.div('tasks-header', 'Finished'))
+    //this.pane.appendChild(util.div('tasks-header', 'Finished'))
     this.pane.appendChild(this.finishedTasksContainer)
   }
+
+
 
 }
 

@@ -25,6 +25,7 @@ const {
 } = require('electron').remote
 const os = require('os')
 
+exports.body = document.getElementsByTagName('BODY')[0]
 
 exports.findKeyId = function(x, obj, tag) {
   tag = tag || '_id'
