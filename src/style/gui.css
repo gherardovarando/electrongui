@@ -1,3 +1,5 @@
+
+
 @keyframes fadein {
   from {
     opacity: 0;
@@ -27,9 +29,6 @@
   width: 20%;
 }
 
-.padded {
-  padding: 20px;
-}
 
 .sidebar.scrollable {
   overflow-y: auto;
