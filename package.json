@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/gherardovarando/electrongui#readme",
   "dependencies": {
+    "electron": "1.7.8",
     "dateformat": "^2.0.0",
     "electron-json-storage": "^3.0.1",
     "json2csv": "^3.7.3"
