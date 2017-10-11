@@ -29,11 +29,26 @@ const util = require('./util.js')
 const GuiExtension = require('./GuiExtension.js')
 
 class Workspace extends GuiExtension {
-  constructor(gui,options) {
-    super(gui,{
+  constructor(gui, options) {
+    super(gui, {
       icon: 'fa fa-database'
     })
     options = options || {}
+    this.options = options
+    this.spaces = {
+      workspace: {
+        path: ''
+      }
+    }
+    if (!this.options.clean) {
+      storage.get('workspace', (error, data) => {
+        if (error) return
+        if (data.workspace) {
+          this.spaces = data || this.spaces
+          this.emit('load')
+        }
+      })
+    }
     window.addEventListener('beforeunload', (e) => {
       storage.set('workspace', this.spaces, (error) => {})
     })
@@ -46,18 +61,8 @@ class Workspace extends GuiExtension {
 
   activate() {
     super.activate()
-    this.spaces = {
-      workspace: {
-        path: ''
-      }
-    }
-    storage.get('workspace', (error, data) => {
-      if (error) return
-      if (data.workspace) {
-        this.spaces = data || this.spaces
-        this.emit('load')
-      }
-    })
+
+
 
     this.gui.header.actionsContainer.addButton({
       id: 'save',

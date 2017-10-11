@@ -28,7 +28,7 @@ const os = require('os')
 
 
 
-
+exports.mainProcess = require('electron').remote.require('process')
 
 exports.body = document.getElementsByTagName('BODY')[0]
 
