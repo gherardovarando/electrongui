@@ -19,6 +19,8 @@
  // SOFTWARE.
 'use strict'
 
+//deprecated use splitpane
+
 const ToggleElement = require('./ToggleElement.js')
 const util = require('./util.js')
 

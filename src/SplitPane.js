@@ -21,43 +21,89 @@
 "use strict"
 
 const ToggleElement = require('./ToggleElement')
+const util = require('./util.js')
 
 
 class SplitPane extends ToggleElement {
-    constructor(element) {
-        super(element)
-        this.element.className = 'pane'
-        this.top = new ToggleElement(document.createElement('DIV'))
-        this.top.element.className = 'h-pane-top'
-        this.top.element.style.height = "100%"
-        this.appendChild(this.top)
+  constructor(element, type) {
+    super(element)
+    type = type || 1
+    this.element.className = 'pane'
+    this.top = new ToggleElement(util.div('h-pane-top'))
+    this.top.element.style.height = "100%"
+    this.appendChild(this.top)
+    let isDragging = false
+    let drag = util.div()
+    drag.appendChild(util.div('line'))
+    element.appendChild(drag)
 
-        this.bottom = new ToggleElement(document.createElement('DIV'))
-        this.bottom.element.className = 'h-pane-bottom'
-        this.bottom.element.style.height = "0%"
-        this.appendChild(this.bottom)
+    this.bottom = new ToggleElement(util.div('h-pane-bottom'))
+    this.bottom.element.style.height = "0%"
+    this.appendChild(this.bottom)
 
+    drag.onmousedown = () => {
+      isDragging = true
+      this.top.element.style.cursor = 'col-resize'
+      this.top.element.style.cursor = 'col-resize'
     }
 
-    showBottom(x) {
-        this.bottom.element.style.height = `${x||70}%`
-        this.top.element.style.height = `${(100-x)||30}%`
-    }
-
-    hideBottom() {
-        this.top.element.style.height = "100%"
-        this.bottom.element.style.height = "0%"
-    }
-
-    toggleBottom() {
-        if (this.bottom.element.style.height == "0%") {
-            this.showBottom()
-        } else {
-            this.hideBottom()
+    element.onmousemove = (e) => {
+      if (isDragging) {
+        let sumPercentages = this.top.element + this.bottom.element
+        let elemRect = element.getBoundingClientRect()
+        if (type === FlexLayout.Type.HORIZONTAL) {
+          let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100
+          let percentageRight = 100 - percentageLeft
+          if (percentageRight > 3 && percentageRight < 97) {
+            this.top.element.style.width = `${percentageLeft}%`
+            this.top.element.style.width = `${percentageRight}%`
+          }
+        } else if (type === FlexLayout.Type.VERTICAL) {
+          let percentageTop = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
+          let percentageBottom = 100 - percentageTop
+          if (percentageBottom > 3 && percentageBottom < 97) {
+            this.top.element.style.height = `${percentageTop}%`
+            this.bottom.element.style.height = `${percentageBottom}%`
+          }
         }
+      }
+    }
+
+    document.onmouseup = () => {
+      if (isDragging) {
+        this.top.element.style.cursor = null
+        this.bottom.element.style.cursor = null
+        isDragging = false
+      }
     }
 
 
+  }
+
+  showBottom(x) {
+    this.bottom.element.style.height = `${x||70}%`
+    this.top.element.style.height = `${(100-x)||30}%`
+  }
+
+  hideBottom() {
+    this.top.element.style.height = "100%"
+    this.bottom.element.style.height = "0%"
+  }
+
+  toggleBottom() {
+    if (this.bottom.element.style.height == "0%") {
+      this.showBottom()
+    } else {
+      this.hideBottom()
+    }
+  }
+
+
+}
+
+SplitPane.Type = {
+  HORIZONTAL: 0,
+  VERTICAL: 1
 }
 
 
