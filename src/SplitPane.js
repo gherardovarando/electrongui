@@ -29,47 +29,46 @@ class SplitPane extends ToggleElement {
     super(element)
     type = type || 'v'
     this.element.className = 'pane split-pane'
-    this.top = new ToggleElement(util.div(`${type}-pane`))
-    this.top.element.style.height = '100%'
-    this.top.element.style.width = '100%'
+    this.one = new ToggleElement(util.div(`${type}-pane`))
+    this.one.element.style.height = '100%'
+    this.one.element.style.width = '100%'
     this._dim = x || 40
-    this.appendChild(this.top)
+    this.appendChild(this.one)
     let isDragging = false
     let drag = util.div()
     drag.appendChild(util.div(`line drag-${type}`))
     element.appendChild(drag)
 
-    this.bottom = new ToggleElement(util.div(`${type}-pane`))
-    this.bottom.element.style.height = "0%"
-    this.appendChild(this.bottom)
+    this.two = new ToggleElement(util.div(`${type}-pane`))
+    this.two.element.style.height = "0%"
+    this.appendChild(this.two)
 
     drag.onmousedown = () => {
       isDragging = true
-      this.top.element.classList.add('resizing')
-      this.bottom.element.classList.add('resizing')
-      this.top.element.style.cursor = 'col-resize'
-      this.bottom.element.style.cursor = 'col-resize'
+      this.one.element.classList.add('resizing')
+      this.two.element.classList.add('resizing')
+      this.one.element.style.cursor = 'col-resize'
+      this.two.element.style.cursor = 'col-resize'
     }
 
     element.onmousemove = (e) => {
       if (isDragging) {
-        let sumPercentages = this.top.element + this.bottom.element
         let elemRect = element.getBoundingClientRect()
         if (type === SplitPane.Type.HORIZONTAL) {
           let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100
           let percentageRight = 100 - percentageLeft
           this._dim = percentageLeft
           if (percentageRight > 3 && percentageRight < 97) {
-            this.top.element.style.width = `${percentageLeft}%`
-            this.top.element.style.width = `${percentageRight}%`
+            this.one.element.style.width = `${percentageLeft}%`
+            this.one.element.style.width = `${percentageRight}%`
           }
         } else if (type === SplitPane.Type.VERTICAL) {
-          let percentageTop = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
-          let percentageBottom = 100 - percentageTop
-          if (percentageBottom > 3 && percentageBottom < 97) {
-            this._dim = percentageBottom
-            this.top.element.style.height = `${percentageTop}%`
-            this.bottom.element.style.height = `${percentageBottom}%`
+          let percentageOne = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
+          let percentageTwo = 100 - percentageOne
+          if (percentageTwo > 3 && percentageTwo < 97) {
+            this._dim = percentageTwo
+            this.one.element.style.height = `${percentageOne}%`
+            this.two.element.style.height = `${percentageTwo}%`
           }
         }
       }
@@ -77,10 +76,10 @@ class SplitPane extends ToggleElement {
 
     document.onmouseup = () => {
       if (isDragging) {
-        this.top.element.style.cursor = null
-        this.bottom.element.style.cursor = null
-        this.top.element.classList.remove('resizing')
-        this.bottom.element.classList.remove('resizing')
+        this.one.element.style.cursor = null
+        this.two.element.style.cursor = null
+        this.one.element.classList.remove('resizing')
+        this.two.element.classList.remove('resizing')
         isDragging = false
       }
     }
@@ -88,24 +87,24 @@ class SplitPane extends ToggleElement {
 
   }
 
-  showBottom(x) {
-    if (x>=0 && x<=100){
+  showSecondPane(x) {
+    if (x>0 && x<=100){
       this._dim = x
     }
-    this.bottom.element.style.height = `${this._dim}%`
-    this.top.element.style.height = `${(100-this._dim)||30}%`
+    this.two.element.style.height = `${this._dim}%`
+    this.one.element.style.height = `${(100-this._dim)||30}%`
   }
 
-  hideBottom() {
-    this.top.element.style.height = "100%"
-    this.bottom.element.style.height = "0%"
+  hideSecondPane() {
+    this.one.element.style.height = "100%"
+    this.two.element.style.height = "0%"
   }
 
-  toggleBottom() {
-    if (this.bottom.element.style.height == "0%") {
-      this.showBottom()
+  toggleSecondPane() {
+    if (this.two.element.style.height == "0%") {
+      this.showSecondPane()
     } else {
-      this.hideBottom()
+      this.hideSecondPane()
     }
   }
 

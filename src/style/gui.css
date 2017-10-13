@@ -462,63 +462,63 @@ img.imageicon {
   color: red;
 }
 
-.v-pane {
+.split-pane {
+  width: 100%;
+  height: 100%;
+}
+
+.split-pane .v-pane {
   max-height: 99.5%;
   min-height: 0%;
-  width: 100%;
   transition: height 0.8s;
   background-color: #F6F6F5;
   overflow: hidden;
 }
 
-.v-pane.resizing {
+.split-pane .v-pane.resizing {
   transition: height 0s;
 }
 
-.h-pane {
+.split-pane .h-pane {
   max-width: 99.5%;
   min-width: 0%;
-  width: 100%;
   transition: width 0.8s;
   background-color: #F6F6F5;
   overflow: hidden;
 }
 
-.h-pane.resizing {
+.split-pane .h-pane.resizing {
   transition: width 0s;
 }
 
-.drag-h {
- padding: 0 4px 0 4px;
- margin-left: -5px;
- height: 100%;
- width: 0;
- cursor: col-resize;
- vertical-align: top;
- display: inline-block;
+.split-pane .drag-h {
+  padding: 0 4px 0 4px;
+  margin-left: -5px;
+  height: 100%;
+  width: 0;
+  cursor: col-resize;
+  vertical-align: top;
+  display: inline-block;
 }
 
-.drag-h .line {
- width: 1px;
- height: 100%;
- background-color: #989698;
- cursor: col-resize;
+.split-pane .drag-h.line {
+  width: 1px;
+  height: 100%;
+  background-color: #989698;
+  cursor: col-resize;
 }
 
-.drag-v {
- padding: 4px 0 4px 0;
- margin-top: -5px;
- cursor: row-resize;
+.split-pane .drag-v {
+  padding: 4px 0 4px 0;
+  margin-top: -5px;
+  cursor: row-resize;
 }
 
-.drag-v .line {
- height: 1px;
- background-color: #989698;
- cursor: row-resize;
+.split-pane .drag-v.line {
+  height: 1px;
+  background-color: #989698;
+  cursor: row-resize;
 }
-
-
-
 
 .list-group.tiles-list {
   border-top: 1px solid #989698;
@@ -646,14 +646,6 @@ img.imageicon {
 .list-group-item .details .grid input {
   width: 60px;
 }
-
-
-
-
-
-
-
-
 
 .layers-widget {
   width: 100%;

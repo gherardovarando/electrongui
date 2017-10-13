@@ -22,7 +22,6 @@
 
 const ButtonsContainer = require('./src/ButtonsContainer.js');
 const ExtensionsManager = require('./src/ExtensionsManager.js');
-const FlexLayout = require('./src/FlexLayout.js');
 const FolderSelector = require('./src/FolderSelector.js');
 const Grid = require('./src/Grid.js');
 const Gui = require('./src/Gui.js');
@@ -48,7 +47,6 @@ const colors = require('./src/Colors.js');
 
 exports.ButtonsContainer = ButtonsContainer;
 exports.ExtensionsManager = ExtensionsManager;
-exports.FlexLayout = FlexLayout;
 exports.FolderSelector = FolderSelector;
 exports.Grid = Grid;
 exports.Gui = Gui;
