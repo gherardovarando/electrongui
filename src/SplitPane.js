@@ -25,43 +25,49 @@ const util = require('./util.js')
 
 
 class SplitPane extends ToggleElement {
-  constructor(element, type) {
+  constructor(element, type, x) {
     super(element)
-    type = type || 1
-    this.element.className = 'pane'
-    this.top = new ToggleElement(util.div('h-pane-top'))
-    this.top.element.style.height = "100%"
+    type = type || 'v'
+    this.element.className = 'pane split-pane'
+    this.top = new ToggleElement(util.div(`${type}-pane`))
+    this.top.element.style.height = '100%'
+    this.top.element.style.width = '100%'
+    this._dim = x || 40
     this.appendChild(this.top)
     let isDragging = false
     let drag = util.div()
-    drag.appendChild(util.div('line'))
+    drag.appendChild(util.div(`line drag-${type}`))
     element.appendChild(drag)
 
-    this.bottom = new ToggleElement(util.div('h-pane-bottom'))
+    this.bottom = new ToggleElement(util.div(`${type}-pane`))
     this.bottom.element.style.height = "0%"
     this.appendChild(this.bottom)
 
     drag.onmousedown = () => {
       isDragging = true
+      this.top.element.classList.add('resizing')
+      this.bottom.element.classList.add('resizing')
       this.top.element.style.cursor = 'col-resize'
-      this.top.element.style.cursor = 'col-resize'
+      this.bottom.element.style.cursor = 'col-resize'
     }
 
     element.onmousemove = (e) => {
       if (isDragging) {
         let sumPercentages = this.top.element + this.bottom.element
         let elemRect = element.getBoundingClientRect()
-        if (type === FlexLayout.Type.HORIZONTAL) {
+        if (type === SplitPane.Type.HORIZONTAL) {
           let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100
           let percentageRight = 100 - percentageLeft
+          this._dim = percentageLeft
           if (percentageRight > 3 && percentageRight < 97) {
             this.top.element.style.width = `${percentageLeft}%`
             this.top.element.style.width = `${percentageRight}%`
           }
-        } else if (type === FlexLayout.Type.VERTICAL) {
+        } else if (type === SplitPane.Type.VERTICAL) {
           let percentageTop = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
           let percentageBottom = 100 - percentageTop
           if (percentageBottom > 3 && percentageBottom < 97) {
+            this._dim = percentageBottom
             this.top.element.style.height = `${percentageTop}%`
             this.bottom.element.style.height = `${percentageBottom}%`
           }
@@ -73,6 +79,8 @@ class SplitPane extends ToggleElement {
       if (isDragging) {
         this.top.element.style.cursor = null
         this.bottom.element.style.cursor = null
+        this.top.element.classList.remove('resizing')
+        this.bottom.element.classList.remove('resizing')
         isDragging = false
       }
     }
@@ -81,8 +89,11 @@ class SplitPane extends ToggleElement {
   }
 
   showBottom(x) {
-    this.bottom.element.style.height = `${x||70}%`
-    this.top.element.style.height = `${(100-x)||30}%`
+    if (x>=0 && x<=100){
+      this._dim = x
+    }
+    this.bottom.element.style.height = `${this._dim}%`
+    this.top.element.style.height = `${(100-this._dim)||30}%`
   }
 
   hideBottom() {
@@ -99,11 +110,21 @@ class SplitPane extends ToggleElement {
   }
 
 
+  setType(type){
+     if (type === SplitPane.Type.HORIZONTAL){
+
+     }
+     if (type === SplitPane.Type.VERTICAL){
+
+     }
+  }
+
+
 }
 
 SplitPane.Type = {
-  HORIZONTAL: 0,
-  VERTICAL: 1
+  HORIZONTAL: 'h',
+  VERTICAL: 'v'
 }
 
 
