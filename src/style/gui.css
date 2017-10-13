@@ -1,5 +1,3 @@
-
-
 @keyframes fadein {
   from {
     opacity: 0;
@@ -7,6 +5,21 @@
   to {
     opacity: 1;
   }
+}
+
+label {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.block {
+  display: block;
+}
+
+input[type=checkbox] {
+  vertical-align: middle;
+  position: relative;
+  bottom: 1px;
 }
 
 .app {
@@ -29,12 +42,9 @@
   width: 20%;
 }
 
-
 .sidebar.scrollable {
   overflow-y: auto;
 }
-
-
 
 div.cellconteiner {
   display: flex;
@@ -48,9 +58,9 @@ div.cellconteiner {
 div.cell-container {
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: left;
   flex-direction: row;
-  align-content: flex-start;
+  align-content: left;
   justify-content: space-around;
 }
 
@@ -58,14 +68,23 @@ div.cell-container {
   margin: 4px;
 }
 
-.active.check-button {
-  background-color: #4fa8df;
+button.check-button {
+  padding-left: 25px;
+  margin-right: 0;
+  background-image: linear-gradient(to right, transparent 1px, #c0cfd8 1px, #c0cfd8 23px, transparent 23px, transparent);
+  background-color: inherit;
+  color: inherit;
+  font-weight: bold;
 }
 
-.check-button:hover {
-  border-color: #0f7abc;
-  border-width: thin;
-  background-color: #97bfd8;
+button.active.check-button {
+  background-image: linear-gradient(to right, transparent 1px, #116cd6 1px, #116cd6 23px, transparent 23px, transparent);
+  background-color: inherit;
+  color: inherit;
+}
+
+button.check-button:hover {
+  background-image: linear-gradient(to right, transparent 1px, #81b3d3 1px, #81b3d3 23px, transparent 23px, transparent);
 }
 
 .progress-bar {
@@ -246,17 +265,11 @@ input.list-input[readOnly] {
   font-weight: bold;
 }
 
-
-
-.modal-body {
-
-}
+.modal-body {}
 
 .vmiddle {
   vertical-align: middle;
 }
-
-
 
 
 /* Add Animation */
