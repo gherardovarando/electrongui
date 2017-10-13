@@ -111,6 +111,10 @@ class Modal extends ToggleElement {
     this.options.parent.removeChild(this.element)
   }
 
+  addHeader(header) {
+    this.addTitle(header)
+  }
+
   addTitle(title) {
     if (title) {
       if (typeof title === 'string') {
@@ -126,7 +130,6 @@ class Modal extends ToggleElement {
       }
     }
     return this
-
   }
 
   addBody(body) {

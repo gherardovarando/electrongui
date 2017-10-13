@@ -120,9 +120,9 @@ class TasksViewer extends GuiExtension {
 
 
 
-    let footer = util.div('toolbar toolbar-header')
+    let header = util.div('toolbar toolbar-header')
     let btns = util.div('toolbar-actions')
-    footer.id = 'modalfootertaskviewer'
+    header.id = 'modalheadertaskviewer'
     let bc = new ButtonsContainer(btns)
     //this.modalBar = new ProgressBar(footer)
     bc.addButton({
@@ -133,7 +133,7 @@ class TasksViewer extends GuiExtension {
         this.gui.taskManager.cancelAllTasks()
         this.progressBar.setBar(0)
       },
-      groupId: 'groupfootermodaltask',
+      groupId: 'groupheadermodaltask',
       groupClassName: 'btn-group'
     })
     bc.addButton({
@@ -143,11 +143,11 @@ class TasksViewer extends GuiExtension {
       action: () => {
         util.empty(this.finishedTasksContainer, this.finishedTasksContainer.firstChild)
       },
-      groupId: 'groupfootermodaltask',
+      groupId: 'groupheadermodaltask',
       groupClassName: 'btn-group'
     })
-    footer.appendChild(btns)
-    this.modal.addTitle(footer)
+    header.appendChild(btns)
+    this.modal.addTitle(header)
 
 
     super.activate()

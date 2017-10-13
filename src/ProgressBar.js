@@ -82,6 +82,7 @@ class ProgressBar extends ToggleElement {
         this.bar.element.style['background-color'] = color || '#4fa8df'
     }
 
+
     remove() {
         this.parent.removeChild(this.element)
     }

@@ -34,10 +34,7 @@
   overflow-y: auto;
 }
 
-input.inputFooter {
-  -webkit-app-region: no-drag;
-  padding: 3px;
-}
+
 
 div.cellconteiner {
   display: flex;
@@ -48,8 +45,17 @@ div.cellconteiner {
   justify-content: space-around;
 }
 
+div.cell-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  flex-direction: row;
+  align-content: flex-start;
+  justify-content: space-around;
+}
+
 .cell {
-  margin: 2px;
+  margin: 4px;
 }
 
 .active.check-button {
@@ -242,10 +248,6 @@ input.list-input[readOnly] {
 
 
 
-.modal-footer input[type="button"], .modal-footer button {
-  margin: 0 4px;
-}
-
 .modal-body {
 
 }
@@ -254,11 +256,7 @@ input.list-input[readOnly] {
   vertical-align: middle;
 }
 
-.modal-body>.input-label>input[type='text']:focus {
-  outline: none !important;
-  border: 1px solid blue;
-  box-shadow: 0 0 10px #719ECE;
-}
+
 
 
 /* Add Animation */

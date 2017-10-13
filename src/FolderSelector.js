@@ -62,14 +62,10 @@ class FolderSelector extends ToggleElement {
     }
     element.appendChild(btnSelectFolder)
 
-    this.selectedFolder = document.createElement("DIV")
-    this.selectedFolder.innerHTML = options.label || "Please, choose an output folder."
-    element.appendChild(this.selectedFolder)
-
     this.folderInput.onchange = (e) => {
       if (this.folderInput.files[0]) {
         this.outputFolderPath = this.folderInput.files[0].path
-        this.selectedFolder.innerHTML = this.outputFolderPath
+        btnSelectFolder.innerHTML = this.outputFolderPath
       }
     }
   }

@@ -30,27 +30,30 @@ exports.checkButton = function(options) {
   inp.id = options.id || ''
   inp.classList.add('btn')
   inp.classList.add('check-button')
+  inp.checked = false
   if (options.active) {
     inp.classList.add('active')
+    inp.checked = true
   }
   options.id = options.id || ''
   inp.id = options.id
   inp.type = 'button'
   inp.innerHTML = options.text
-  if (options.icon){
+  if (options.icon) {
     inp.appendChild(util.icon(options.icon))
   }
   inp.onclick = () => {
     if (inp.classList.contains('active')) {
       inp.classList.remove('active')
-
+      inp.checked = false
       if (typeof options.onactivate === 'function') {
         options.ondeactivate(inp, inp.classList.contains('active'))
       }
     } else {
       inp.classList.add('active')
+      inp.checked = true
       if (typeof options.ondeactivate === 'function') {
-        options.onactivate(inp)
+        options.onactivate(inp, inp.classList.contains('active'))
       }
     }
     if (typeof options.onclick === 'function') {
@@ -147,7 +150,7 @@ exports.input = function(options) {
     inp.autofocus = true
   }
   if (inp.type === 'date') {
-    inp.valueAsDate = options.valueAsDate  //for type=date
+    inp.valueAsDate = options.valueAsDate //for type=date
   }
   inp.placeholder = options.placeholder || ''
   inp.min = options.min
