@@ -23,131 +23,137 @@ const EventEmitter = require('events')
 const util = require('./util')
 
 class ToggleElement extends EventEmitter {
-  constructor(element, par) {
-    super()
-    if (!element) {
-      element = util.div()
-    }
-    this.element = element
-    this.id = element.id
-    if (par) {
-      this.appendTo(par)
-    }
-  }
-
-  appendTo(par) {
-    if (!this.element) return this
-    if (!par) return this
-    if (typeof par.appendChild === 'function') {
-      par.appendChild(this.element)
-      this.parent = par
-    }
-    return this
-  }
-
-  appendChild(el) {
-    if (this.element) {
-      if (el.element) {
-        this.element.appendChild(el.element)
-      } else if (el.appendChild) {
-        this.element.appendChild(el)
-      }
-    }
-    return this
-  }
-
-  removeChild(el) {
-    if (this.element) {
-      if (el.element) {
-        this.element.removeChild(el.element)
-      } else if (el.appendChild) {
-        this.element.removeChild(el)
-      }
-    }
-    return this
-  }
-
-
-  clear() {
-    util.empty(this.element, this.element.firstChild)
-    return this
-  }
-
-  show() {
-    this.element.style.display = ""
-    this.emit('show')
-    return this
-  }
-
-  hide() {
-    this.element.style.display = "none"
-    this.emit('hide')
-    return this
-  }
-
-
-  toggle() {
-    if (this.element.style.display === 'none') {
-      this.show()
-    } else {
-      this.hide()
-    }
-  }
-
-  isHidden() {
-    return this.element.style.display === 'none'
-  }
-
-  addToggleButton(options) {
-    let opt
-    if (options.buttonsContainer) {
-      opt = {
-        text: options.text,
-        id: options.id || this.id,
-        icon: options.icon,
-        toggle: false,
-        className: options.className,
-        groupId: options.groupId,
-        groupClassName: options.groupClassName,
-        title: options.title || options.text,
-        action: () => {
-          if (typeof options.action === 'function') options.action()
-          this.toggle()
+    constructor(element, par) {
+        super()
+        if (!element) {
+            element = util.div()
         }
-      }
-      let btn = options.buttonsContainer.addButton(opt)
-      this.buttonsContainer = options.buttonsContainer
-      this.toggleButton = btn
-
-      this.on('show', (e) => {
-        if (btn) {
-          btn.classList.add('active')
+        this.element = element
+        this.id = element.id
+        if (par) {
+            this.appendTo(par)
         }
-      })
+    }
 
-      this.on('hide', (e) => {
-        if (btn) {
-          btn.classList.remove('active')
+    appendTo(par) {
+        if (!this.element) return this
+        if (!par) return this
+        if (typeof par.appendChild === 'function') {
+            par.appendChild(this.element)
+            this.parent = par
+            this.emit('add')
         }
-      })
+        return this
+    }
 
-      return btn
+    appendChild(el) {
+        if (this.element) {
+            if (el instanceof ToggleElement) {
+                el.appendTo(this)
+            } else if (el.appendChild) {
+                this.element.appendChild(el)
+            }
+        }
+        return this
+    }
+
+    removeChild(el) {
+        if (this.element) {
+            if (el instanceof ToggleElement) {
+                this.element.removeChild(el.element)
+                el.emit('remove')
+            } else if (el.appendChild) {
+                this.element.removeChild(el)
+            }
+        }
+        return this
     }
 
 
-  }
-
-  removeToggleButton(id) {
-    if (this.buttonsContainer) {
-      this.buttonsContainer.removeButton(id || this.id)
+    clear() {
+        util.empty(this.element, this.element.firstChild)
+        this.emit('clear')
+        return this
     }
-    return this
-  }
 
-  remove() {
-    this.parent.removeChild(this.element)
-    return this
-  }
+    show() {
+        this.element.style.display = ""
+        this.emit('show')
+        return this
+    }
+
+    hide() {
+        this.element.style.display = "none"
+        this.emit('hide')
+        return this
+    }
+
+
+    toggle() {
+        if (this.element.style.display === 'none') {
+            this.show()
+        } else {
+            this.hide()
+        }
+    }
+
+    isHidden() {
+        return this.element.style.display === 'none'
+    }
+
+    addToggleButton(options) {
+        let opt
+        if (options.buttonsContainer) {
+            opt = {
+                text: options.text,
+                id: options.id || this.id,
+                icon: options.icon,
+                toggle: false,
+                className: options.className,
+                groupId: options.groupId,
+                groupClassName: options.groupClassName,
+                title: options.title || options.text,
+                action: () => {
+                    if (typeof options.action === 'function') options.action()
+                    this.toggle()
+                }
+            }
+            let btn = options.buttonsContainer.addButton(opt)
+            this.buttonsContainer = options.buttonsContainer
+            this.toggleButton = btn
+
+            this.on('show', (e) => {
+                if (btn) {
+                    btn.classList.add('active')
+                }
+            })
+
+            this.on('hide', (e) => {
+                if (btn) {
+                    btn.classList.remove('active')
+                }
+            })
+
+            return btn
+        }
+
+
+    }
+
+    removeToggleButton(id) {
+        if (this.buttonsContainer) {
+            this.buttonsContainer.removeButton(id || this.id)
+        }
+        return this
+    }
+
+    remove() {
+        if (this.parent) {
+            this.parent.removeChild(this.element)
+            this.emit('remove')
+        }
+        return this
+    }
 
 
 }

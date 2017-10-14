@@ -74,7 +74,7 @@ class SplitPane extends ToggleElement {
             }
         }
 
-        document.addEventListener('mouseup', () => {
+        let cl = () => {
             if (isDragging) {
                 this.one.element.style.cursor = null
                 this.two.element.style.cursor = null
@@ -82,6 +82,14 @@ class SplitPane extends ToggleElement {
                 this.two.element.classList.remove('resizing')
                 isDragging = false
             }
+        }
+
+        this.on('add',()=>{
+          document.addEventListener('mouseup', cl)          
+        })
+
+        this.on('remove', () => {
+            document.removeEventListener('mouseup', cl)
         })
 
 

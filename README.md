@@ -31,7 +31,7 @@ gui.notify('Gui initialized!!!') //this message should appear in the footer
    - [NavGroup](#navgroup)
    - [Sidebar](#sidebar)
    - [Colors](#colors)
-   - [FlexLayut](#flexlayut)
+   - [SplitPane](#splipane)
    - [FolderSelector](#folderselector)
  - [Gui and Extensions](#gui-and-extensions)
    - [Gui](#gui)
@@ -152,6 +152,14 @@ Emitted when the element is shown.
 ##### `hide`
 
 Emitted when the element is hided.
+
+##### `add`
+
+Emitted when the element is added to a parent element (using `appendTo` or `appendChild` ToggleElement methods).
+
+##### `remove`
+
+Emitted when the element is removed from a parent element (using `remove` or `removeChild` ToggleElement methods).
 
 ### ButtonsContainer
 
