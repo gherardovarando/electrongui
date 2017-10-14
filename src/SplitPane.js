@@ -25,105 +25,105 @@ const util = require('./util.js')
 
 
 class SplitPane extends ToggleElement {
-  constructor(element, type, x) {
-    super(element)
-    type = type || 'v'
-    this.element.className = 'pane split-pane'
-    this.one = new ToggleElement(util.div(`${type}-pane`))
-    this.one.element.style.height = '100%'
-    this.one.element.style.width = '100%'
-    this._dim = x || 40
-    this.appendChild(this.one)
-    let isDragging = false
-    let drag = util.div()
-    drag.appendChild(util.div(`line drag-${type}`))
-    element.appendChild(drag)
+    constructor(element, type, x) {
+        super(element)
+        type = type || 'v'
+        this.element.className = 'pane split-pane'
+        this.one = new ToggleElement(util.div(`${type}-pane`))
+        this.one.element.style.height = '100%'
+        this.one.element.style.width = '100%'
+        this._dim = x || 40
+        this.appendChild(this.one)
+        let isDragging = false
+        let drag = util.div()
+        drag.appendChild(util.div(`line drag-${type}`))
+        element.appendChild(drag)
 
-    this.two = new ToggleElement(util.div(`${type}-pane`))
-    this.two.element.style.height = "0%"
-    this.appendChild(this.two)
+        this.two = new ToggleElement(util.div(`${type}-pane`))
+        this.two.element.style.height = "0%"
+        this.appendChild(this.two)
 
-    drag.onmousedown = () => {
-      isDragging = true
-      this.one.element.classList.add('resizing')
-      this.two.element.classList.add('resizing')
-      this.one.element.style.cursor = 'col-resize'
-      this.two.element.style.cursor = 'col-resize'
-    }
-
-    element.onmousemove = (e) => {
-      if (isDragging) {
-        let elemRect = element.getBoundingClientRect()
-        if (type === SplitPane.Type.HORIZONTAL) {
-          let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100
-          let percentageRight = 100 - percentageLeft
-          this._dim = percentageLeft
-          if (percentageRight > 3 && percentageRight < 97) {
-            this.one.element.style.width = `${percentageLeft}%`
-            this.one.element.style.width = `${percentageRight}%`
-          }
-        } else if (type === SplitPane.Type.VERTICAL) {
-          let percentageOne = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
-          let percentageTwo = 100 - percentageOne
-          if (percentageTwo > 3 && percentageTwo < 97) {
-            this._dim = percentageTwo
-            this.one.element.style.height = `${percentageOne}%`
-            this.two.element.style.height = `${percentageTwo}%`
-          }
+        drag.onmousedown = () => {
+            isDragging = true
+            this.one.element.classList.add('resizing')
+            this.two.element.classList.add('resizing')
+            this.one.element.style.cursor = 'col-resize'
+            this.two.element.style.cursor = 'col-resize'
         }
-      }
+
+        element.onmousemove = (e) => {
+            if (isDragging) {
+                let elemRect = element.getBoundingClientRect()
+                if (type === SplitPane.Type.HORIZONTAL) {
+                    let percentageLeft = ((e.pageX - elemRect.left) / element.offsetWidth) * 100
+                    let percentageRight = 100 - percentageLeft
+                    this._dim = percentageLeft
+                    if (percentageRight > 3 && percentageRight < 97) {
+                        this.one.element.style.width = `${percentageLeft}%`
+                        this.one.element.style.width = `${percentageRight}%`
+                    }
+                } else if (type === SplitPane.Type.VERTICAL) {
+                    let percentageOne = ((e.pageY - elemRect.top) / element.offsetHeight) * 100
+                    let percentageTwo = 100 - percentageOne
+                    if (percentageTwo > 3 && percentageTwo < 97) {
+                        this._dim = percentageTwo
+                        this.one.element.style.height = `${percentageOne}%`
+                        this.two.element.style.height = `${percentageTwo}%`
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                this.one.element.style.cursor = null
+                this.two.element.style.cursor = null
+                this.one.element.classList.remove('resizing')
+                this.two.element.classList.remove('resizing')
+                isDragging = false
+            }
+        })
+
+
     }
 
-    document.onmouseup = () => {
-      if (isDragging) {
-        this.one.element.style.cursor = null
-        this.two.element.style.cursor = null
-        this.one.element.classList.remove('resizing')
-        this.two.element.classList.remove('resizing')
-        isDragging = false
-      }
+    showSecondPane(x) {
+        if (x > 0 && x <= 100) {
+            this._dim = x
+        }
+        this.two.element.style.height = `${this._dim}%`
+        this.one.element.style.height = `${(100-this._dim)||30}%`
+    }
+
+    hideSecondPane() {
+        this.one.element.style.height = "100%"
+        this.two.element.style.height = "0%"
+    }
+
+    toggleSecondPane() {
+        if (this.two.element.style.height == "0%") {
+            this.showSecondPane()
+        } else {
+            this.hideSecondPane()
+        }
     }
 
 
-  }
+    setType(type) {
+        if (type === SplitPane.Type.HORIZONTAL) {
 
-  showSecondPane(x) {
-    if (x>0 && x<=100){
-      this._dim = x
+        }
+        if (type === SplitPane.Type.VERTICAL) {
+
+        }
     }
-    this.two.element.style.height = `${this._dim}%`
-    this.one.element.style.height = `${(100-this._dim)||30}%`
-  }
-
-  hideSecondPane() {
-    this.one.element.style.height = "100%"
-    this.two.element.style.height = "0%"
-  }
-
-  toggleSecondPane() {
-    if (this.two.element.style.height == "0%") {
-      this.showSecondPane()
-    } else {
-      this.hideSecondPane()
-    }
-  }
-
-
-  setType(type){
-     if (type === SplitPane.Type.HORIZONTAL){
-
-     }
-     if (type === SplitPane.Type.VERTICAL){
-
-     }
-  }
 
 
 }
 
 SplitPane.Type = {
-  HORIZONTAL: 'h',
-  VERTICAL: 'v'
+    HORIZONTAL: 'h',
+    VERTICAL: 'v'
 }
 
 
