@@ -463,8 +463,8 @@ img.imageicon {
 }
 
 .split-pane {
-  width: 100%;
-  height: 100%;
+  overflow-y: hidden;
+  -webkit-user-select: none;
 }
 
 .split-pane .v-pane {
