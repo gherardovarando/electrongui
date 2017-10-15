@@ -115,6 +115,12 @@ class Modal extends ToggleElement {
     this.addTitle(header)
   }
 
+  show(){
+    super.show()
+    let inps = this.element.getElementsByTagName('INPUT')
+    if (inps.length>0) inps[0].focus()
+  }
+
   addTitle(title) {
     if (title) {
       if (typeof title === 'string') {
