@@ -85,7 +85,7 @@ class SplitPane extends ToggleElement {
         }
 
         this.on('add',()=>{
-          document.addEventListener('mouseup', cl)          
+          document.addEventListener('mouseup', cl)
         })
 
         this.on('remove', () => {
