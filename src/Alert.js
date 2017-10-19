@@ -20,39 +20,31 @@
 'use strict'
 const ToggleElement = require('./ToggleElement')
 const util = require('./util')
-let max = 1
-let present = []
-let container = util.div('gui-alert-container')
-document.getElementsByTagName('BODY')[0].appendChild(container)
+
 
 class Alert extends ToggleElement {
-  constructor(status, title, body) {
-    super(util.div(`gui-alert gui-alert-${status}`))
-    this.appendChild(util.div('gui-alert-title', title))
-    this.appendChild(util.div('gui-alert-body', body))
-    if ((present.length >= max) && present[0]) {
-      present[0].remove()
-      present.splice(0, 1)
+  constructor(options) {
+    options = options || {
+      body: '',
+      status: 'default',
+      icon: ''
     }
-    present.push(this)
+    super(util.div(`gui-alert gui-alert-${options.status}`))
+    let ic = util.div('gui-alert-icon')
+    ic.appendChild(util.icon(options.icon))
+    this.appendChild(ic)
+    this.appendChild(util.div('gui-alert-body', options.body))
     this.element.onclick = () => {
-      this.hide()
-      this.remove()
-      present.splice(present.indexOf(this),1)
+      if (!options.sticky) {
+        this.hide()
+        this.remove()
+      }
     }
-    this.appendTo(container)
-  }
-
-
-  static setMax(x) {
-    if (x > 0) {
-      max = x
+    if (options.timeout){
+      setTimeout(()=>{
+        this.remove()
+      },options.timeout)
     }
-  }
-
-  static clean() {
-    present.map((n) => n.remove())
-    present = []
   }
 
 }

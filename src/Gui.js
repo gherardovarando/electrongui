@@ -20,8 +20,8 @@
 'use strict'
 
 const EventEmitter = require('events')
+const AlertManager = require('./AlertManager')
 const ProgressBar = require('./ProgressBar')
-const Alert = require('./Alert')
 const fs = require('fs')
 const {
   Menu,
@@ -49,6 +49,8 @@ class Gui extends EventEmitter {
     this._menuItems = []
     this._menu = new Menu()
     this.taskManager = new TaskManager()
+    this.tasks = this.taskManager
+    this.alerts = new AlertManager(5)
     util.body.appendChild(ap)
   }
 
@@ -60,13 +62,12 @@ class Gui extends EventEmitter {
     //fix for windows behaviour, in linux is ok, if window is not maximise
   }
 
-  alert(title, body, status) {
-    new Alert(status || 'default', title, body)
-  }
 
 
-  notify(title, body, status) {
-     new Alert(status || 'default', title, body)
+  notify(body, status) { //dont use it, use gui.alerts.add instead
+     if (this.alerts instanceof AlertManager){
+       this.alerts.add(body, status || 'default')
+     }
   }
 
 
