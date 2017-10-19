@@ -43,7 +43,6 @@ class ButtonsContainer extends ToggleElement {
     let btn = document.createElement('BUTTON')
     btn.id = `${this.id}Button${options.id}` //so the id is not the DOM id
     btn.className = `btn ${options.className}`
-    btn.role = "button"
     btn.title = options.title || options.text || ''
     if (typeof options.text === 'string') {
       btn.innerHTML = options.text

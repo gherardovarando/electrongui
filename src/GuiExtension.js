@@ -31,7 +31,7 @@ class GuiExtension extends ToggleElement {
   constructor(gui, config) {
     let element = document.createElement('DIV')
     element.className = 'pane-group'
-    element.style.display = 'none'  //hide by default
+    element.style.display = 'none' //hide by default
     super(element)
     config = Object.assign({
       icon: 'fa fa-cubes',
@@ -105,11 +105,17 @@ class GuiExtension extends ToggleElement {
       this._menuItems.push(item)
       this._buildMenuItem()
       this.gui.updateMenuItem(this._menuIndx, this._menuItem)
+      return (this._menuItems.length - 1)
     }
+    return (-1)
   }
 
   removeMenuItem(item) {
-    if (item) {
+    if (item >= 0) {
+      this._menuItems.splice(item, 1)
+      this._buildMenuItem()
+      this.gui.updateMenuItem(this._menuIndx, this._menuItem)
+    } else if (item) {
       let idx = this._menuItems.indexOf(item)
       if (idx < 0) return
       this._menuItems.splice(idx, 1)
