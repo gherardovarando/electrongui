@@ -25,7 +25,7 @@ const Alert = require('./Alert')
 const util = require('./util')
 
 let icons = {
-  default: 'fa fa-comment',
+  default: 'fa fa-info',
   warning: 'fa fa-warning',
   danger: 'fa fa-exclamation',
   success: 'fa fa-check',

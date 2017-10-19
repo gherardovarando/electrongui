@@ -818,7 +818,7 @@ div.gui-alert-icon {
 }
 
  .gui-alert-warning .gui-alert-icon {
-  background-color: : rgba(237, 178, 40, 1);
+  background-color: rgba(237, 178, 40, 1);
 }
 
  .gui-alert-default .gui-alert-icon {
@@ -838,7 +838,7 @@ div.gui-alert-icon {
 }
 
 div.gui-alert-warning {
-  background-color: : rgba(237, 178, 40, 0.8);
+  background-color: rgba(237, 178, 40, 0.8);
 }
 
 div.gui-alert-default {
