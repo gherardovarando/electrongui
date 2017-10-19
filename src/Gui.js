@@ -21,7 +21,7 @@
 
 const EventEmitter = require('events')
 const ProgressBar = require('./ProgressBar')
-const Notification = require('./Notification')
+const Alert = require('./Alert')
 const fs = require('fs')
 const {
   Menu,
@@ -60,9 +60,13 @@ class Gui extends EventEmitter {
     //fix for windows behaviour, in linux is ok, if window is not maximise
   }
 
+  alert(title, body, status) {
+    new Alert(status || 'default', title, body)
+  }
+
 
   notify(title, body, status) {
-     new Notification(status || 'default', title, body)
+     new Alert(status || 'default', title, body)
   }
 
 

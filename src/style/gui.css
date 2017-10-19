@@ -450,11 +450,11 @@ img.imageicon {
   padding: 5px 5px 5px 46px;
 }
 
-.notif-off {
+.alert-off {
   display: none;
 }
 
-.notif-on {
+.alert-on {
   display: block;
   position: absolute;
   top: 1px;
@@ -768,31 +768,64 @@ td {
   color: green !important;
 }
 
-div.gui-notif {
+@-webkit-keyframes animatebottom {
+  from {
+    top: -300px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
+}
+
+@keyframes animateopacity {
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+}
+
+div.gui-alert-container {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 10px;
+  right: 10px;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  z-index: 100;
+}
+
+div.gui-alert {
   background-color: rgba(0, 0, 0, 0.3);
   width: auto;
   height: auto;
+  max-width: 180px;
+  -webkit-animation-name: animateopacity;
+  -webkit-animation-duration: 0.7s;
+  animation-name: animateopacity;
+  animation-duration: 0.7s;
+  padding: 3px;
 }
 
-div.gui-notif-warning {
-  background-color: : orange;
+div.gui-alert-warning {
+  background-color: : rgba(237, 178, 40, 0.4);
 }
 
-div.gui-notif-default {
-  background-color: green;
+div.gui-alert-default {
+  background-color: rgba(74, 163, 73, 0.4);
 }
 
-div.gui-notif-danger {
-  background-color: red;
+div.gui-alert-danger {
+  background-color: rgba(188, 3, 19, 0.4);
 }
 
-div.gui-notif-title{
+div.gui-alert-title{
   font-weight: bold;
 }
 
-div.gui-notif-body{
+div.gui-alert-body{
   padding: 10px;
 }

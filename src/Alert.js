@@ -22,29 +22,39 @@ const ToggleElement = require('./ToggleElement')
 const util = require('./util')
 let max = 1
 let present = []
+let container = util.div('gui-alert-container')
+document.getElementsByTagName('BODY')[0].appendChild(container)
 
-class Notification extends ToggleElement {
+class Alert extends ToggleElement {
   constructor(status, title, body) {
-     super(util.div(`gui-notif gui-notif-${status}`))
-     this.appendChild(util.div('gui-notif-title'),title)
-     this.appendChild(util.div('gui-notif-body'),title)
-     present.push(this)
-     if (present.length > max) Notification.clean()
-     present.appendTo(document.getElementsByTagName('BODY')[0])
+    super(util.div(`gui-alert gui-alert-${status}`))
+    this.appendChild(util.div('gui-alert-title', title))
+    this.appendChild(util.div('gui-alert-body', body))
+    if ((present.length >= max) && present[0]) {
+      present[0].remove()
+      present.splice(0, 1)
+    }
+    present.push(this)
+    this.element.onclick = () => {
+      this.hide()
+      this.remove()
+      present.splice(present.indexOf(this),1)
+    }
+    this.appendTo(container)
   }
 
 
   static setMax(x) {
-    if (x >= 0) {
-      max = 1
+    if (x > 0) {
+      max = x
     }
   }
 
-  static clean(){
-    present.map((n)=> n.remove())
+  static clean() {
+    present.map((n) => n.remove())
     present = []
   }
 
 }
 
-module.exports = Notification
+module.exports = Alert

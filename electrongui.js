@@ -45,7 +45,9 @@ const Workspace = require('./src/Workspace.js');
 const colors = require('./src/Colors.js');
 const Header = require('./src/Header')
 const Footer = require('./src/Footer')
+const Alert = require('./src/Alert')
 
+exports.Alert = Alert
 exports.Header = Header
 exports.Footer = Footer
 exports.ButtonsContainer = ButtonsContainer
