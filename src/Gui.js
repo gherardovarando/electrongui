@@ -62,7 +62,7 @@ class Gui extends EventEmitter {
 
 
   notify(title, body, status) {
-     Notification(status || 'default', title, body)
+     new Notification(status || 'default', title, body)
   }
 
 
