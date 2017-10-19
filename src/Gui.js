@@ -21,7 +21,7 @@
 
 const EventEmitter = require('events')
 const ProgressBar = require('./ProgressBar')
-const util = require('./util')
+const Notification = require('./Notification')
 const fs = require('fs')
 const {
   Menu,
@@ -31,82 +31,9 @@ const {
 const ToggleElement = require('./ToggleElement')
 const ButtonsContainer = require('./ButtonsContainer')
 const TaskManager = require('./TaskManager')
-let child
-
-
-class Header extends ToggleElement {
-  constructor(element, parent) {
-    super(element)
-    this.id = element.id
-    let actionsContainer = document.createElement("DIV")
-    actionsContainer.className = 'toolbar-actions'
-    actionsContainer.id = "header-actions"
-    this.element.appendChild(actionsContainer)
-    this.actionsContainer = new ButtonsContainer(actionsContainer)
-    if (parent) {
-      this.appendTo(parent)
-    }
-  }
-
-  // setTitle(title) {
-  //   let tl = this.element.getElementsByClassName('title')[0]
-  //   if (tl) {
-  //     tl.innerHTML = title
-  //   } else {
-  //     tl = document.createElement('H1')
-  //     tl.className = 'title'
-  //     tl.innerHTML = title
-  //     let cont = this.element.getElementsByClassName('toolbar-actions')[0]
-  //     if (cont) {
-  //       this.element.insertBefore(tl, cont)
-  //     } else {
-  //       this.element.appendChild(tl)
-  //     }
-  //   }
-  // }
-
-  addProgressBar() {
-    this.progressBar = new ProgressBar(this.element)
-    return this
-  }
-
-  addNotificationBar() {
-    this.notificationBar = new ToggleElement(document.createElement('DIV'))
-    this.notificationBar.element.className = 'pull-right'
-    this.notificationBar.message = document.createElement('STRONG')
-    this.notificationBar.element.appendChild(this.notificationBar.message)
-    this.element.appendChild(this.notificationBar.element)
-    return this
-  }
-}
-
-
-
-class Footer extends ToggleElement {
-  constructor(element, parent) {
-    super(element)
-    if (parent) {
-      this.appendTo(parent)
-    }
-  }
-
-
-  addNotificationBar() {
-    this.notificationBar = new ToggleElement(document.createElement('DIV'))
-    this.notificationBar.element.className = 'pull-right'
-    this.notificationBar.message = document.createElement('STRONG')
-    this.notificationBar.element.appendChild(this.notificationBar.message)
-    this.element.appendChild(this.notificationBar.element)
-    return this
-  }
-
-  addProgressBar() {
-    this.progressBar = new ProgressBar(this.element)
-    return this
-  }
-}
-
-
+const util = require('./util')
+const Header = require('./Header')
+const Footer = require('./Footer')
 
 class Gui extends EventEmitter {
   constructor() {
@@ -134,23 +61,10 @@ class Gui extends EventEmitter {
   }
 
 
-  notify(message) {
-    this.footer.notificationBar.message.innerHTML = message
+  notify(title, body, status) {
+     Notification(status || 'default', title, body)
   }
 
-  setProgress(prog) {
-    //this.stopWaiting()
-    //this.header.progressBar.setBar(prog)
-  }
-
-  startWaiting() {
-    //this.header.progressBar.startWaiting()
-  }
-
-  stopWaiting() {
-    //  this.header.progressBar.stopWaiting()
-    //  this.header.progressBar.setBar(0)
-  }
 
   reloadMenu() {
     this._menu = new Menu()
@@ -202,23 +116,6 @@ class Gui extends EventEmitter {
     child.once('ready-to-show', () => {
       child.show()
     })
-    // let bounds = this.win.getBounds()
-    // let conb = this.container.element.getBoundingClientRect()
-    // child.setBounds({
-    //   x: bounds.x + 0,
-    //   y: bounds.y + 30,
-    //   width: bounds.width,
-    //   height: bounds.height
-    // })
-    // this.win.on('move',()=>{
-    //   let bounds = this.win.getBounds()
-    //   child.setBounds({
-    //     x: bounds.x + 0,
-    //     y: bounds.y + 40,
-    //     width: bounds.width,
-    //     height: 600
-    //   })
-    // })
     child.loadURL(url)
     return child
   }

@@ -12,7 +12,7 @@
 
 - Add (and modify to your taste) the `src/style/gui.css` file
 
-- In the Renderer process :
+- In the Renderer process of your electron app:
 
 ```
 const {Gui} = require('electrongui')
@@ -20,8 +20,79 @@ let gui = new Gui() // create the base gui structure
 gui.notify('Gui initialized!!!') //this message should appear in the footer
 ```
 
+## The `Gui` class
 
-#### Index
+When a instance of the `Gui` class is created
+## How to write extensions
+
+To write an extension you just need to create a npm package (or a simple js file) exporting a `class` that extend the `GuiExtension` class.
+
+
+```
+const {
+  GuiExtension,
+  util
+} = module.parent.require('electrongui')
+
+class MyExtension extends GuiExtension {
+
+  constructor(gui) {
+    super(gui, {
+      icon: 'fa fa-bars',
+      // alternatively image: 'path-to-image',
+      //setting a manuLabel and a menuTemplate
+      menuLabel: 'MyExtension',
+      menuTemplate: [{
+        label: 'Show',
+        click: () => this.show()
+      }, {
+        label: 'action'
+      }, {
+        label: 'other action'
+      }]
+    })
+  }
+
+  activate() {
+    super.activate() //always call super methods
+    this.appendMenu()
+    // here goes the creation of the elements
+    this.appendChild(util.div('padded', 'This is the main element of MyExtension'))
+    this.gui.notify('MyExtension activated')
+  }
+
+  deactivate() {
+    super.deactivate() // clean main pane and menu
+    //clean other things that could have been added
+    util.notifyOS('MyExtension deactivated')
+  }
+}
+
+module.exports = MyExtension
+```
+
+#### The `gui` object
+
+The current `gui` interface (instance of `Gui`) it is passed automatically on creation. And can be obtained with `this.gui` (see example above).
+
+#### Requiring modules
+
+You can require Node native modules and Electron ones.
+Every dependencies that you need can be loaded with `require`.
+
+If you want your extension to be installable by the `ExtensionManager` you need to load the `electrongui` module with `module.parent.require('electrongui')`.
+
+
+#### Cleaning the interface on deactivate
+
+The `deactivate` method must clean all the elements added to the interfaces as buttons or menus. The menu created by the menuLabel and menuTemplate options in the creation are automatically removed by `super.deactivate()`.
+
+
+
+
+
+## API
+
  - [Basic Elements](#basic-elements)
    - [ToggleElement](#toggleelement)
    - [ButtonsContainer](#buttonscontainer)
