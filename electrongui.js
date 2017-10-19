@@ -43,8 +43,8 @@ const TreeList = require('./src/TreeList.js');
 const util = require('./src/util.js');
 const Workspace = require('./src/Workspace.js');
 const colors = require('./src/Colors.js');
-const Header = require('./Header')
-const Footer = require('./Footer')
+const Header = require('./src/Header')
+const Footer = require('./src/Footer')
 
 exports.Header = Header
 exports.Footer = Footer
