@@ -55,43 +55,7 @@ class Workspace extends EventEmitter {
     }, options.syncinterval || 30000)
   }
 
-  // activate() {
-  //   super.activate()
-  //
-  //
-  //
-  //   this.gui.header.actionsContainer.addButton({
-  //     id: 'save',
-  //     groupId: 'basetools',
-  //     icon: 'fa fa-save',
-  //     title: 'Save current workspace',
-  //     action: () => {
-  //       this.save()
-  //     }
-  //   })
-  //
-  //   this.gui.header.actionsContainer.addButton({
-  //     id: 'load',
-  //     groupId: 'basetools',
-  //     icon: 'fa fa-folder-open-o',
-  //     title: 'Load a workspace',
-  //     action: () => {
-  //       this.loadChecking()
-  //     }
-  //   })
-  //   //this.pane = new ToggleElement(document.createElement('DIV'))
-  //   //this.pane.element.className = 'pane padded'
-  //   //this.treeView = new TreeList(this.pane.element, this.spaces)
-  //   //this.element.appendChild(this.pane.element)
-  //
-  //   // this.addToggleButton({
-  //   //     groupId: 'basetools',
-  //   //     icon: 'fa fa-cubes',
-  //   //     buttonsContainer: this.gui.header.actionsContainer
-  //   // })
-  //
-  //
-  // }
+
 
   addSpace(extension, object, overwrite) {
     if (extension) {
@@ -165,10 +129,6 @@ class Workspace extends EventEmitter {
   }
 
   loadChecking() {
-    if (Object.keys(this.spaces).length < 2) {
-      this.load()
-      return
-    }
     dialog.showMessageBox({
       title: 'Save workspace?',
       type: 'warning',
@@ -232,7 +192,7 @@ class Workspace extends EventEmitter {
   }
 
 
-  load(path, cl, err) {
+  load(path, cl, error) {
     if (typeof path === 'string' && path != '') {
       wk = util.readJSONsync(path)
       this.spaces = wk
@@ -250,12 +210,16 @@ class Workspace extends EventEmitter {
         extensions: ['json']
       }],
       properties: ['openFile']
-    }, (file) => {
+    }, (file,err) => {
+      if (err) {
+        if (typeof error === 'function') error(err)
+        return
+      }
       let wk
       try {
         wk = util.readJSONsync(file[0])
       } catch (e) {
-        this.gui.notify(e)
+        if (typeof error === 'function') error(err)
         return
       }
       try {
@@ -266,7 +230,9 @@ class Workspace extends EventEmitter {
         storage.set('workspace', this.spaces)
         this.emit('load')
       } catch (e) {
-        this.gui.notify(e)
+        if (typeof error === 'function'){
+          error(e)
+        }
       }
     })
   }

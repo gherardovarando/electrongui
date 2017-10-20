@@ -52,7 +52,7 @@ class Gui extends EventEmitter {
     this._menuItems = []
     this._menu = new Menu()
     this.taskManager = new TaskManager()
-    this.extensions = new ExtensionsManager()
+    this.extensions = new ExtensionsManager(this)
     this.workspace = new Workspace(options.workspace)
     this.tasks = this.taskManager
     this.alerts = new AlertManager(5)

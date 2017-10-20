@@ -53,14 +53,9 @@ class ExtensionsManager extends GuiExtension {
       }]
     })
     this.extensions = {}
-    this.gui.on('load:extension', (e) => {
-      this.add(e.extension)
-    })
-  }
-
-  activate() {
     this.sidebar = new Sidebar(this.element)
     this.sidebar.addList('list')
+    this.sidebar.show()
     //this.sidebar.hide()
     this.sidebar.list.addSearch({
       placeholder: 'Search extension'
@@ -68,8 +63,14 @@ class ExtensionsManager extends GuiExtension {
 
     //here put actions to load a new extension from custom file.
     this.pane = new ToggleElement(document.createElement('DIV'))
-    this.element.appendChild(this.pane.element)
+    this.appendChild(this.pane)
     this.appendMenu()
+    this.gui.on('load:extension', (e) => {
+      this.add(e.extension)
+    })
+  }
+
+  activate() {
     super.activate()
   }
 
@@ -90,6 +91,7 @@ class ExtensionsManager extends GuiExtension {
       openDirectory: false,
       openFile: true
     }, (filePaths) => {
+      if (!filePaths) return
       let p = filePaths[0]
       this.load(p, (ext) => {
         if (ext) {

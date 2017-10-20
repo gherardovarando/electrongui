@@ -68,7 +68,7 @@ class GuiExtension extends ToggleElement {
     this.gui.container.appendChild(this.element)
     this.active = true
     this.emit('activate')
-    return this.active
+    return this
   }
 
   deactivate() {
@@ -78,7 +78,7 @@ class GuiExtension extends ToggleElement {
     this.removeMenu()
     this.active = false
     this.emit('deactivate')
-    return this.active
+    return this
   }
 
   _buildMenuItem() {
@@ -136,15 +136,6 @@ class GuiExtension extends ToggleElement {
     this._menuIndx = -1
   }
 
-  show() {
-    super.show()
-    this.emit('show')
-  }
-
-  hide() {
-    super.hide()
-    this.emit('hide')
-  }
 }
 
 module.exports = GuiExtension
