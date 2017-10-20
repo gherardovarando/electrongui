@@ -26,33 +26,78 @@ const {
 } = require('electron').remote
 const fs = require('fs')
 const path = require('path')
+const GuiExtension = require('./GuiExtension')
+const Sidebar = require('./Sidebar.js')
+const ToggleElement = require('./ToggleElement.js')
 const util = require('./util.js')
 const storage = require('electron-json-storage')
 
 
-class ExtensionsManager extends EventEmitter {
+class ExtensionsManager extends GuiExtension {
 
-  constructor() {
-    super()
+  constructor(gui) {
+    super(gui, {
+      menuLabel: 'Extensions',
+      menuTemplate: [{
+        label: 'Manager',
+        click: () => {
+          this.show()
+        }
+      }, {
+        label: 'Install Extension',
+        click: () => {
+          this.installExtension()
+        }
+      }, {
+        type: 'separator'
+      }]
+    })
     this.extensions = {}
     this.gui.on('load:extension', (e) => {
       this.add(e.extension)
     })
   }
 
+  activate() {
+    this.sidebar = new Sidebar(this.element)
+    this.sidebar.addList('list')
+    //this.sidebar.hide()
+    this.sidebar.list.addSearch({
+      placeholder: 'Search extension'
+    })
 
-
-
-  get(x){
-     if (typeof x === 'string'){
-       return this.extensions[x]
-     }else{
-       return this.extensions
-     }
+    //here put actions to load a new extension from custom file.
+    this.pane = new ToggleElement(document.createElement('DIV'))
+    this.element.appendChild(this.pane.element)
+    this.appendMenu()
+    super.activate()
   }
 
 
-
+  installExtension() {
+    dialog.showOpenDialog({
+      title: 'Select the extension main .js file or the relative package.json',
+      buttonlabel: 'Install',
+      filters: [{
+          name: 'javascript',
+          extensions: ['js', 'JS']
+        },
+        {
+          name: 'package json',
+          extensions: ['json', 'JSON']
+        }
+      ],
+      openDirectory: false,
+      openFile: true
+    }, (filePaths) => {
+      let p = filePaths[0]
+      this.load(p, (ext) => {
+        if (ext) {
+          ext.info.manuallyinstalled = true
+        }
+      })
+    })
+  }
 
 
   load(extPath, cl) {
@@ -77,16 +122,15 @@ class ExtensionsManager extends EventEmitter {
     }
   }
 
-  addTitle(title) {
-    this.sidebar.list.addTitle(title)
-  }
 
-  hideExtenions() {
+  hideExtensions() {
     Object.keys(this.extensions).map((name) => {
       this.extensions[name].hide()
     })
     this.hide()
   }
+
+
 
   add(extension) {
     if (this.extensions[extension.constructor.name]) {
@@ -173,7 +217,7 @@ class ExtensionsManager extends EventEmitter {
   }
 
   show() {
-    this.hideExtenions()
+    this.hideExtensions()
     this.sidebar.show()
     super.show()
   }

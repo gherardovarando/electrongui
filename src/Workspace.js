@@ -20,12 +20,12 @@
 
 "use strict"
 const storage = require('electron-json-storage')
-const ToggleElement = require('./ToggleElement')
 const fs = require('fs')
 const {
   dialog
 } = require('electron').remote
 const util = require('./util.js')
+const EventEmitter = require('events')
 
 class Workspace extends EventEmitter {
   constructor(options) {
