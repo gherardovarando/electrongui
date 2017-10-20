@@ -79,8 +79,24 @@ The current `gui` interface (instance of `Gui`) it is passed automatically on cr
 
 You can require Node native modules and Electron ones.
 Every dependencies that you need can be loaded with `require`.
+Be sure to list `electrongui` as a dependency.
 
-If you want your extension to be installable by the `ExtensionManager` you need to load the `electrongui` module with `module.parent.require('electrongui')`.
+#### Installing through the ExtensionsManager
+
+The extensions manager instance is available through `gui.extensions` and provides methods to install and manage extensions. If you want to install an extension with the extension manager (useful for developing new extensions), the extension need to be able to find all the dependencies, especially `electrongui`.
+It is suggested to create a npm-module folder structure for the extension, an appropriate `package.json`. Running `npm install` will build the `node_modules` folder containing all the dependencies.
+If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app (see example below).
+```
+//renderer.js
+const {Gui} = require('electrongui')
+const MyExtension = require('myextension')
+
+let gui = new Gui()
+
+let myext = new MyExtension
+myext.activate()
+
+```
 
 
 #### Cleaning the interface on deactivate

@@ -31,12 +31,15 @@ const {
 const ToggleElement = require('./ToggleElement')
 const ButtonsContainer = require('./ButtonsContainer')
 const TaskManager = require('./TaskManager')
+const ExtensionsManager = require('./ExtensionsManager')
+const Workspace = require('./Workspace')
 const util = require('./util')
 const Header = require('./Header')
 const Footer = require('./Footer')
 
 class Gui extends EventEmitter {
-  constructor() {
+  constructor(options) {
+    options = options || {}
     super()
     this.win = require('electron').remote.getCurrentWindow()
     let ap = util.div('window app')
@@ -44,11 +47,13 @@ class Gui extends EventEmitter {
     this.container = new ToggleElement(util.div("window-content"))
     this.container.appendTo(ap)
     this.footer = new Footer(util.div("toolbar toolbar-footer"), ap)
-    //this.header.addProgressBar()
     this.footer.addNotificationBar()
+
     this._menuItems = []
     this._menu = new Menu()
     this.taskManager = new TaskManager()
+    this.extensions = new ExtensionsManager()
+    this.workspace = new Workspace(options.workspace)
     this.tasks = this.taskManager
     this.alerts = new AlertManager(5)
     util.body.appendChild(ap)

@@ -26,13 +26,10 @@ const {
   dialog
 } = require('electron').remote
 const util = require('./util.js')
-const GuiExtension = require('./GuiExtension.js')
 
-class Workspace extends GuiExtension {
-  constructor(gui, options) {
-    super(gui, {
-      icon: 'fa fa-database'
-    })
+class Workspace extends EventEmitter {
+  constructor(options) {
+    super()
     options = options || {}
     this.options = options
     this.spaces = {
@@ -56,65 +53,51 @@ class Workspace extends GuiExtension {
     setInterval(() => {
       storage.set('workspace', this.spaces, (error) => {})
     }, options.syncinterval || 30000)
-    this.activate()
   }
 
-  activate() {
-    super.activate()
-
-
-
-    this.gui.header.actionsContainer.addButton({
-      id: 'save',
-      groupId: 'basetools',
-      icon: 'fa fa-save',
-      title: 'Save current workspace',
-      action: () => {
-        this.save()
-      }
-    })
-
-    this.gui.header.actionsContainer.addButton({
-      id: 'load',
-      groupId: 'basetools',
-      icon: 'fa fa-folder-open-o',
-      title: 'Load a workspace',
-      action: () => {
-        this.loadChecking()
-      }
-    })
-    //this.pane = new ToggleElement(document.createElement('DIV'))
-    //this.pane.element.className = 'pane padded'
-    //this.treeView = new TreeList(this.pane.element, this.spaces)
-    //this.element.appendChild(this.pane.element)
-
-    // this.addToggleButton({
-    //     groupId: 'basetools',
-    //     icon: 'fa fa-cubes',
-    //     buttonsContainer: this.gui.header.actionsContainer
-    // })
-
-
-  }
-
-  deactivate() {
-    //this.removeToggleButton()
-    this.gui.header.actionsContainer.removeButton('save')
-    this.gui.header.actionsContainer.removeButton('load')
-    this.clear()
-    super.deactivate()
-  }
-
-  show() {
-    //super.show()
-  }
+  // activate() {
+  //   super.activate()
+  //
+  //
+  //
+  //   this.gui.header.actionsContainer.addButton({
+  //     id: 'save',
+  //     groupId: 'basetools',
+  //     icon: 'fa fa-save',
+  //     title: 'Save current workspace',
+  //     action: () => {
+  //       this.save()
+  //     }
+  //   })
+  //
+  //   this.gui.header.actionsContainer.addButton({
+  //     id: 'load',
+  //     groupId: 'basetools',
+  //     icon: 'fa fa-folder-open-o',
+  //     title: 'Load a workspace',
+  //     action: () => {
+  //       this.loadChecking()
+  //     }
+  //   })
+  //   //this.pane = new ToggleElement(document.createElement('DIV'))
+  //   //this.pane.element.className = 'pane padded'
+  //   //this.treeView = new TreeList(this.pane.element, this.spaces)
+  //   //this.element.appendChild(this.pane.element)
+  //
+  //   // this.addToggleButton({
+  //   //     groupId: 'basetools',
+  //   //     icon: 'fa fa-cubes',
+  //   //     buttonsContainer: this.gui.header.actionsContainer
+  //   // })
+  //
+  //
+  // }
 
   addSpace(extension, object, overwrite) {
-    if (extension instanceof GuiExtension) {
+    if (extension) {
       if (object) {
-        if (!overwrite && this.spaces[extension.constructor.name]) return
-        this.spaces[extension.constructor.name] = object
-
+        if (!overwrite && this.spaces[extension]) return
+        this.spaces[extension] = object
       } else {
         if (extension._space) {
           this.addSpace(extension, extension._space)
@@ -124,9 +107,7 @@ class Workspace extends GuiExtension {
   }
 
   getSpace(extension) {
-    if (extension instanceof GuiExtension) {
-      return this.spaces[extension.constructor.name]
-    } else if (typeof extension === 'string') {
+    if (extension) {
       return this.spaces[extension]
     }
   }
@@ -151,7 +132,11 @@ class Workspace extends GuiExtension {
   }
 
   removeSpace(extension) {
-    delete this.spaces[extension.constructor.name]
+    delete this.spaces[extension]
+  }
+
+  new(path) {
+    this.newWorkspace(path)
   }
 
   newChecking() {
@@ -205,14 +190,17 @@ class Workspace extends GuiExtension {
   }
 
 
-  save(path, callback) {
+  save(path, cl, error) {
     let content = JSON.stringify(this.spaces)
     if (typeof path === 'string' && path != '') {
-      fs.writeFile(path, content, () => {
+      fs.writeFile(path, content, (err) => {
+        if (err && (typeof error === 'function')) {
+          error(`An error ocurred creating the file  ${err.message}`)
+        }
         this.spaces.workspace.path = path
         storage.set('workspace', this.spaces)
-        if (callback) {
-          callback(path)
+        if (typeof cl === 'function') {
+          cl(path)
         }
       })
       return
@@ -225,29 +213,26 @@ class Workspace extends GuiExtension {
         }]
       },
       (fileName) => {
-        let cl = callback
 
         if (fileName === undefined) {
-          this.gui.notify("Workspace not saved")
-          return
+          err('no filename')
         }
 
         fs.writeFile(fileName, content, (err) => {
-          if (err) {
-            this.gui.notify("An error ocurred creating the file " + err.message)
+          if (err && (typeof error === 'function')) {
+            error(`An error ocurred creating the file  ${err.message}`)
           }
           this.spaces.workspace.path = fileName
           storage.set('workspace', this.spaces)
-          this.gui.notify(`The workspace has been succesfully saved`)
-          if (cl) {
-            cl()
+          if (typeof cl === 'function') {
+            cl(fileName)
           }
         })
       })
   }
 
 
-  load(path) {
+  load(path, cl, err) {
     if (typeof path === 'string' && path != '') {
       wk = util.readJSONsync(path)
       this.spaces = wk
