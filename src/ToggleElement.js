@@ -63,7 +63,7 @@ class ToggleElement extends EventEmitter {
                 this.element.removeChild(el.element)
                 el.emit('remove')
             } else if (el.appendChild) {
-                this.element.removeChild(el)
+              if (this.element.contains(el)) this.element.removeChild(el)
             }
         }
         return this

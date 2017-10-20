@@ -183,6 +183,9 @@ class ExtensionsManager extends GuiExtension {
         deactive: () => {
           extension.deactivate()
         }
+      },
+      oncontextmenu: ()=>{
+        console.log('aa')
       }
     })
 

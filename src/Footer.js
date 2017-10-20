@@ -45,10 +45,10 @@ class Footer extends ToggleElement {
     return this
   }
 
-  notify(){
+  notify(message){
     this.notificationBar.message.innerHTML = message
   }
-  
+
 }
 
 module.exports = Footer
