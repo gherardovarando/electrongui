@@ -108,7 +108,7 @@ class ExtensionsManager extends GuiExtension {
       try {
         delete require.cache[extPath]
         let tmp = require(extPath)
-        if (tmp.prototype instanceof GuiExtension) {
+        if (tmp) {
           ext = new tmp(this.gui)
         } else {
         }
@@ -138,7 +138,7 @@ class ExtensionsManager extends GuiExtension {
 
 
   addExtension(extension) {
-    if (this.extensions[extension.constructor.name] instanceof GuiExtension) {
+    if (this.extensions[extension.constructor.name]) {
       this.extensions[extension.constructor.name].deactivate()
       this.sidebar.list.removeItem(extension.constructor.name)
       this.extensions[extension.constructor.name].removeAllListeners()
