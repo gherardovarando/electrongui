@@ -89,6 +89,13 @@ class Task extends EventEmitter {
     return false
   }
 
+
+  error(message) {
+    this.emit('error', {
+      error: message
+    })
+  }
+
   /**
    * Updates task status to FAILED if the task
    * is currently running.
@@ -101,8 +108,9 @@ class Task extends EventEmitter {
       this.finishTime = new Date()
       this.status = Task.Status.FAILED
       this.failureInfo = message
-      console.log(message)
-      this.emit("fail")
+      this.emit('fail', {
+        error: message
+      })
       return true
     }
     return false
@@ -278,7 +286,7 @@ Task.TaskDOMElement = class {
    * - A task with CANCELLED status will show a red exclamation.
    */
   _configureByStatus() {
-    this.statusElement.display='none'
+    this.statusElement.display = 'none'
     //this.statusElement.innerHTML = ''
     switch (this.task.status) {
       case Task.Status.CREATED:

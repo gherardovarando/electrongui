@@ -32,7 +32,7 @@ To write an extension you just need to create a npm package (or a simple js file
 const {
   GuiExtension,
   util
-} = module.parent.require('electrongui')
+} = require('electrongui')
 
 class MyExtension extends GuiExtension {
 
@@ -85,7 +85,7 @@ Be sure to list `electrongui` as a dependency.
 
 The extensions manager instance is available through `gui.extensions` and provides methods to install and manage extensions. If you want to install an extension with the extension manager (useful for developing new extensions), the extension need to be able to find all the dependencies, especially `electrongui`.
 It is suggested to create a npm-module folder structure for the extension, an appropriate `package.json`. Running `npm install` will build the `node_modules` folder containing all the dependencies.
-If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app (see example below).
+If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app and then create the instance and call the `activate` method (see example below).
 ```
 //renderer.js
 const {Gui} = require('electrongui')
@@ -101,10 +101,7 @@ myext.activate()
 
 #### Cleaning the interface on deactivate
 
-The `deactivate` method must clean all the elements added to the interfaces as buttons or menus. The menu created by the menuLabel and menuTemplate options in the creation are automatically removed by `super.deactivate()`.
-
-
-
+The `deactivate` method must clean all the elements added to the interfaces as buttons or menus. The menu created by the menuLabel and menuTemplate options in the creation are automatically removed by `super.deactivate()`. Moreover the `deactivate` method must also remove the event listener added.
 
 
 ## API

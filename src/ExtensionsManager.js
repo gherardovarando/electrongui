@@ -64,13 +64,13 @@ class ExtensionsManager extends GuiExtension {
     //here put actions to load a new extension from custom file.
     this.pane = new ToggleElement(document.createElement('DIV'))
     this.appendChild(this.pane)
-    this.appendMenu()
     this.gui.on('load:extension', (e) => {
       this.add(e.extension)
     })
   }
 
   activate() {
+    this.appendMenu()
     super.activate()
   }
 

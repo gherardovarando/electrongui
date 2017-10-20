@@ -80,6 +80,7 @@ class AlertManager extends EventEmitter {
     })
 
     alert.appendTo(this.container)
+    return alert  
   }
 
   _check() {
