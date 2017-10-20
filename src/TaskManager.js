@@ -54,7 +54,7 @@ class TaskManager extends EventEmitter {
    * @return {boolean} If task was added successfully.
    */
   addTask(task) {
-    if (task instanceof Task) {
+    if (task) {
       task.id = this.nextId
       this.tasks[task.id] = {
         task: task,
