@@ -46,7 +46,29 @@ class ExtensionsManager extends GuiExtension {
       }, {
         label: 'Install Extension',
         click: () => {
-          this.installExtension()
+          dialog.showOpenDialog({
+            title: 'Select the extension main .js file or the relative package.json',
+            buttonlabel: 'Install',
+            filters: [{
+                name: 'javascript',
+                extensions: ['js', 'JS']
+              },
+              {
+                name: 'package json',
+                extensions: ['json', 'JSON']
+              }
+            ],
+            openDirectory: false,
+            openFile: true
+          }, (filePaths) => {
+            if (!filePaths) return
+            let p = filePaths[0]
+            this.load(p, (ext) => {
+              if (ext) {
+                ext.info.manuallyinstalled = true
+              }
+            })
+          })
         }
       }, {
         type: 'separator'
@@ -75,30 +97,8 @@ class ExtensionsManager extends GuiExtension {
   }
 
 
-  installExtension() {
-    dialog.showOpenDialog({
-      title: 'Select the extension main .js file or the relative package.json',
-      buttonlabel: 'Install',
-      filters: [{
-          name: 'javascript',
-          extensions: ['js', 'JS']
-        },
-        {
-          name: 'package json',
-          extensions: ['json', 'JSON']
-        }
-      ],
-      openDirectory: false,
-      openFile: true
-    }, (filePaths) => {
-      if (!filePaths) return
-      let p = filePaths[0]
-      this.load(p, (ext) => {
-        if (ext) {
-          ext.info.manuallyinstalled = true
-        }
-      })
-    })
+  install() {
+
   }
 
 
@@ -113,7 +113,7 @@ class ExtensionsManager extends GuiExtension {
         } else {
         }
       } catch (e) {
-        console.log(e)
+        throw e
         ext = e
       }
     } else {
