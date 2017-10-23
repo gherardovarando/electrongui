@@ -42,7 +42,9 @@ class Workspace extends EventEmitter {
         if (error) return
         if (data.workspace) {
           this.spaces = data || this.spaces
-          this.emit('load')
+          this.emit('load', {
+            path: 'recover'
+          })
         }
       })
     }
@@ -82,7 +84,9 @@ class Workspace extends EventEmitter {
         path: path || ''
       }
     }
-    this.emit('load')
+    this.emit('load', {
+      path: path
+    })
   }
 
   reg() {
@@ -153,12 +157,16 @@ class Workspace extends EventEmitter {
   save(path, cl, error) {
     let content = JSON.stringify(this.spaces)
     if (typeof path === 'string' && path != '') {
+      this.spaces.workspace.path = path
       fs.writeFile(path, content, (err) => {
-        if (err && (typeof error === 'function')) {
-          error(`An error ocurred creating the file  ${err.message}`)
+        if (err) {
+          this.spaces.workspace.path = undefined
+          if (typeof error === 'function') error(`An error ocurred creating the file  ${err.message}`)
         }
-        this.spaces.workspace.path = path
         storage.set('workspace', this.spaces)
+        this.emit('save', {
+          path: path
+        })
         if (typeof cl === 'function') {
           cl(path)
         }
@@ -177,13 +185,16 @@ class Workspace extends EventEmitter {
         if (fileName === undefined) {
           err('no filename')
         }
-
+        this.spaces.workspace.path = fileName
         fs.writeFile(fileName, content, (err) => {
-          if (err && (typeof error === 'function')) {
-            error(`An error ocurred creating the file  ${err.message}`)
+          if (err) {
+            this.spaces.workspace.path = undefined
+            if (typeof error === 'function') error(`An error ocurred creating the file  ${err.message}`)
           }
-          this.spaces.workspace.path = fileName
           storage.set('workspace', this.spaces)
+          this.emit('save', {
+            path: fileName
+          })
           if (typeof cl === 'function') {
             cl(fileName)
           }
@@ -200,7 +211,9 @@ class Workspace extends EventEmitter {
       this.spaces.workspace = this.spaces.workspace || {
         path: ''
       }
-      this.emit('load')
+      this.emit('load', {
+        path: path
+      })
       return
     }
     dialog.showOpenDialog({
@@ -210,7 +223,7 @@ class Workspace extends EventEmitter {
         extensions: ['json']
       }],
       properties: ['openFile']
-    }, (file,err) => {
+    }, (file, err) => {
       if (err) {
         if (typeof error === 'function') error(err)
         return
@@ -225,12 +238,14 @@ class Workspace extends EventEmitter {
       try {
         this.spaces = wk
         this.spaces.workspace = this.spaces.workspace || {
-          path: ''
+          path: file[0]
         }
         storage.set('workspace', this.spaces)
-        this.emit('load')
+        this.emit('load', {
+          path: file[0]
+        })
       } catch (e) {
-        if (typeof error === 'function'){
+        if (typeof error === 'function') {
           error(e)
         }
       }
