@@ -571,7 +571,7 @@ remove the sidebar.
 
 - `gui.tasks` Instance of TaskManager.
 
--- `gui.workspace` Instance of Workspace.
+- `gui.workspace` Instance of Workspace.
 
 - `gui.win` Reference to the window object.
 
@@ -595,6 +595,42 @@ remove the sidebar.
   - `options` BrowserWindow options
 
   Return the BrowserWindow instance.
+
+
+#### Examples
+
+##### Add a button in the header
+```
+gui.header.actionsContainer.addButton({
+  icon: 'fa fa-bar',
+  action: ()=> console.log('click!')
+  })
+```
+##### Write in the footer
+```
+gui.footer.notify('message!!!!')
+```
+##### Add a progress bar
+```
+gui.footer.addProgressBar()
+gui.footer.progressBar.setBar(20)
+```
+
+##### Create an alert
+```
+const {Alert} = require('electrongui')
+gui.alerts.add('this is a warning','warning')
+gui.alerts.add('this is a code error', 'error')
+let customAlert = new Alert({
+  body: 'custom alert',
+  icon: 'fa fa-bell-o',
+  status: 'warning',
+  timeout: 40000 //after 40 sec the alert will be removed
+  })
+gui.alerts.add(customAlert)
+```
+
+
 
 ### GuiExtension
 
