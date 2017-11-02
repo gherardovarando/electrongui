@@ -30,7 +30,6 @@ const GuiExtension = require('./GuiExtension')
 const Sidebar = require('./Sidebar.js')
 const ToggleElement = require('./ToggleElement.js')
 const util = require('./util.js')
-const storage = require('electron-json-storage')
 
 
 class ExtensionsManager extends GuiExtension {
@@ -60,7 +59,11 @@ class ExtensionsManager extends GuiExtension {
             ],
             openDirectory: false,
             openFile: true
-          }, (filePaths) => {
+          }, (filePaths, err) => {
+            if (err) {
+              this.emit('error', err)
+              return
+            }
             if (!filePaths) return
             let p = filePaths[0]
             this.load(p, (ext) => {
@@ -110,14 +113,14 @@ class ExtensionsManager extends GuiExtension {
         let tmp = require(extPath)
         if (tmp) {
           ext = new tmp(this.gui)
-        } else {
-        }
+        } else {}
       } catch (e) {
-        throw e
-        ext = e
+        this.emit('error', new Error(`Error loading extension from ${extPath}, details: ${err.message}`))
+        return
       }
     } else {
-      ext = 'trying to load non path extension'
+      this.emit('error', new Error(`trying to load non path extension from ${extPath}`))
+      return
     }
     if (typeof cl === 'function') {
       cl(ext)
@@ -181,9 +184,7 @@ class ExtensionsManager extends GuiExtension {
           extension.deactivate()
         }
       },
-      oncontextmenu: ()=>{
-        console.log('aa')
-      }
+      oncontextmenu: () => {}
     })
 
     extension.on('deactivate', () => {
@@ -206,13 +207,6 @@ class ExtensionsManager extends GuiExtension {
         }
       })
     })
-
-    // extension.on('hide', () => {
-    //     if (Object.keys(this.extensions).every((key) => {
-    //             return this.extensions[key].isHidden()
-    //         }) && this.isHidden()) {
-    //     }
-    // })
 
     this.emit('add', extension)
 
