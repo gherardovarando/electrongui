@@ -39,7 +39,11 @@ class Workspace extends EventEmitter {
     }
     if (!this.options.clean) {
       storage.get('workspace', (error, data) => {
-        if (error) return
+        if (error) {
+          let err1 = new Error(`Error trying to recover workspace, details: ${error.message}`)
+          this.emit('error', err1)
+          return
+        }
         if (data.workspace) {
           this.spaces = data || this.spaces
           this.emit('load', {
@@ -160,8 +164,10 @@ class Workspace extends EventEmitter {
       this.spaces.workspace.path = path
       fs.writeFile(path, content, (err) => {
         if (err) {
+          let err1 = new Error(`An error ocurred creating the file ${path}, error details  ${err.message}`)
           this.spaces.workspace.path = undefined
-          if (typeof error === 'function') error(`An error ocurred creating the file  ${err.message}`)
+          if (typeof error === 'function') error(err1)
+          this.emit('error', err1)
         }
         storage.set('workspace', this.spaces)
         this.emit('save', {
@@ -181,15 +187,18 @@ class Workspace extends EventEmitter {
         }]
       },
       (fileName) => {
-
         if (fileName === undefined) {
-          err('no filename')
+          let err = new Error('No filename provided')
+          if (typeof error === 'function') error(err)
+          this.emit('error', err)
         }
         this.spaces.workspace.path = fileName
         fs.writeFile(fileName, content, (err) => {
           if (err) {
             this.spaces.workspace.path = undefined
-            if (typeof error === 'function') error(`An error ocurred creating the file  ${err.message}`)
+            err2 = new Error(`An error ocurred creating the file in ${filename}, error details:  ${err.message}`)
+            this.emit('error', err2)
+            if (typeof error === 'function') error(err2)
           }
           storage.set('workspace', this.spaces)
           this.emit('save', {
@@ -209,7 +218,7 @@ class Workspace extends EventEmitter {
       this.spaces = wk
       storage.set('workspace', this.spaces)
       this.spaces.workspace = this.spaces.workspace || {
-        path: ''
+        path: path || ''
       }
       this.emit('load', {
         path: path
@@ -225,6 +234,8 @@ class Workspace extends EventEmitter {
       properties: ['openFile']
     }, (file, err) => {
       if (err) {
+        let err2 = new Error(`Error opening the workspace json file: ${err.message}`)
+        this.emit('error', err)
         if (typeof error === 'function') error(err)
         return
       }
@@ -232,7 +243,9 @@ class Workspace extends EventEmitter {
       try {
         wk = util.readJSONsync(file[0])
       } catch (e) {
-        if (typeof error === 'function') error(err)
+        let err3 = new Error(`Error parsing the workspace json string: ${e.message}`)
+        this.emit('error', err3)
+        if (typeof error === 'function') error(err3)
         return
       }
       try {
@@ -245,8 +258,10 @@ class Workspace extends EventEmitter {
           path: file[0]
         })
       } catch (e) {
+        let err4 = new Error(`Error loading the workspace from file ${file[0]}: ${e.message}`)
+        this.emit('error', err4)
         if (typeof error === 'function') {
-          error(e)
+          error(err4)
         }
       }
     })
