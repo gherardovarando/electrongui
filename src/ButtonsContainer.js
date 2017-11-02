@@ -139,7 +139,7 @@ class ButtonsContainer extends ToggleElement {
   }
 
   removeButtonGroup(id, force) {
-    if (typeof id === string) {
+    if (typeof id === 'string') {
       if (this.buttonGroups[id]) {
         let btng = document.getElementById(`${this.id}ButtonGroup${id}`)
         if (btng) {
