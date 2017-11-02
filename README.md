@@ -93,6 +93,24 @@ let myext = new MyExtension
 myext.activate()
 ```
 
+##### Using the `module.parent.require` trick
+If your extension is very simple and do not use any external modules apart from `electrongui` it can be written requiring `electrongui` from the parent module.
+This method permit to install extension from single files, without the need to install additional packages.
+
+```
+//myextension.js
+const {GuiExtension} = module.parent.require('electrongui') // this will require electrongui from the parent module, since the parent moduel is in the application it will find electrongui module.
+
+class MyExtension extends GuiExtension {
+  constructor(gui){
+    super(gui,{
+      icon: 'fa fa-bar'
+      })
+    // etc..
+  }
+}
+```
+
 ### Cleaning the interface on deactivate
 
 The `deactivate` method must clean all the elements added to the interfaces as buttons or menus. The menu created by the menuLabel and menuTemplate options in the creation are automatically removed by `super.deactivate()`. Moreover the `deactivate` method must also remove the event listener added.
@@ -144,7 +162,7 @@ let body = document.getElementsByTagName('body')[0]
 const {ToggleElement} = require('electrongui')
 var el = document.createElelement('DIV')
 var togEl = new ToggleElement(el, body)
-togEl.element === el \\ true
+togEl.element === el // true
 ```
 
 #### Creation
