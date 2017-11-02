@@ -94,7 +94,7 @@ class Workspace extends EventEmitter {
   }
 
   reg() {
-    storage.set('workspace', this.spaces)
+    storage.set('workspace', this.spaces,()=>{})
   }
 
   safequit() {
@@ -169,7 +169,7 @@ class Workspace extends EventEmitter {
           if (typeof error === 'function') error(err1)
           this.emit('error', err1)
         }
-        storage.set('workspace', this.spaces)
+        storage.set('workspace', this.spaces,()=>{})
         this.emit('save', {
           path: path
         })
@@ -200,7 +200,7 @@ class Workspace extends EventEmitter {
             this.emit('error', err2)
             if (typeof error === 'function') error(err2)
           }
-          storage.set('workspace', this.spaces)
+          storage.set('workspace', this.spaces,()=>{})
           this.emit('save', {
             path: fileName
           })
@@ -216,7 +216,7 @@ class Workspace extends EventEmitter {
     if (typeof path === 'string' && path != '') {
       wk = util.readJSONsync(path)
       this.spaces = wk
-      storage.set('workspace', this.spaces)
+      storage.set('workspace', this.spaces,()=>{})
       this.spaces.workspace = this.spaces.workspace || {
         path: path || ''
       }
@@ -253,12 +253,12 @@ class Workspace extends EventEmitter {
         this.spaces.workspace = this.spaces.workspace || {
           path: file[0]
         }
-        storage.set('workspace', this.spaces)
         this.emit('load', {
           path: file[0]
         })
+        storage.set('workspace', this.spaces, () => {})
       } catch (e) {
-        let err4 = new Error(`Error loading the workspace from file ${file[0]}: ${e.message}`)
+        let err4 = new Error(`Error loading the workspace from file ${file[0]}, details: ${e.message}`)
         this.emit('error', err4)
         if (typeof error === 'function') {
           error(err4)
