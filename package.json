@@ -1,6 +1,6 @@
 {
   "name": "electrongui",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "gui skeleton for electron app ",
   "main": "electrongui.js",
   "scripts": {
