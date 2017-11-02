@@ -630,11 +630,13 @@ let customAlert = new Alert({
 gui.alerts.add(customAlert)
 ```
 
-
-
 ### GuiExtension
 
 Extend this class to create a new extension.
+
+#### Methods
+
+#### Events
 
 ### ExtensionManager
 
