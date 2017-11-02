@@ -1,7 +1,7 @@
 # electrongui
 
 [![npm version](https://badge.fury.io/js/electrongui.svg)](https://badge.fury.io/js/electrongui)
-
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
 ## author: gherardo.varando [gherardo.varando@gmail.com](mailto:gherardo.varando@gmail.com)
 
 **electrongui** is a skeleton for GUI written in JS/Node/electron framework. It is made of several classes and utilities. The main class is `Gui` that creates an empty interface on the current window. It is not compulsory to create an instance of `Gui` class and every other classes and utilities can be used independently. electrongui it is meant to be used in Rendered windows and not in the main electron process.
