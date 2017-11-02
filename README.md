@@ -1,10 +1,10 @@
 # electrongui
 
-#### author: gherardo.varando [gherardo.varando@gmail.com](mailto:gherardo.varando@gmail.com)
+## author: gherardo.varando [gherardo.varando@gmail.com](mailto:gherardo.varando@gmail.com)
 
 **electrongui** is a skeleton for GUI written in JS/Node/electron framework. It is made of several classes and utilities. The main class is `Gui` that creates an empty interface on the current window. It is not compulsory to create an instance of `Gui` class and every other classes and utilities can be used independently. electrongui it is meant to be used in Rendered windows and not in the main electron process.
 
-#### How to use it
+## How to use it
 
 - Add the [photonkit](http://photonkit.com/) css
 
@@ -17,16 +17,13 @@
 ```
 const {Gui} = require('electrongui')
 let gui = new Gui() // create the base gui structure
-gui.notify('Gui initialized!!!') //this message should appear in the footer
+gui.alerts.add('Gui initialized!!!','warning') //this message should appear in the footer
 ```
 
-## The `Gui` class
 
-When a instance of the `Gui` class is created
 ## How to write extensions
 
 To write an extension you just need to create a npm package (or a simple js file) exporting a `class` that extend the `GuiExtension` class.
-
 
 ```
 const {
@@ -58,7 +55,7 @@ class MyExtension extends GuiExtension {
     this.appendMenu()
     // here goes the creation of the elements
     this.appendChild(util.div('padded', 'This is the main element of MyExtension'))
-    this.gui.notify('MyExtension activated')
+    this.gui.alerts.add('MyExtension activated')
   }
 
   deactivate() {
@@ -71,21 +68,18 @@ class MyExtension extends GuiExtension {
 module.exports = MyExtension
 ```
 
-#### The `gui` object
+### The `gui` object
 
 The current `gui` interface (instance of `Gui`) it is passed automatically on creation. And can be obtained with `this.gui` (see example above).
 
-#### Requiring modules
+### Requiring modules
 
-You can require Node native modules and Electron ones.
-Every dependencies that you need can be loaded with `require`.
-Be sure to list `electrongui` as a dependency.
+You can require Node native modules and Electron ones. Every dependencies that you need can be loaded with `require`. Be sure to list `electrongui` as a dependency.
 
-#### Installing through the ExtensionsManager
+### Installing through the ExtensionsManager
 
-The extensions manager instance is available through `gui.extensions` and provides methods to install and manage extensions. If you want to install an extension with the extension manager (useful for developing new extensions), the extension need to be able to find all the dependencies, especially `electrongui`.
-It is suggested to create a npm-module folder structure for the extension, an appropriate `package.json`. Running `npm install` will build the `node_modules` folder containing all the dependencies.
-If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app and then create the instance and call the `activate` method (see example below).
+The extensions manager instance is available through `gui.extensions` and provides methods to install and manage extensions. If you want to install an extension with the extension manager (useful for developing new extensions), the extension need to be able to find all the dependencies, especially `electrongui`. It is suggested to create a npm-module folder structure for the extension, an appropriate `package.json`. Running `npm install` will build the `node_modules` folder containing all the dependencies. If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app and then create the instance and call the `activate` method (see example below).
+
 ```
 //renderer.js
 const {Gui} = require('electrongui')
@@ -95,42 +89,45 @@ let gui = new Gui()
 
 let myext = new MyExtension
 myext.activate()
-
 ```
 
-
-#### Cleaning the interface on deactivate
+### Cleaning the interface on deactivate
 
 The `deactivate` method must clean all the elements added to the interfaces as buttons or menus. The menu created by the menuLabel and menuTemplate options in the creation are automatically removed by `super.deactivate()`. Moreover the `deactivate` method must also remove the event listener added.
 
-
 ## API
 
- - [Basic Elements](#basic-elements)
-   - [ToggleElement](#toggleelement)
-   - [ButtonsContainer](#buttonscontainer)
-   - [Modal](#modal)
-   - [ProgressBar](#progressbar)
-   - [ListGroup](#listgroup)
-   - [NavGroup](#navgroup)
-   - [Sidebar](#sidebar)
-   - [Colors](#colors)
-   - [SplitPane](#splipane)
-   - [FolderSelector](#folderselector)
- - [Gui and Extensions](#gui-and-extensions)
-   - [Gui](#gui)
-   - [GuiExtension](#guiextension)
-   - [ExtensionManager](#extensionmanager)
-   - [Workspace](#workspace)
-   - [TaskViewer](#taskviewer)
-   - [TaskManager](#taskmanager)
-   - [Task](#task)
- - [Utilities](#utilities)
-   - [util](#util)
-   - [input](#input)
+- [Basic Elements](#basic-elements)
+
+  - [ToggleElement](#toggleelement)
+  - [ButtonsContainer](#buttonscontainer)
+  - [Modal](#modal)
+  - [ProgressBar](#progressbar)
+  - [ListGroup](#listgroup)
+  - [NavGroup](#navgroup)
+  - [Sidebar](#sidebar)
+  - [Colors](#colors)
+  - [SplitPane](#splipane)
+  - [FolderSelector](#folderselector)
+
+- [Gui and Extensions](#gui-and-extensions)
+
+  - [Gui](#gui)
+  - [GuiExtension](#guiextension)
+  - [ExtensionManager](#extensionmanager)
+  - [Workspace](#workspace)
+  - [TaskViewer](#taskviewer)
+  - [TaskManager](#taskmanager)
+  - [Task](#task)
+  - [AlertManager](#alertmanager)
+  - [Alert](#alert)
+
+- [Utilities](#utilities)
+
+  - [util](#util)
+  - [input](#input)
 
 ## Basic Elements
-
 
 ### ToggleElement
 
@@ -151,6 +148,7 @@ togEl.element === el \\ true
 #### Creation
 
 `new ToggleElement(element, parent)`
+
 - element HTMl element
 - parent HTMl element or ToggleElement
 
@@ -160,48 +158,39 @@ togEl.element === el \\ true
 
 - `element` an HTML element or an instance of `ToggleElement`.
 
-Append `this.element` to `element`.
-Return `this`.
+Append `this.element` to `element`. Return `this`.
 
 ##### `appendChild(element)`
 
 - `element` an HTML element or an instance of `ToggleElement`.
 
-Append `element` as a child of `this.element`.
-Return `this`.
+Append `element` as a child of `this.element`. Return `this`.
 
 ##### `removeChild(element)`
 
 - `element` an HTML element or an instance of `ToggleElement`.
 
-Remove `element` from the children of `this.element`.
-Return `this`.
+Remove `element` from the children of `this.element`. Return `this`.
 
 ##### `remove()`
 
-Remove from the parent (if set with `this.appendTo(parent)`).
-Return `this`.
-
+Remove from the parent (if set with `this.appendTo(parent)`). Return `this`.
 
 ##### `clear()`
 
-Remove all the children of `this.element`.
-Return `this`.
+Remove all the children of `this.element`. Return `this`.
 
 ##### `show()`
 
-Display the element, set `this.element.style.display = ''`.
-Return `this`.
+Display the element, set `this.element.style.display = ''`. Return `this`.
 
 ##### `hide()`
 
-Display the element, set `this.element.style.display = 'none'`.
-Return `this`.
+Display the element, set `this.element.style.display = 'none'`. Return `this`.
 
 ##### `toggle()`
 
-Display/hide the element.
-Return `this`.
+Display/hide the element. Return `this`.
 
 ##### `isHidden()`
 
@@ -220,8 +209,7 @@ return `true` if the element is hidden.
   - `groupClassName` string, css class of the button group.
   - `action` function, action to perform on element toggling.
 
-Add a toggle button to a preexistent buttonsContainer.
-Return the button.
+Add a toggle button to a preexistent buttonsContainer. Return the button.
 
 ##### `removeToggleButton()`
 
@@ -267,47 +255,51 @@ btnContainer.addButton({
     console.log(btn.innerHTML);
     btn.innerHTML += 'a';
   });
-
 ```
 
 #### Methods
 
 ##### `addButton(options)`
+
 - `options` object of options:
+
   - `id` string the id of the html button element.
   - `text` string, the text of the button.
   - `icon` string, the icon of the button.
   - `toggle` logical, if it is a toggable button (active-deactive states).
-  - `action` function or object `{active, deactive}` both functions.
-     `function(btn)`, where `btn`is the button.
-      This option permits to add a callback when the button is pressed (`action`) or when it is ativated/deactivated (`active,deactive`) if `toggle` is set to `true`.
+  - `action` function or object `{active, deactive}` both functions. `function(btn)`, where `btn`is the button. This option permits to add a callback when the button is pressed (`action`) or when it is ativated/deactivated (`active,deactive`) if `toggle` is set to `true`.
   - `groupId` string, the id of the button group, if not present it will be created.
   - `gropuClassName` string, the class name of the group id, it will be used only if the gropu id is not present and thus it will be created.
 
 Return the button element.
 
-
 ##### `removeButton(id, force)`
+
 - `id` string, the id of the button to remove.
 - `force` logical, if true, remove the element even uf it is not a button in this container.
 
 ##### `addButtonGroup(options, buttons)`
+
 - `options` object:
- - `className` css class of the group.
- - `id` id of the group.
-- `buttons` array of buttons options. If present all the respective buttons will be created and added to this group.  
+
+  - `className` css class of the group.
+  - `id` id of the group.
+
+- `buttons` array of buttons options. If present all the respective buttons will be created and added to this group.
 
 Return the button group element
 
-
 ##### `removeButtonGroup(id, force)`
+
 - `id` string.
 - `force` logical.
 
 ### Modal
+
 extends [`ToggleElement`](#toggleelement)
 
 Create a Modal element.
+
 ```
 const {Modal} = require('electrongui');
 
@@ -323,23 +315,24 @@ new Modal({
 
 #### constructor
 
-``new Modal(options)``
+`new Modal(options)`
 
 -`options`:
-  - `draggable` logical, if the modal should be draggable.
-  - `title` string, html element or ToggleElement, title of the modal.
-  - `body` html element or ToggleElement, the body of the modal
-  - `footer` string, html element or ToggleElement, footer of the modal.
-  - `onsubmit` function, it will be call when the user press the enter key
-  - `oncancel` function, it it will be call when the user press esc/canc or click outside of the modal.
-  - `width` string, width of the modal, default to `'auto'`.
-  - `height` string, height of the modal, default to `'auto'`.
-  - `maxWidth` string.
-  - `maxHeight` string.
-  - `baseright`, `baseleft`, `basetop` , `basebottom` options to position the modal (defualt to 0).
-  - `baseheight`, `basewidth` options for the size of the base of the modal (usally set to 100%).
-  - `backgroundcolor` defualt to `rgba(0,0,0,0.4)`.
-  - `parent` html element or toggle element, default to the `body` element of the window.
+
+- `draggable` logical, if the modal should be draggable.
+- `title` string, html element or ToggleElement, title of the modal.
+- `body` html element or ToggleElement, the body of the modal
+- `footer` string, html element or ToggleElement, footer of the modal.
+- `onsubmit` function, it will be call when the user press the enter key
+- `oncancel` function, it it will be call when the user press esc/canc or click outside of the modal.
+- `width` string, width of the modal, default to `'auto'`.
+- `height` string, height of the modal, default to `'auto'`.
+- `maxWidth` string.
+- `maxHeight` string.
+- `baseright`, `baseleft`, `basetop` , `basebottom` options to position the modal (defualt to 0).
+- `baseheight`, `basewidth` options for the size of the base of the modal (usally set to 100%).
+- `backgroundcolor` defualt to `rgba(0,0,0,0.4)`.
+- `parent` html element or toggle element, default to the `body` element of the window.
 
 #### Methods
 
@@ -348,41 +341,43 @@ new Modal({
 Hide and destroy the modal.
 
 ##### `addTitle(title)`
-- `title` string, HTML element or ToggleElement.
-Return `this`.
+
+- `title` string, HTML element or ToggleElement. Return `this`.
 
 ##### `addBody(body)`
-- `body` string or html element or ToggleElement.
-Return `this`.
+
+- `body` string or html element or ToggleElement. Return `this`.
 
 ##### `addFooter(footer)`
 
--`footer` string or html element or toggle element.
-Return `this`.
-
+-`footer` string or html element or toggle element. Return `this`.
 
 ### ProgressBar
+
 extends [`ToggleElement`](#toggleelement)
 
 #### constructor
 
-``new ProgressBar(parent)``
+`new ProgressBar(parent)`
+
 - `parent` an html element or toggle element.
 
 #### Methods
 
 ##### `setHeight(h)`
-- `h` number, the height
-Set the height of the progress bar.
+
+- `h` number, the height Set the height of the progress bar.
 
 ##### `setBar(value)`
-- `value` number, between 0 and 100.
-set the progress to `value`
+
+- `value` number, between 0 and 100. set the progress to `value`
 
 ##### `startWaiting()`
+
 make the progress bar start the waiting animation, moving cycling.
 
 ##### `stopWaiting()`
+
 stop the waiting animation.
 
 ##### `hideBar()`
@@ -395,7 +390,6 @@ stop the waiting animation.
 
 ##### `add()`
 
-
 ### ListGroup
 
 Create and manage a List group as in [Photon](http://photonkit.com/components/).
@@ -403,13 +397,16 @@ Create and manage a List group as in [Photon](http://photonkit.com/components/).
 #### constructor
 
 `new ListGroup(id, parent)`
+
 - `id` [optional] string
 - `parent` html element or toggle element
 
 #### Methods
 
-##### ``addItem(options)``
+##### `addItem(options)`
+
 - `options` object of options:
+
   - `id` string id of the item to add.
   - `image` string, path of the image to use in the list item.
   - `icon` string, icon to use instead of the image.
@@ -418,25 +415,31 @@ Create and manage a List group as in [Photon](http://photonkit.com/components/).
   - `details` html element or toggle element or string.
   - `toggle` logical, if the element can be toggled.
   - `onclick`, function(item,e) or (if toggle is true) object with:
+
     - `active` function(item, e)
     - `deactive` function(item, e)
+
   - `ondblclick`, function(item, e)
   - `oncontextmenu`, function(item, e)
   - `onmouseover`, function(item ,e)
   - `key` string, search keys
 
 ##### `removeItem(id)`
+
 - `id` string
 
 remove the given item
 
 ##### `addSearch(options)`
+
 - `options`
+
   - `placeholder` string
 
 add a search field at the top of the list group, will use the keys tag to search in the items list, and display/hide the appropriate items that match the search.
 
 ##### `setKey(id, newkey, append)`
+
 - `id` string, id of the item to edit
 - `newkey` string, the new key
 - `append` logical, if the new key has to be appended or instead substitute the old keys.
@@ -444,6 +447,7 @@ add a search field at the top of the list group, will use the keys tag to search
 Add the new key to the given item's search keys
 
 ##### `removeKey(id, key)`
+
 - `id` string
 - `key` string
 
@@ -454,45 +458,54 @@ Remove the `key` from the search keys of the item `id`
 remove all items.
 
 ##### `setTitle(id, newtitle)`
+
 - `id`
 - `newtitle`
 
 set the new title in the given item.
 
 ##### `showItem(id)`
+
 -`id`
 
 show the given item.
 
 ##### `hideItem(id)`
+
 -`id`
 
 hide the given item.
 
 ##### `activeItem(id)`
+
 - `id`
 
 Active (add css class 'active') to the given item.
 
-
 ##### `deactiveItem(id)`
+
 - `id`
 
 Deactive (remove css class 'active') from the given item.
 
 ##### `showAll()`
+
 show all items.
 
 ##### `hideAll()`
+
 hide all items
 
 ##### `activeAll()`
+
 active all items.
 
 ##### `deactiveAll()`
+
 deactive all items.
 
 ##### `hideDetails(id)`
+
 - `id`
 
 hide the details element of the given item.
@@ -502,31 +515,36 @@ hide the details element of the given item.
 ##### `hideAllDetails()`
 
 ##### `forEach(f)`
+
 - `f` function(item)
 
-
 apply a given function `f` to all the items.
+
 ### NavGroup
 
 Create and manage a Nav group as in [Photon](http://photonkit.com/components/).
 
 ### Sidebar
+
 extends [`ToggleElement`](#toggleelement)
 
 #### constructor
 
 `new Sidebar(parent, options)`
+
 - `parent` html element or toggle element.
 - `options` object:
-  - `className` css class of the sidebar
 
+  - `className` css class of the sidebar
 
 #### Methods
 
 ##### `addList(arg)`
+
 - arg string or ListGroup
 
 ##### `addNav(arg)`
+
 - arg string ot NavGroup
 
 ##### `addItem(options)`
@@ -534,32 +552,102 @@ extends [`ToggleElement`](#toggleelement)
 add one item to the ListGroup or NavGroup.
 
 ##### `remove()`
-remove the sidebar.
 
+remove the sidebar.
 
 ## Gui and Extensions
 
 ### Gui
 
+#### Properties
+
+- `gui.header` Instance of Header.
+
+- `gui.footer` Instance of footer.
+
+- `gui.taskManager` Instance of TaskManager.
+
+- `gui.alerts` Instance of AlertManager.
+
+- `gui.tasks` Instance of TaskManager.
+
+-- `gui.workspace` Instance of Workspace.
+
+- `gui.win` Reference to the window object.
+
+#### Methods
+
+- `gui.reloadMenu()`
+
+  Reload the app menu
+
+- `gui.addMenuItem(item)`
+
+  - `item` a MenuItem
+
+- `gui.removeMenuItem(item)`
+
+  - `item` a MenuItem
+
+- `gui.openChildWindow(url, option)`
+
+  - `url` String
+  - `options` BrowserWindow options
+
+  Return the BrowserWindow instance.
+
 ### GuiExtension
+
+Extend this class to create a new extension.
 
 ### ExtensionManager
 
+#### Methods
+
+#### Events
+
 ### Workspace
 
+#### Methods
+
+#### Events
+
+### AlertManager
+
+#### Methods
+
+#### Events
 
 ### TaskManager
+
+#### Methods
+
+#### Events
+
+### Task
+
+#### Methods
+
+#### Events
+
+### AlertManager
+
+#### Methods
+
+#### Events
+
+### Alert
 
 ## Utilities
 
 ### util
 
-Just a collection of utilities.
-``const {util} = require('electrongui')``
+Just a collection of utilities. `const {util} = require('electrongui')`
 
-#### ``util.findKeyId(x, obj, tag)``
+#### `util.findKeyId(x, obj, tag)`
 
 suppose to have an object as
+
 ```
 let a = {
   one: {
@@ -574,7 +662,7 @@ let a = {
 }
 ```
 
-And you want to find the sub-object with properties ``id`` equal to 23.
+And you want to find the sub-object with properties `id` equal to 23.
 
 ```
 let target =util.findKeyId(23, a, 'id')
@@ -582,11 +670,13 @@ console.log(a[target]) // { id: 23}
 ```
 
 #### `util.nextKey(obj)`
+
 - `obj` an object
 
 find the first numeric key that is available to assign a new property in the object.
 
 #### `util.parseTimeInterval(s)`
+
 - `s` number, milliseconds
 
 return a human readable string of time from a millisecond value.
@@ -647,10 +737,12 @@ create and icon element starting from a string if able otherwise return an empty
 
 ### input
 
-` const {input} = require('electrongui')`
+`const {input} = require('electrongui')`
 
-####  `input.checkButton(options)`
+#### `input.checkButton(options)`
+
 - `options` checkButton options object:
+
   - `className` string
   - `id` string
   - `active` logical
@@ -666,19 +758,24 @@ create and icon element starting from a string if able otherwise return an empty
 return the HTML element.
 
 #### `input.selectInput(options)`
+
 - `options` selectInput options object:
+
   - `className`
   - `id`
   - `onchange`
   - `onblur`
   - `oninput`
   - `choices` object or array with choices (option html element will be created for every field):
-     - ` { choice1: value1, choice2:value2  }  `
+
+    - `{ choice1: value1, choice2:value2 }`
+
   - `parent` HTML element or ToggleElement
 
-
 #### `input.input(options)`
+
 - `options` input options object:
+
   - `type` string, like the HTML input element
   - `id`
   - `label`
@@ -699,9 +796,7 @@ return the HTML element.
 
 ## Acknowledgment
 
-Mario Juez [mjuez@fi.upm.es](mailto:mjuez@fi.upm.es) collaborated in part of the code.
-This project was partially founded by the  [Cajal Blue Brain Project](http://cajalbbp.cesvima.upm.es/).
-
+Mario Juez [mjuez@fi.upm.es](mailto:mjuez@fi.upm.es) collaborated in part of the code. This project was partially founded by the [Cajal Blue Brain Project](http://cajalbbp.cesvima.upm.es/).
 
 ## License
 
