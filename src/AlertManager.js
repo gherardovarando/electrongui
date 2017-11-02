@@ -60,7 +60,7 @@ class AlertManager extends EventEmitter {
     this._check()
     let alert
     let timeout = null
-    if (body instanceof Alert) {
+    if (body instanceof Alert || typeof body.hide === 'function' ) {
       alert = body
     } else {
       if (status === 'success') timeout = 3000
@@ -80,7 +80,7 @@ class AlertManager extends EventEmitter {
     })
 
     alert.appendTo(this.container)
-    return alert  
+    return alert
   }
 
   _check() {
