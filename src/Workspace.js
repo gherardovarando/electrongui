@@ -94,7 +94,7 @@ class Workspace extends EventEmitter {
   }
 
   reg() {
-    storage.set('workspace', this.spaces,()=>{})
+    storage.set('workspace', this.spaces, () => {})
   }
 
   safequit() {
@@ -169,7 +169,7 @@ class Workspace extends EventEmitter {
           if (typeof error === 'function') error(err1)
           this.emit('error', err1)
         }
-        storage.set('workspace', this.spaces,()=>{})
+        storage.set('workspace', this.spaces, () => {})
         this.emit('save', {
           path: path
         })
@@ -200,7 +200,7 @@ class Workspace extends EventEmitter {
             this.emit('error', err2)
             if (typeof error === 'function') error(err2)
           }
-          storage.set('workspace', this.spaces,()=>{})
+          storage.set('workspace', this.spaces, () => {})
           this.emit('save', {
             path: fileName
           })
@@ -216,8 +216,8 @@ class Workspace extends EventEmitter {
     if (typeof path === 'string' && path != '') {
       wk = util.readJSONsync(path)
       this.spaces = wk
-      storage.set('workspace', this.spaces,()=>{})
-      this.spaces.workspace = this.spaces.workspace || {
+      storage.set('workspace', this.spaces, () => {})
+      this.spaces.workspace = {
         path: path || ''
       }
       this.emit('load', {
@@ -250,7 +250,7 @@ class Workspace extends EventEmitter {
       }
       try {
         this.spaces = wk
-        this.spaces.workspace = this.spaces.workspace || {
+        this.spaces.workspace = {
           path: file[0]
         }
         this.emit('load', {
