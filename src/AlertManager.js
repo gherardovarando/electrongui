@@ -29,7 +29,8 @@ let icons = {
   warning: 'fa fa-warning',
   danger: 'fa fa-exclamation',
   success: 'fa fa-check',
-  error: 'fa fa-code'
+  error: 'fa fa-code',
+  progress: 'fa fa-circle-o-notch fa-spin'
 }
 
 class AlertManager extends EventEmitter {

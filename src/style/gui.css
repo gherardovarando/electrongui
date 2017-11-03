@@ -69,22 +69,22 @@ div.cell-container {
 }
 
 button.check-button {
-  padding-left: 25px;
+  padding-left: 19px;
   margin-right: 0;
-  background-image: linear-gradient(to right, transparent 1px, #c0cfd8 1px, #c0cfd8 23px, transparent 23px, transparent);
+  background-image: linear-gradient(to right, transparent 1px, #c0cfd8 1px, #c0cfd8 15px, transparent 15px, transparent);
   background-color: inherit;
   color: inherit;
   font-weight: bold;
 }
 
 button.active.check-button {
-  background-image: linear-gradient(to right, transparent 1px, #116cd6 1px, #116cd6 23px, transparent 23px, transparent);
+  background-image: linear-gradient(to right, transparent 1px, #116cd6 1px, #116cd6 15px, transparent 15px, transparent);
   background-color: inherit;
   color: inherit;
 }
 
 button.check-button:hover {
-  background-image: linear-gradient(to right, transparent 1px, #81b3d3 1px, #81b3d3 23px, transparent 23px, transparent);
+  background-image: linear-gradient(to right, transparent 1px, #81b3d3 1px, #81b3d3 15px, transparent 15px, transparent);
 }
 
 .progress-bar {
@@ -809,6 +809,11 @@ div.gui-alert {
   animation-duration: 0.7s;
   padding: 3px;
   display: table-row;
+  opacity: 0.9;
+}
+
+div.gui-alert:hover{
+  opacity: 1;
 }
 
 div.gui-alert-icon {
@@ -826,7 +831,7 @@ div.gui-alert-icon {
 }
 
 .gui-alert-danger .gui-alert-icon {
-  background-color: rgba(188, 3, 19, 1);
+  background-color: rgba(242, 46, 62, 1);
 }
 
 .gui-alert-error .gui-alert-icon {
@@ -834,7 +839,11 @@ div.gui-alert-icon {
 }
 
 .gui-alert-success .gui-alert-icon {
-  background-color: rgba(33, 125, 206, 0.9);
+  background-color: rgba(33, 125, 206, 1);
+}
+
+.gui-alert-progress .gui-alert-icon {
+  background-color: rgba(33, 206, 142, 1);
 }
 
 div.gui-alert-warning {
@@ -846,7 +855,7 @@ div.gui-alert-default {
 }
 
 div.gui-alert-danger {
-  background-color: rgba(188, 3, 19, 0.8);
+  background-color: rgba(242, 46, 62, 0.8);
 }
 
 div.gui-alert-error {
@@ -855,6 +864,10 @@ div.gui-alert-error {
 
 div.gui-alert-success {
   background-color: rgba(33, 125, 206, 0.6);
+}
+
+div.gui-alert-progress {
+  background-color: rgba(33, 206, 142, 0.6);
 }
 
 div.gui-alert-body {
