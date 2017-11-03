@@ -16,11 +16,13 @@
 
 - In the Renderer process of your electron app:
 
-```
+ ```
 const {Gui} = require('electrongui')
 let gui = new Gui() // create the base gui structure
 gui.alerts.add('Gui initialized!!!','warning') //this message should appear in the footer
-```
+ ```
+
+- See the [API](#api) 
 
 
 ## How to write extensions
@@ -70,6 +72,7 @@ class MyExtension extends GuiExtension {
 module.exports = MyExtension
 ```
 
+
 ### The `gui` object
 
 The current `gui` interface (instance of `Gui`) it is passed automatically on creation. And can be obtained with `this.gui` (see example above).
@@ -94,6 +97,8 @@ class MyExtension extends GuiExtension {
     // etc..
   }
 }
+
+module.exports = MyExtension
 ```
 
 ### Installing the extension
