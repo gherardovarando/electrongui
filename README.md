@@ -692,8 +692,6 @@ An instance of AlertManager is available as `gui.alerts`.
  - `body` string, HTML element, ToggleElement or Alert object.
  - `status` string, one of `danger, error, warning, progress, success, default `
 
-![Type of alerts](/examples/alerts.png)
-
 ### Alert
 
 
@@ -713,14 +711,6 @@ An instance of AlertManager is available as `gui.alerts`.
 #### Methods
 
 #### Events
-
-### AlertManager
-
-#### Methods
-
-#### Events
-
-### Alert
 
 ## Utilities
 
