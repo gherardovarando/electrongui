@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/electrongui.svg)](https://badge.fury.io/js/electrongui)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
-## author: gherardo.varando [gherardo.varando@gmail.com](mailto:gherardo.varando@gmail.com)
+#### [gherardo.varando@gmail.com](mailto:gherardo.varando@gmail.com)
 
 **electrongui** is a skeleton for GUI written in JS/Node/electron framework. It is made of several classes and utilities. The main class is `Gui` that creates an empty interface on the current window. It is not compulsory to create an instance of `Gui` class and every other classes and utilities can be used independently. `electrongui` is meant to be used in Rendered windows and **not** in the main electron process.
 
@@ -78,21 +78,6 @@ The current `gui` interface (instance of `Gui`) it is passed automatically on cr
 
 You can require Node native modules and Electron ones. Every dependencies that you need can be loaded with `require`. Be sure to list `electrongui` as a dependency.
 
-### Installing through the ExtensionsManager
-
-The extensions manager instance is available through `gui.extensions` and provides methods to install and manage extensions. If you want to install an extension with the extension manager (useful for developing new extensions), the extension need to be able to find all the dependencies, especially `electrongui`. It is suggested to create a npm-module folder structure for the extension, an appropriate `package.json`. Running `npm install` will build the `node_modules` folder containing all the dependencies. If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app and then create the instance and call the `activate` method (see example below).
-
-```
-//renderer.js
-const {Gui} = require('electrongui')
-const MyExtension = require('myextension')
-
-let gui = new Gui()
-
-let myext = new MyExtension
-myext.activate()
-```
-
 ##### Using the `module.parent.require` trick
 If your extension is very simple and do not use any external modules apart from `electrongui` it can be written requiring `electrongui` from the parent module.
 This method permit to install extension from single files, without the need to install additional packages.
@@ -109,6 +94,66 @@ class MyExtension extends GuiExtension {
     // etc..
   }
 }
+```
+
+### Installing the extension
+
+If you want then to integrate your extension in the application, you can directly insert it as a dependency in the `package.json` of the electron app and then create the instance and call the `activate` method (see example below).
+
+```
+//renderer.js
+const {Gui} = require('electrongui')
+const MyExtension = require('myextension')
+
+let gui = new Gui()
+
+let myext = new MyExtension
+myext.activate()
+```
+
+
+#### Using the built-in `ExtensionsManager`
+
+The extensions manager instance is available through `gui.extensions` and provides methods to install and manage extensions. If you want to install an extension with the extension manager (useful for developing new extensions), the extension need to be able to find all the dependencies, especially `electrongui`. It is suggested to create a npm-module folder structure for the extension, an appropriate `package.json`. Running `npm install` will build the `node_modules` folder containing all the dependencies.
+
+##### Using ExtensionsManager programmatically
+
+```
+const {Gui} = require('electrongui')
+let gui = new Gui()
+
+// create alert if the ExtensionManager run in an error, this is useful when
+// ExtensionManager find an error loading an extension
+gui.extensions.on('error',(e)=>{
+  gui.alerts.add(e.message, 'danger')
+  console.log(e)
+  })
+
+// the following will load the extension file with require, then will try to create the extension
+gui.extensions.load('myextensionpath') // path to MyExtension.js or to appropriate
+                                      //  package.json or just module name if
+                                      //  the extension is a npm module and it is                                    
+                                      //  installed in a location reachable from
+                                      //  the electron app renderer process.
+// now the extension is available
+
+gui.extensions.extensions.MyExtension.activate()
+
+```
+
+##### Using ExtensionManager from the GUI
+
+ExtensionsManager is a GuiExtension and provide also GUI element to operate on extensions.
+To use it from the GUI it is necessary to activate it.
+
+```
+const {Gui} = require('electrongui')
+let gui = new Gui()
+
+gui.extensions.activate()
+// now there will be a new menu entry in the application named Extensions
+// from there it is possible to install new extensions, selecting the main js file
+// moreover it is possible to activate/deactivate extensions
 ```
 
 ### Cleaning the interface on deactivate
