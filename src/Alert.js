@@ -29,22 +29,39 @@ class Alert extends ToggleElement {
       status: 'default',
       icon: ''
     }
+    this.options = options
     super(util.div(`gui-alert gui-alert-${options.status}`))
     let ic = util.div('gui-alert-icon')
     ic.appendChild(util.icon(options.icon))
     this.appendChild(ic)
-    this.appendChild(util.div('gui-alert-body', options.body))
+    if (options.body && options.body.appendChild) {
+      this.body = options.body
+    } else {
+      this.body = util.div('gui-alert-body', options.body)
+    }
+    this.appendChild(this.body)
     this.element.onclick = () => {
       if (!options.sticky) {
         this.hide()
         this.remove()
       }
     }
-    if (options.timeout){
-      setTimeout(()=>{
+    if (options.timeout) {
+      setTimeout(() => {
         this.remove()
-      },options.timeout)
+      }, options.timeout)
     }
+  }
+
+  setBodyText(text) {
+    if (this.body.element) this.body.element.innerHTML = text
+    else this.body.innerHTML = text
+  }
+
+  setStatus(status) {
+    this.element.classList.remove(`gui-alert-${this.options.status}`)
+    this.element.classList.add(`gui-alert-${status}`)
+    this.options.status = status
   }
 
 }
