@@ -27,6 +27,7 @@ const util = require('./util.js')
 class SplitPane extends ToggleElement {
     constructor(element, type, x) {
         super(element)
+        this._EGTYPE.push('splitpane')
         type = type || 'v'
         this.element.className = 'pane split-pane'
         this.one = new ToggleElement(util.div(`${type}-pane`))
@@ -93,6 +94,11 @@ class SplitPane extends ToggleElement {
         })
 
 
+    }
+
+    static is(x){
+      if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('splitpane')) return true
+      return false
     }
 
     showSecondPane(x) {

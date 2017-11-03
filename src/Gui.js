@@ -41,7 +41,7 @@ class Gui extends EventEmitter {
   constructor(options) {
     options = options || {}
     super()
-    this._EGTYPE = 'gui'
+    this._EGTYPE = ['gui']
     this.win = require('electron').remote.getCurrentWindow()
     let ap = util.div('window app')
     this.header = new Header(util.div("toolbar toolbar-header"), ap)
@@ -60,8 +60,8 @@ class Gui extends EventEmitter {
     util.body.appendChild(ap)
   }
 
-  static is(x) {
-    if (x._EGTYPE === 'gui') return true
+  static is(x){
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('gui')) return true
     return false
   }
 

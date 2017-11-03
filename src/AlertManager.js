@@ -36,7 +36,7 @@ let icons = {
 class AlertManager extends EventEmitter {
   constructor(x, parent) {
     super()
-    this._EGTYPE = 'alertmanager'
+    this._EGTYPE = ['alertmanager']
     this.max = Math.max(1, x || 0)
     this.alerts = []
     this.container = new ToggleElement(util.div('gui-alert-container'))
@@ -93,7 +93,7 @@ class AlertManager extends EventEmitter {
   }
 
   static is(x) {
-    if (x._EGTYPE === 'alertmanager') return true
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('alertmanager')) return true
     return false
   }
 

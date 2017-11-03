@@ -25,14 +25,14 @@ const ProgressBar = require('./ProgressBar')
 class Footer extends ToggleElement {
   constructor(element, parent) {
     super(element)
-    this._EGTYPE = 'footer'
+    this._EGTYPE.push('footer')
     if (parent) {
       this.appendTo(parent)
     }
   }
 
   static is(x) {
-    if (x._EGTYPE === 'footer') return true
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('footer')) return true
     return false
   }
 

@@ -26,9 +26,9 @@ class Grid extends ToggleElement {
 
   constructor(rows, columns) {
     var element = document.createElement("TABLE")
-    element.className = "grid"
+    element.className = 'grid'
     super(element)
-
+    this._EGTYPE.push('grid')
     this.rows = rows
     this.columns = columns
     this.actualRow = 0
@@ -42,6 +42,11 @@ class Grid extends ToggleElement {
       }
       element.appendChild(row)
     }
+  }
+
+  static is(x){
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('grid')) return true
+    return false
   }
 
   addElement(element, row, column) {

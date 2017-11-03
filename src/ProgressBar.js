@@ -29,11 +29,17 @@ class ProgressBar extends ToggleElement {
         element.className = 'progress-bar-container'
         parent.appendChild(element)
         super(element)
+        this._EGTYPE.push('progressbar')
         this.parent = parent
         this.value = 0
         this.bar = new ToggleElement(document.createElement('DIV'))
         this.bar.element.className = 'progress-bar'
         this.element.appendChild(this.bar.element)
+    }
+
+    static is(x){
+      if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('progressbar')) return true
+      return false
     }
 
 

@@ -47,7 +47,7 @@ class Task extends EventEmitter {
    */
   constructor(name, details) {
     super()
-    this._EGTYPE = 'task'
+    this._EGTYPE = ['task']
     this.id = null
     this.name = name
     this.details = details
@@ -58,8 +58,8 @@ class Task extends EventEmitter {
     this.customAction = {}
   }
 
-  static is(x) {
-    if (x._EGTYPE === 'task') return true
+  static is(x){
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('task')) return true
     return false
   }
 

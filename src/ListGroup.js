@@ -40,6 +40,7 @@ class ListGroup extends ToggleElement {
     element.className = 'list-group'
     element.id = `${id}`
     super(element)
+    this._EGTYPE.push('listgroup')
     this.id = `${id}`
     this.items = {}
     this.nItems = 0
@@ -48,6 +49,11 @@ class ListGroup extends ToggleElement {
         this.appendTo(parent)
       }
     }
+  }
+
+  static is(x){
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('listgroup')) return true
+    return false
   }
 
   addItem(options) {

@@ -32,6 +32,12 @@ class Sidebar extends ToggleElement {
     let element = util.div(`sidebar ${options.className}`)
     element.id = `${parent.id}Sidebar${parent.getElementsByClassName('sidebar').length}`
     super(element, parent)
+    this._EGTYPE.push('sidebar')
+  }
+
+  static is(x){
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('sidebar')) return true
+    return false
   }
 
   addList() {

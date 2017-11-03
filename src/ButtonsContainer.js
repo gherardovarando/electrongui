@@ -26,7 +26,7 @@ const ToggleElement = require('./ToggleElement')
 class ButtonsContainer extends ToggleElement {
   constructor(element) {
     super(element)
-    this._EGTYPE = 'buttonscontainer'
+    this._EGTYPE.push('buttonscontainer')
     if (!(typeof this.element.id === 'string')) this.element.id = "ButtonsContainer"
     this.id = this.element.id
     this.buttons = {}
@@ -36,7 +36,7 @@ class ButtonsContainer extends ToggleElement {
   }
 
   static is(x){
-    if (x._EGTYPE === 'buttonscontainer') return true
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('buttonscontainer')) return true
     return false
   }
 

@@ -107,11 +107,12 @@ class Workspace extends EventEmitter {
     delete this.spaces[extension]
   }
 
-  new(path) {
-    this.newWorkspace(path)
+  new(path, check) {
+    if (check) this.newChecking(path)
+    else this.newWorkspace(path)
   }
 
-  newChecking() {
+  newChecking(path) {
     if (Object.keys(this.spaces).length < 2) {
       this.load()
       return
@@ -127,10 +128,10 @@ class Workspace extends EventEmitter {
       if (id > 0) {
         if (id > 1) {
           this.save(this.spaces.workspace.path, () => {
-            this.newWorkspace()
+            this.newWorkspace(path)
           })
         } else {
-          this.newWorkspace()
+          this.newWorkspace(path)
         }
       }
     })
@@ -212,7 +213,27 @@ class Workspace extends EventEmitter {
   }
 
 
-  load(path, cl, error) {
+  load(path, check) {
+    if (check){
+      dialog.showMessageBox({
+        title: 'Save workspace?',
+        type: 'warning',
+        buttons: ['Cancel', "Don't save", 'Save'],
+        message: `Save the current workspace before opening a new one?`,
+        detail: `Your changes will be lost if you do not save them`,
+        noLink: true
+      }, (id) => {
+        if (id > 0) {
+          if (id > 1) {
+            this.save(this.spaces.workspace.path, () => {
+              this.load(path, false)
+            })
+          } else {
+            this.load(path, false)
+          }
+        }
+      })
+    }
     if (typeof path === 'string' && path != '') {
       wk = util.readJSONsync(path)
       this.spaces = wk
@@ -236,7 +257,6 @@ class Workspace extends EventEmitter {
       if (err) {
         let err2 = new Error(`Error opening the workspace json file: ${err.message}`)
         this.emit('error', err)
-        if (typeof error === 'function') error(err)
         return
       }
       let wk
@@ -245,7 +265,6 @@ class Workspace extends EventEmitter {
       } catch (e) {
         let err3 = new Error(`Error parsing the workspace json string: ${e.message}`)
         this.emit('error', err3)
-        if (typeof error === 'function') error(err3)
         return
       }
       try {
@@ -260,9 +279,6 @@ class Workspace extends EventEmitter {
       } catch (e) {
         let err4 = new Error(`Error loading the workspace from file ${file[0]}, details: ${e.message}`)
         this.emit('error', err4)
-        if (typeof error === 'function') {
-          error(err4)
-        }
       }
     })
   }

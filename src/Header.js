@@ -25,6 +25,7 @@ const ButtonsContainer = require('./ButtonsContainer')
 class Header extends ToggleElement {
   constructor(element, parent) {
     super(element)
+    this._EGTYPE.push('header')
     this.id = element.id
     let actionsContainer = document.createElement("DIV")
     actionsContainer.className = 'toolbar-actions'
@@ -34,6 +35,11 @@ class Header extends ToggleElement {
     if (parent) {
       this.appendTo(parent)
     }
+  }
+
+  static is(x){
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('header')) return true
+    return false
   }
 
   addProgressBar() {

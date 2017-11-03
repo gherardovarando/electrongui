@@ -31,6 +31,7 @@ class NavGroup extends ToggleElement {
         element.className = 'nav-group'
         element.id = `${id}`
         super(element)
+        this._EGTYPE.push('navgroup')
         this.id = `${id}`
         this.items = {}
         this.nItems = 0
@@ -42,6 +43,11 @@ class NavGroup extends ToggleElement {
         if (typeof parent.appendChild === 'function') {
             this.appendTo(parent)
         }
+    }
+
+    static is(x){
+      if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('navgroup')) return true
+      return false
     }
 
 

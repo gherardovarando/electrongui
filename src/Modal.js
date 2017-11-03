@@ -97,7 +97,7 @@ class Modal extends ToggleElement {
     options.parent = options.parent || util.body
     options.parent.appendChild(element)
     super(element)
-    this._EGTYPE = 'modal'
+    this._EGTYPE.push('modal')
     this.options = options
     this.content = content
     this.addTitle(options.title)
@@ -107,7 +107,7 @@ class Modal extends ToggleElement {
   }
 
   static is(x){
-    if (x._EGTYPE === 'modal')return true
+    if (x && x._EGTYPE && Array.isArray(x._EGTYPE) && x._EGTYPE.includes('modal')) return true
     return false
   }
 

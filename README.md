@@ -22,7 +22,7 @@ let gui = new Gui() // create the base gui structure
 gui.alerts.add('Gui initialized!!!','warning') //this message should appear in the footer
  ```
 
-- See the [API](#api) 
+- See the [API](#api)
 
 
 ## How to write extensions
@@ -127,8 +127,8 @@ The extensions manager instance is available through `gui.extensions` and provid
 const {Gui} = require('electrongui')
 let gui = new Gui()
 
-// create alert if the ExtensionManager run in an error, this is useful when
-// ExtensionManager find an error loading an extension
+// create alert if the ExtensionsManager run in an error, this is useful when
+// ExtensionsManager find an error loading an extension
 gui.extensions.on('error',(e)=>{
   gui.alerts.add(e.message, 'danger')
   console.log(e)
@@ -146,7 +146,7 @@ gui.extensions.extensions.MyExtension.activate()
 
 ```
 
-##### Using ExtensionManager from the GUI
+##### Using ExtensionsManager from the GUI
 
 ExtensionsManager is a GuiExtension and provide also GUI element to operate on extensions.
 To use it from the GUI it is necessary to activate it.
@@ -167,6 +167,8 @@ The `deactivate` method must clean all the elements added to the interfaces as b
 
 ## API
 
+Almost all the classes have a static `is(x)` method that check if `x` is an instance of that class. Use that instead of `instanceof` because it works on different scopes.
+
 - [Basic Elements](#basic-elements)
 
   - [ToggleElement](#toggleelement)
@@ -184,7 +186,7 @@ The `deactivate` method must clean all the elements added to the interfaces as b
 
   - [Gui](#gui)
   - [GuiExtension](#guiextension)
-  - [ExtensionManager](#extensionmanager)
+  - [ExtensionsManager](#extensionsmanager)
   - [Workspace](#workspace)
   - [TaskViewer](#taskviewer)
   - [TaskManager](#taskmanager)
@@ -701,22 +703,94 @@ gui.alerts.add(customAlert)
 ```
 
 ### GuiExtension
+##### extends [ToggleElement](#toggleelement)
 
-Extend this class to create a new extension.
+Extend this class to create a new extension. When implementing default methods be sure to call the relative `super` method.
+
+#### `constructor(gui, config)`
+ - `gui` the gui object
+ - `config` optional, configuration object:
+    - `image` string, path to image
+    - `icon` string, icon class
+    - `author` string
+    - `menuLabel` string
+    - `menuTemplate` Electron menu template object will be passed to `Menu.buildFromTemplate`
 
 #### Methods
 
+##### `activate`
+
+Activate the extension
+
+##### `deactivate`
+
+Deactivate the extension
+
+##### `setMenuLabel(label)`
+
+##### `addMenuItem(item)`
+
+##### `removeMenuItem(item)`
+
+##### `appendMenu()`
+
+##### `removeMenu()`
+
 #### Events
 
-### ExtensionManager
+##### `activate`
+
+##### `deactivate`
+
+
+### ExtensionsManager
+##### extends [GuiExtension](#guiextension)
 
 #### Methods
 
+##### `load(extPath, cl)`
+ - `extPath` string, path to extension or module name
+ - `cl` function, callback `cl(extension)` called when the extension is been loaded.
+
+##### `hideExtensions()`
+Hide all the extensions.
+
+##### `add(extension)`
+Add the given extension to the ExtensionsManager, usually there is no need to use this method since extensions are automatically added to the ExtensionsManager.
+
 #### Events
+
+##### `add`
+Emitted when an extension is added to the ExtensionsManager.
+
+Return `extension`.
+
+##### `error`
+Emitted when there is an error.
+
+Return `error`.
 
 ### Workspace
+##### extends Node's `EventEmitter`
+
+#### `constructor(options)`
+- `options`:
+ - `clean` boolean
 
 #### Methods
+
+##### `addSpace(id, object, overwrite)`
+
+##### `getSpace(id)`
+
+##### `new(path, check)`
+
+##### `save(path, cl, error)`
+
+##### `load(path, check)`
+
+##### `safequit()`
+
 
 #### Events
 
@@ -740,7 +814,7 @@ An instance of AlertManager is available as `gui.alerts`.
 
 - `add(body, status)`
  - `body` string, HTML element, ToggleElement or Alert object.
- - `status` string, one of `danger, error, warning, progress, success, default `
+ - `status` string, one of `danger, error, warning, progress, success, default ` (optional, not used if `body` is an Alert)
 
 ### Alert
 
