@@ -672,6 +672,31 @@ Extend this class to create a new extension.
 
 ### AlertManager
 
+An instance of AlertManager is available as `gui.alerts`.
+
+#### Methods
+
+- Constructor `new AlertManager(max, parent)`
+ - `max` positive number, the maximum number of alerts shown.
+ - `parent` HTML element or ToggleElement, where add the container (default to `BODY`).
+
+- `setMax(max)`
+ - `max` positive number, the maximum number of alerts shown.
+
+- `addContainer(parent)`
+ - `parent` HTML element or ToggleElement
+
+- `removeContainer()`
+
+- `add(body, status)`
+ - `body` string, HTML element, ToggleElement or Alert object.
+ - `status` string, one of `danger, error, warning, progress, success, default `
+
+
+### Alert
+
+
+
 #### Methods
 
 #### Events

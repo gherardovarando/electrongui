@@ -29,8 +29,9 @@ class Alert extends ToggleElement {
       status: 'default',
       icon: ''
     }
-    this.options = options
     super(util.div(`gui-alert gui-alert-${options.status}`))
+    this.options = options
+    this._EGTYPE = 'alert'
     let ic = util.div('gui-alert-icon')
     ic.appendChild(util.icon(options.icon))
     this.appendChild(ic)
@@ -62,6 +63,11 @@ class Alert extends ToggleElement {
     this.element.classList.remove(`gui-alert-${this.options.status}`)
     this.element.classList.add(`gui-alert-${status}`)
     this.options.status = status
+  }
+
+  static is(x) {
+    if (x._EGTYPE === 'alert') return true
+    return false
   }
 
 }

@@ -97,12 +97,18 @@ class Modal extends ToggleElement {
     options.parent = options.parent || util.body
     options.parent.appendChild(element)
     super(element)
+    this._EGTYPE = 'modal'
     this.options = options
     this.content = content
     this.addTitle(options.title)
     this.addBody(options.body)
     this.addFooter(options.footer)
     this.hide()
+  }
+
+  static is(x){
+    if (x._EGTYPE === 'modal')return true
+    return false
   }
 
   destroy() {

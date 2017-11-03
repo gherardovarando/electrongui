@@ -41,6 +41,7 @@ class Gui extends EventEmitter {
   constructor(options) {
     options = options || {}
     super()
+    this._EGTYPE = 'gui'
     this.win = require('electron').remote.getCurrentWindow()
     let ap = util.div('window app')
     this.header = new Header(util.div("toolbar toolbar-header"), ap)
@@ -59,6 +60,11 @@ class Gui extends EventEmitter {
     util.body.appendChild(ap)
   }
 
+  static is(x) {
+    if (x._EGTYPE === 'gui') return true
+    return false
+  }
+
 
   viewTrick() { //force the element to be arranged properly, fix some problem with leaflet's map
     let size = this.win.getSize()
@@ -70,9 +76,9 @@ class Gui extends EventEmitter {
 
 
   notify(body, status) { //dont use it, use gui.alerts.add instead
-     if (this.alerts instanceof AlertManager){
-       this.alerts.add(body, status || 'default')
-     }
+    if (this.alerts instanceof AlertManager) {
+      this.alerts.add(body, status || 'default')
+    }
   }
 
 

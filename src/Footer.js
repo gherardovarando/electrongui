@@ -25,9 +25,15 @@ const ProgressBar = require('./ProgressBar')
 class Footer extends ToggleElement {
   constructor(element, parent) {
     super(element)
+    this._EGTYPE = 'footer'
     if (parent) {
       this.appendTo(parent)
     }
+  }
+
+  static is(x) {
+    if (x._EGTYPE === 'footer') return true
+    return false
   }
 
 
@@ -45,7 +51,7 @@ class Footer extends ToggleElement {
     return this
   }
 
-  notify(message){
+  notify(message) {
     this.notificationBar.message.innerHTML = message
   }
 

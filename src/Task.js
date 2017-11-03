@@ -47,6 +47,7 @@ class Task extends EventEmitter {
    */
   constructor(name, details) {
     super()
+    this._EGTYPE = 'task'
     this.id = null
     this.name = name
     this.details = details
@@ -55,6 +56,11 @@ class Task extends EventEmitter {
     this.startTime = null
     this.finishTime = null
     this.customAction = {}
+  }
+
+  static is(x) {
+    if (x._EGTYPE === 'task') return true
+    return false
   }
 
   /**

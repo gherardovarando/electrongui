@@ -34,12 +34,13 @@ let icons = {
 }
 
 class AlertManager extends EventEmitter {
-  constructor(x) {
+  constructor(x, parent) {
     super()
+    this._EGTYPE = 'alertmanager'
     this.max = Math.max(1, x || 0)
     this.alerts = []
     this.container = new ToggleElement(util.div('gui-alert-container'))
-    this.addContainer()
+    this.addContainer(parent)
   }
 
   setMax(x) {
@@ -49,8 +50,8 @@ class AlertManager extends EventEmitter {
     }
   }
 
-  addContainer() {
-    this.container.appendTo(document.getElementsByTagName('BODY')[0])
+  addContainer(parent) {
+    this.container.appendTo(parent || document.getElementsByTagName('BODY')[0])
   }
 
   removeContainer() {
@@ -61,7 +62,7 @@ class AlertManager extends EventEmitter {
     this._check()
     let alert
     let timeout = null
-    if (body instanceof Alert || typeof body.hide === 'function' ) {
+    if (Alert.is(body)) {
       alert = body
     } else {
       if (status === 'success') timeout = 3000
@@ -89,6 +90,11 @@ class AlertManager extends EventEmitter {
       this.alerts[0].remove()
       this._check()
     }
+  }
+
+  static is(x) {
+    if (x._EGTYPE === 'alertmanager') return true
+    return false
   }
 
 

@@ -26,12 +26,18 @@ const ToggleElement = require('./ToggleElement')
 class ButtonsContainer extends ToggleElement {
   constructor(element) {
     super(element)
+    this._EGTYPE = 'buttonscontainer'
     if (!(typeof this.element.id === 'string')) this.element.id = "ButtonsContainer"
     this.id = this.element.id
     this.buttons = {}
     this.buttonGroups = {}
     this.nButtons = 0
     this.nButtonGroups = 0
+  }
+
+  static is(x){
+    if (x._EGTYPE === 'buttonscontainer') return true
+    return false
   }
 
 

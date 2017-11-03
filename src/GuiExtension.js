@@ -33,6 +33,7 @@ class GuiExtension extends ToggleElement {
     element.className = 'pane-group'
     element.style.display = 'none' //hide by default
     super(element)
+    this._EGTYPE = 'guiextension'
     config = Object.assign({
       icon: 'fa fa-cubes',
       menuLabel: this.constructor.name
@@ -62,6 +63,11 @@ class GuiExtension extends ToggleElement {
     this.gui.emit('load:extension', {
       extension: this
     })
+  }
+
+  is(x) {
+    if (x._EGTYPE === 'guiextension') return true
+    return false
   }
 
   activate() {
