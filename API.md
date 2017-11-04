@@ -1,4 +1,4 @@
-## API
+# electrongui API 
 
 Almost all the classes have a static `is(x)` method that check if `x` is an instance of that class. Use that instead of `instanceof` because it works on different scopes.
 

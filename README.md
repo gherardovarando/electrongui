@@ -22,7 +22,7 @@ let gui = new Gui() // create the base gui structure
 gui.alerts.add('Gui initialized!!!','warning') //this message should appear in the footer
  ```
 
-- See the [API](API.md)
+- See the [API](https://gherardovarando.github.io/electrongui/API.html)
 
 
 ## How to write extensions
