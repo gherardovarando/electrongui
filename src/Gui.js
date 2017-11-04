@@ -41,6 +41,7 @@ const path = require('path')
 class Gui extends EventEmitter {
   constructor(options) {
     options = options || {}
+    util.insertCSS(path.join(__dirname, 'style', 'font-awesome-4.5.0','css','font-awesome.min.css'))
     util.insertCSS(path.join(__dirname, 'style', 'photon.min.css'))
     util.insertCSS(path.join(__dirname, 'style', 'gui.css'))
     super()
