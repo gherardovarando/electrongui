@@ -21,7 +21,7 @@
 
 const fs = require('fs')
 const {
-  app
+    app
 } = require('electron').remote
 const os = require('os')
 
@@ -32,171 +32,179 @@ exports.mainProcess = require('electron').remote.require('process')
 
 exports.body = document.getElementsByTagName('BODY')[0]
 
+exports.insertCSS = function(src) {
+  let style = document.createElement('LINK')
+  style.rel = 'stylesheet'
+  style.type = 'text/CSS'
+  style.src = src
+  document.getElementsByTagName("head")[0].appendChild(style)
+}
+
 exports.findKeyId = function(x, obj, tag) {
-  tag = tag || '_id'
-  for (let i in obj) {
-    if (obj[i][tag] === x) return i
-  }
+    tag = tag || '_id'
+    for (let i in obj) {
+        if (obj[i][tag] === x) return i
+    }
 }
 
 
 exports.nextKey = function(obj) {
-  let finish = false
-  let key = 0
-  while (!finish) {
-    if (Object.keys(obj).indexOf(`${key}`) >= 0) {
-      key++
-    } else {
-      finish = true
+    let finish = false
+    let key = 0
+    while (!finish) {
+        if (Object.keys(obj).indexOf(`${key}`) >= 0) {
+            key++
+        } else {
+            finish = true
+        }
     }
-  }
-  return key
+    return key
 }
 
 exports.parseTimeInterval = function(s) {
-  if (s < 1000) {
-    return `${s.toPrecision(3)} milliseconds`
-  } else if (s < 60000) {
-    return `${(s/1000).toPrecision(2)} seconds`
-  } else if (s < 3600000) {
-    return `${(s/60000).toPrecision(2)} minutes`
-  } else if (s < 86400000) {
-    return `${(s/3600000).toPrecision(2)} hours`
-  } else {
-    return `${(s/86400000).toPrecision(3)} days`
-  }
+    if (s < 1000) {
+        return `${s.toPrecision(3)} milliseconds`
+    } else if (s < 60000) {
+        return `${(s/1000).toPrecision(2)} seconds`
+    } else if (s < 3600000) {
+        return `${(s/60000).toPrecision(2)} minutes`
+    } else if (s < 86400000) {
+        return `${(s/3600000).toPrecision(2)} hours`
+    } else {
+        return `${(s/86400000).toPrecision(3)} days`
+    }
 }
 
 
 exports.div = function(className, text) {
-  if (document) {
-    let t = document.createElement('DIV')
-    if (text) {
-      t.innerHTML = text
+    if (document) {
+        let t = document.createElement('DIV')
+        if (text) {
+            t.innerHTML = text
+        }
+        if (className) {
+            t.className = className
+        }
+        return t
     }
-    if (className) {
-      t.className = className
-    }
-    return t
-  }
 }
 
 exports.setProgress = function(val) {
-  require('electron').remote.getCurrentWindow().setProgressBar(val / 100)
+    require('electron').remote.getCurrentWindow().setProgressBar(val / 100)
 }
 
 exports.stringify = function(object) {
-  if (object) {
-    return (JSON.stringify(object).replace(/\u007D/g, '').replace(/\u007B/g, '').replace(/\u0022/g, ''))
-  }
-  return null
+    if (object) {
+        return (JSON.stringify(object).replace(/\u007D/g, '').replace(/\u007B/g, '').replace(/\u0022/g, ''))
+    }
+    return null
 }
 
 exports.isNode = function() {
-  if (typeof module !== 'undefined' && module.exports) {
-    return true
-  } else {
-    return false
-  }
+    if (typeof module !== 'undefined' && module.exports) {
+        return true
+    } else {
+        return false
+    }
 }
 
 exports.isElectron = function() {
-  if (process.versions.electron) {
-    return true
-  } else {
-    return false
-  }
+    if (process.versions.electron) {
+        return true
+    } else {
+        return false
+    }
 }
 
 
 exports.sum = function(v) {
-  let sum = v.reduce((a, b) => {
-    if (isNaN(b)) return a
-    return a + b
-  }, 0)
-  return sum
+    let sum = v.reduce((a, b) => {
+        if (isNaN(b)) return a
+        return a + b
+    }, 0)
+    return sum
 }
 
 
 exports.mean = function(v) {
-  let n = v.reduce((a, b) => {
-    if (isNaN(b)) return a
-    return a + 1
-  }, 0)
-  let sum = exports.sum(v)
-  return (sum / n)
+    let n = v.reduce((a, b) => {
+        if (isNaN(b)) return a
+        return a + 1
+    }, 0)
+    let sum = exports.sum(v)
+    return (sum / n)
 }
 
 exports.clone = function(obj) {
-  return Object.assign({}, obj)
+    return Object.assign({}, obj)
 }
 
 exports.notifyOS = function(text) {
-  var notif = new window.Notification(`${app.getName()}`, {
-    body: text
-  })
+    var notif = new window.Notification(`${app.getName()}`, {
+        body: text
+    })
 }
 
 exports.readJSON = function(filename, callback, error) {
-  fs.readFile(filename, 'utf-8', function(err, data) {
-    if (err) {
-      error(err)
-      return
-    }
-    var obj = JSON.parse(data)
-    callback(obj)
-  })
+    fs.readFile(filename, 'utf-8', function(err, data) {
+        if (err) {
+            error(err)
+            return
+        }
+        var obj = JSON.parse(data)
+        callback(obj)
+    })
 }
 
 exports.readJSONsync = function(filename, error) {
-  let data
-  try {
-    data = fs.readFileSync(filename, 'utf-8')
-    return JSON.parse(data)
-  } catch (err) {
-    if (error) {
-      error(err)
+    let data
+    try {
+        data = fs.readFileSync(filename, 'utf-8')
+        return JSON.parse(data)
+    } catch (err) {
+        if (error) {
+            error(err)
+        }
+        return null
     }
-    return null
-  }
 }
 
 exports.empty = function(parent, child) {
-  if (parent && typeof parent.removeChild === 'function') {
-    if (child) {
-      parent.removeChild(child)
-      this.empty(parent, parent.firstChild)
+    if (parent && typeof parent.removeChild === 'function') {
+        if (child) {
+            parent.removeChild(child)
+            this.empty(parent, parent.firstChild)
+        }
     }
-  }
 }
 
 exports.isIcon = function(icon) {
-  if (icon) {
-    if (icon.className) {
-      if (icon.className.includes('fa') | icon.className.includes('icon')) return true
+    if (icon) {
+        if (icon.className) {
+            if (icon.className.includes('fa') | icon.className.includes('icon')) return true
+        }
     }
-  }
-  return false
+    return false
 }
 
 exports.icon = function(icon) {
-  if (!document) return
-  if (this.isIcon(icon)) return icon
-  if (typeof icon === 'string') {
-    let ic
-    if (icon.includes('fa')) {
-      ic = document.createElement('I')
-      ic.className = icon
-    } else if (icon.includes('icon')) {
-      ic = document.createElement('SPAN')
-      ic.className = icon
+    if (!document) return
+    if (this.isIcon(icon)) return icon
+    if (typeof icon === 'string') {
+        let ic
+        if (icon.includes('fa')) {
+            ic = document.createElement('I')
+            ic.className = icon
+        } else if (icon.includes('icon')) {
+            ic = document.createElement('SPAN')
+            ic.className = icon
+        } else {
+            ic = document.createElement('SPAN')
+        }
+        return ic
     } else {
-      ic = document.createElement('SPAN')
+        return document.createElement('DIV')
     }
-    return ic
-  } else {
-    return document.createElement('DIV')
-  }
 
 }
 
