@@ -8,11 +8,7 @@
 
 ## How to use it
 
-- Add the [photonkit](http://photonkit.com/) css
-
 - Install electrongui with `npm`
-
-- Add (and modify to your taste) the `src/style/gui.css` file
 
 - In the Renderer process of your electron app:
 
