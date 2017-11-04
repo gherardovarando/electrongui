@@ -36,6 +36,7 @@ const Workspace = require('./Workspace')
 const util = require('./util')
 const Header = require('./Header')
 const Footer = require('./Footer')
+const path = require('path')
 
 class Gui extends EventEmitter {
   constructor(options) {
