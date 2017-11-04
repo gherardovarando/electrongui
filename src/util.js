@@ -24,13 +24,22 @@ const {
     app
 } = require('electron').remote
 const os = require('os')
-
+const path = require('path')
 
 
 
 exports.mainProcess = require('electron').remote.require('process')
 
 exports.body = document.getElementsByTagName('BODY')[0]
+
+exports.insertModuleCSS = function(name, rel){
+  let dir = path.dirname(require.resolve(name))
+  let style = document.createElement('LINK')
+  style.setAttribute('rel','stylesheet')
+  style.setAttribute('type','text/css')
+  style.setAttribute('href', path.join(dir,rel))
+  document.getElementsByTagName("head")[0].appendChild(style)
+}
 
 exports.insertCSS = function(href) {
   let style = document.createElement('LINK')
