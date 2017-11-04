@@ -38,22 +38,21 @@ const Header = require('./Header')
 const Footer = require('./Footer')
 const path = require('path')
 
-class Gui extends EventEmitter {
+class Gui extends ToggleElement {
   constructor(options) {
     options = options || {}
     util.insertCSS(path.join(__dirname, 'style', 'font-awesome-4.5.0','css','font-awesome.min.css'))
     util.insertCSS(path.join(__dirname, 'style', 'photon.min.css'))
     util.insertCSS(path.join(__dirname, 'style', 'gui.css'))
-    super()
+    let ap = util.div('window app')
+    super(ap)
     this._EGTYPE = ['gui']
     this.win = require('electron').remote.getCurrentWindow()
-    let ap = util.div('window app')
     this.header = new Header(util.div("toolbar toolbar-header"), ap)
     this.container = new ToggleElement(util.div("window-content"))
     this.container.appendTo(ap)
     this.footer = new Footer(util.div("toolbar toolbar-footer"), ap)
     this.footer.addNotificationBar()
-
     this._menuItems = []
     this._menu = new Menu()
     this.taskManager = new TaskManager()
@@ -61,7 +60,7 @@ class Gui extends EventEmitter {
     this.workspace = new Workspace(options.workspace)
     this.tasks = this.taskManager
     this.alerts = new AlertManager(5)
-    util.body.appendChild(ap)
+    this.appendTo(util.body)
   }
 
   static is(x){
