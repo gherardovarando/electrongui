@@ -34,9 +34,9 @@ exports.body = document.getElementsByTagName('BODY')[0]
 
 exports.insertCSS = function(href) {
   let style = document.createElement('LINK')
-  style.rel = 'stylesheet'
-  style.type = 'text/css'
-  style.href = href
+  style.setAttribute('rel','stylesheet')
+  style.setAttribute('type','text/css')
+  style.setAttribute('href',href)
   document.getElementsByTagName("head")[0].appendChild(style)
 }
 
