@@ -41,7 +41,8 @@ const path = require('path')
 class Gui extends EventEmitter {
   constructor(options) {
     options = options || {}
-    //util.insertCSS(require(path.join(__dirname, 'style', 'gui.css')))
+    util.insertCSS(path.join(__dirname, 'style', 'photon.min.css'))
+    util.insertCSS(path.join(__dirname, 'style', 'gui.css'))
     super()
     this._EGTYPE = ['gui']
     this.win = require('electron').remote.getCurrentWindow()
