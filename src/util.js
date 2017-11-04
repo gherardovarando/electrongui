@@ -32,11 +32,11 @@ exports.mainProcess = require('electron').remote.require('process')
 
 exports.body = document.getElementsByTagName('BODY')[0]
 
-exports.insertCSS = function(src) {
+exports.insertCSS = function(href) {
   let style = document.createElement('LINK')
   style.rel = 'stylesheet'
   style.type = 'text/CSS'
-  style.src = src
+  style.href = href
   document.getElementsByTagName("head")[0].appendChild(style)
 }
 
