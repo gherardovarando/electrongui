@@ -22,82 +22,82 @@
 
 let eg = {
   get ButtonsContainer() {
-    require('./src/ButtonsContainer.js')
+    return require('./src/ButtonsContainer.js')
   },
   get ExtensionsManager() {
-    require('./src/ExtensionsManager.js')
+    return require('./src/ExtensionsManager.js')
   },
   get FolderSelector() {
-    require('./src/FolderSelector.js')
+    return require('./src/FolderSelector.js')
   },
   get Grid() {
-    require('./src/Grid.js')
+    return require('./src/Grid.js')
   },
   get Gui() {
-    require('./src/Gui.js')
+    return require('./src/Gui.js')
   },
   get GuiExtension() {
-    require('./src/GuiExtension.js')
+    return require('./src/GuiExtension.js')
   },
   get input() {
-    require('./src/input')
+    return require('./src/input')
   },
   get ListGroup() {
-    require('./src/ListGroup.js')
+    return require('./src/ListGroup.js')
   },
   get Modal() {
-    require('./src/Modal.js')
+    return require('./src/Modal.js')
   },
   get NavGroup() {
-    require('./src/NavGroup.js')
+    return require('./src/NavGroup.js')
   },
   get ProgressBar() {
-    require('./src/ProgressBar.js')
+    return require('./src/ProgressBar.js')
   },
   get Sidebar() {
-    require('./src/Sidebar.js')
+    return require('./src/Sidebar.js')
   },
   get SplitPane() {
-    require('./src/SplitPane.js')
+    return require('./src/SplitPane.js')
   },
   get TabGroup() {
-    require('./src/TabGroup.js')
+    return require('./src/TabGroup.js')
   },
   get Table() {
-    require('./src/Table.js')
+    return require('./src/Table.js')
   },
   get Task() {
-    require('./src/Task.js')
+    return require('./src/Task.js')
   },
   get TaskManager() {
-    require('./src/TaskManager.js')
+    return require('./src/TaskManager.js')
   },
   get TasksViewer() {
-    require('./src/TasksViewer.js')
+    return require('./src/TasksViewer.js')
   },
   get ToggleElement() {
-    require('./src/ToggleElement.js')
+    return require('./src/ToggleElement.js')
   },
   get TreeList() {
-    require('./src/TreeList.js')
+    return require('./src/TreeList.js')
   },
   get util() {
-    require('./src/util.js')
+    return require('./src/util.js')
   },
   get Workspace() {
-    require('./src/Workspace.js')
+    return require('./src/Workspace.js')
   },
   get colors() {
-    require('./src/Colors.js')
+    return require('./src/Colors.js')
   },
   get Header() {
-    require('./src/Header')
+    return require('./src/Header')
   },
   get Footer() {
-    require('./src/Footer')
+    return require('./src/Footer')
   },
   get Alert() {
-    require('./src/Alert')
+    return require('./src/Alert')
   }
 }
 
