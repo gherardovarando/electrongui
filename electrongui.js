@@ -101,4 +101,4 @@ let eg = {
   }
 }
 
-module.export = eg
+module.exports = eg
