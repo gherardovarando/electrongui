@@ -59,7 +59,6 @@ class AlertManager extends EventEmitter {
   }
 
   add(body, status) {
-    this._check()
     let alert
     let timeout = null
     if (Alert.is(body)) {
@@ -71,7 +70,7 @@ class AlertManager extends EventEmitter {
         body: body,
         status: status || 'default',
         icon: icons[status || 'default'],
-        sticky: false,
+        sticky: status === 'progress',
         timeout: timeout
       })
     }
@@ -82,13 +81,14 @@ class AlertManager extends EventEmitter {
     })
 
     alert.appendTo(this.container)
+    this._check()
     return alert
   }
 
   _check() {
-    if (this.alerts.length >= this.max) {
-      this.alerts[0].remove()
-      this._check()
+    for (let i = this.alerts.length - 1; i >= 0; i--) {
+      if (this.alerts.length - i <= this.max) this.alerts[i].show()
+      else this.alerts[i].hide()
     }
   }
 
