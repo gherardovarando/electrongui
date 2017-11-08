@@ -1,4 +1,4 @@
-// Copyright (c) 2017 Gherardo Varando (gherardo.varando@gmail.com), Mario Juez (mjuez@fi.upm.es)
+// Copyright (c) 2017 Gherardo Varando (gherardo.varando@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,31 +18,87 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-'use strict';
+'use strict'
 
-exports.ButtonsContainer = require('./src/ButtonsContainer.js');
-exports.ExtensionsManager = require('./src/ExtensionsManager.js');
-exports.FolderSelector = require('./src/FolderSelector.js');
-exports.Grid = require('./src/Grid.js');
-exports.Gui = require('./src/Gui.js');
-exports.GuiExtension = require('./src/GuiExtension.js');
-exports.input = require('./src/input');
-exports.ListGroup = require('./src/ListGroup.js');
-exports.Modal = require('./src/Modal.js');
-exports.NavGroup = require('./src/NavGroup.js');
-exports.ProgressBar = require('./src/ProgressBar.js');
-exports.Sidebar = require('./src/Sidebar.js');
-exports.SplitPane = require('./src/SplitPane.js');
-exports.TabGroup = require('./src/TabGroup.js');
-exports.Table = require('./src/Table.js');
-exports.Task = require('./src/Task.js');
-exports.TaskManager = require('./src/TaskManager.js');
-exports.TasksViewer = require('./src/TasksViewer.js');
-exports.ToggleElement = require('./src/ToggleElement.js');
-exports.TreeList = require('./src/TreeList.js');
-exports.util = require('./src/util.js');
-exports.Workspace = require('./src/Workspace.js');
-exports.colors = require('./src/Colors.js');
-exports.Header = require('./src/Header')
-exports.Footer = require('./src/Footer')
-exports.Alert = require('./src/Alert')
+let eg = {
+  get ButtonsContainer() {
+    require('./src/ButtonsContainer.js')
+  },
+  get ExtensionsManager() {
+    require('./src/ExtensionsManager.js')
+  },
+  get FolderSelector() {
+    require('./src/FolderSelector.js')
+  },
+  get Grid() {
+    require('./src/Grid.js')
+  },
+  get Gui() {
+    require('./src/Gui.js')
+  },
+  get GuiExtension() {
+    require('./src/GuiExtension.js')
+  },
+  get input() {
+    require('./src/input')
+  },
+  get ListGroup() {
+    require('./src/ListGroup.js')
+  },
+  get Modal() {
+    require('./src/Modal.js')
+  },
+  get NavGroup() {
+    require('./src/NavGroup.js')
+  },
+  get ProgressBar() {
+    require('./src/ProgressBar.js')
+  },
+  get Sidebar() {
+    require('./src/Sidebar.js')
+  },
+  get SplitPane() {
+    require('./src/SplitPane.js')
+  },
+  get TabGroup() {
+    require('./src/TabGroup.js')
+  },
+  get Table() {
+    require('./src/Table.js')
+  },
+  get Task() {
+    require('./src/Task.js')
+  },
+  get TaskManager() {
+    require('./src/TaskManager.js')
+  },
+  get TasksViewer() {
+    require('./src/TasksViewer.js')
+  },
+  get ToggleElement() {
+    require('./src/ToggleElement.js')
+  },
+  get TreeList() {
+    require('./src/TreeList.js')
+  },
+  get util() {
+    require('./src/util.js')
+  },
+  get Workspace() {
+    require('./src/Workspace.js')
+  },
+  get colors() {
+    require('./src/Colors.js')
+  },
+  get Header() {
+    require('./src/Header')
+  },
+  get Footer() {
+    require('./src/Footer')
+  },
+  get Alert() {
+    require('./src/Alert')
+  }
+}
+
+module.export = eg
