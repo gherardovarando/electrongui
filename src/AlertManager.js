@@ -78,6 +78,7 @@ class AlertManager extends EventEmitter {
     this.alerts.push(alert)
     alert.on('remove', () => {
       this.alerts.splice(this.alerts.indexOf(alert), 1)
+      this._check()
     })
 
     alert.appendTo(this.container)
