@@ -69,9 +69,9 @@ class Gui extends ToggleElement {
   }
 
 
-  viewTrick() { //force the element to be arranged properly, fix some problem with leaflet's map
+  viewTrick(x) { //force the element to be arranged properly, fix some problem with leaflet's map
     let size = this.win.getSize()
-    this.win.setSize(size[0] + 1, size[1] + 1)
+    this.win.setSize(size[0] + (x || 1), size[1] + (x || 1))
     this.win.setSize(size[0], size[1])
     //fix for windows behaviour, in linux is ok, if window is not maximise
   }
