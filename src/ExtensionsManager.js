@@ -22,7 +22,8 @@
 const {
   Menu,
   MenuItem,
-  dialog
+  dialog,
+  app
 } = require('electron').remote
 const fs = require('fs')
 const path = require('path')
@@ -30,6 +31,9 @@ const GuiExtension = require('./GuiExtension')
 const Sidebar = require('./Sidebar.js')
 const ToggleElement = require('./ToggleElement.js')
 const util = require('./util.js')
+const {
+  spawn
+} = require('child_process')
 
 
 class ExtensionsManager extends GuiExtension {
@@ -77,6 +81,7 @@ class ExtensionsManager extends GuiExtension {
         type: 'separator'
       }]
     })
+    this.localFolder = app.getPath('appData')
     this.extensions = {}
     this.sidebar = new Sidebar(this.element)
     this.sidebar.addList('list')
@@ -100,8 +105,36 @@ class ExtensionsManager extends GuiExtension {
   }
 
 
-  install() {
+  install(name) {
 
+    if (typeof name === 'string') {
+      this.download(name, (pth, err) => {
+        if (err) {
+          this.gui.alerts.add(`Unable to install ${name} \n ${err.message}`)
+        } else {
+          this.load(pth, (ext) => {
+            if (GuiExtension.is(ext)) this.gui.alerts.add(`Extension ${name} installed and loaded`, 'success')
+          })
+        }
+      })
+    }
+
+
+  }
+
+  download(name, cl) {
+    let alert = this.gui.alerts.add(`Downloading ${name}`, 'progress')
+    let ch = spawn('npm', ['install', name], {
+      cwd: this.localFolder
+    })
+    ch.on('close', (code) => {
+      alert.remove()
+      if (code === 0) {
+        cl(path.join(this.localFolder, 'node_modules', name))
+      } else {
+        cl(null, new Error(`Error on npm install ${name}. ${name} must be a valid npm module`))
+      }
+    })
   }
 
 
