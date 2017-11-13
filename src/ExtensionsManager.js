@@ -31,9 +31,12 @@ const GuiExtension = require('./GuiExtension')
 const Sidebar = require('./Sidebar.js')
 const ToggleElement = require('./ToggleElement.js')
 const util = require('./util.js')
+const Modal = require('./Modal.js')
+const input = require('./input.js')
 const {
   spawn
 } = require('child_process')
+const storage = require('electron-json-storage')
 
 
 class ExtensionsManager extends GuiExtension {
@@ -47,36 +50,60 @@ class ExtensionsManager extends GuiExtension {
           this.show()
         }
       }, {
-        label: 'Install Extension',
-        click: () => {
-          dialog.showOpenDialog({
-            title: 'Select the extension main .js file or the relative package.json',
-            buttonlabel: 'Install',
-            filters: [{
-                name: 'javascript',
-                extensions: ['js', 'JS']
-              },
-              {
-                name: 'package json',
-                extensions: ['json', 'JSON']
+        label: 'Install extension',
+        submenu: [{
+          label: 'Load local extension',
+          click: () => {
+            dialog.showOpenDialog({
+              title: 'Select the extension main .js file or the relative package.json',
+              buttonlabel: 'Load',
+              filters: [{
+                  name: 'javascript',
+                  extensions: ['js', 'JS']
+                },
+                {
+                  name: 'package json',
+                  extensions: ['json', 'JSON']
+                }
+              ],
+              openDirectory: false,
+              openFile: true
+            }, (filePaths, err) => {
+              if (err) {
+                this.emit('error', err)
+                return
               }
-            ],
-            openDirectory: false,
-            openFile: true
-          }, (filePaths, err) => {
-            if (err) {
-              this.emit('error', err)
-              return
-            }
-            if (!filePaths) return
-            let p = filePaths[0]
-            this.load(p, (ext) => {
-              if (ext) {
-                ext.info.manuallyinstalled = true
+              if (!filePaths) return
+              let p = filePaths[0]
+              this.load(p, (ext) => {
+                if (ext) {
+                  ext.info.manuallyinstalled = true
+                }
+              })
+            })
+          }
+        }, {
+          label: 'Download npm module',
+          click: () => {
+            let modal = new Modal({
+              title: 'Download npm module',
+              onsubmit: () => {
+                this.install(inp.value)
               }
             })
-          })
-        }
+            let body = util.div('pane padded')
+            let inp = input.input({
+              parent: body,
+              className: 'form-control',
+              label: '',
+              placeholder: 'module name',
+              type: 'text',
+              value: ''
+            })
+            modal.addBody(body)
+            modal.show()
+          }
+        }]
       }, {
         type: 'separator'
       }]
@@ -88,7 +115,7 @@ class ExtensionsManager extends GuiExtension {
     this.sidebar.show()
     //this.sidebar.hide()
     this.sidebar.list.addSearch({
-      placeholder: 'Search extension'
+      placeholder: 'Search installed extension'
     })
 
     //here put actions to load a new extension from custom file.
@@ -96,6 +123,29 @@ class ExtensionsManager extends GuiExtension {
     this.appendChild(this.pane)
     this.gui.on('load:extension', (e) => {
       this.add(e.extension)
+    })
+    this._installRegister = {}
+    this._activeRegister = {}
+    storage.get('active_register', (error, data) => {
+      if (!error) {
+        if (data) this._activeRegister = data
+      }
+      storage.get('extension_register', (error, data) => {
+        if (error) {
+          alert.remove()
+          return
+        }
+        if (data) {
+          Object.keys(data).map((name) => {
+            if (!this.extensions[name]) this.load(data[name], (ext) => {
+              if (GuiExtension.is(ext)) {
+                this._register(ext.constructor.name, data[name])
+                if (this._activeRegister[name]) ext.activate()
+              }
+            }) //prevent loading already present extensions
+          })
+        }
+      })
     })
   }
 
@@ -106,14 +156,18 @@ class ExtensionsManager extends GuiExtension {
 
 
   install(name) {
-
     if (typeof name === 'string') {
+      name = name.toLowerCase()
       this.download(name, (pth, err) => {
         if (err) {
           this.gui.alerts.add(`Unable to install ${name} \n ${err.message}`)
         } else {
-          this.load(pth, (ext) => {
-            if (GuiExtension.is(ext)) this.gui.alerts.add(`Extension ${name} installed and loaded`, 'success')
+          this.load(pth, (ext, err) => {
+            if (err) return
+            if (GuiExtension.is(ext)) {
+              this.gui.alerts.add(`Extension ${name} installed and loaded`, 'success')
+              this._register(ext.constructor.name, pth)
+            }
           })
         }
       })
@@ -123,7 +177,7 @@ class ExtensionsManager extends GuiExtension {
   }
 
   download(name, cl) {
-    let alert = this.gui.alerts.add(`Downloading ${name}`, 'progress')
+    let alert = this.gui.alerts.add(`npm install ${name}`, 'progress')
     let ch = spawn('npm', ['install', name], {
       cwd: this.localFolder
     })
@@ -140,23 +194,46 @@ class ExtensionsManager extends GuiExtension {
 
   load(extPath, cl) {
     let ext
+    let err
     if (typeof extPath === 'string') {
+      if (path.extname(extPath).toLowerCase() === '.json') {
+        let conf = require(extPath)
+        extPath = path.join(path.dirname(extPath), conf.main)
+      }
       try {
         delete require.cache[extPath]
         let tmp = require(extPath)
-        if (tmp) {
+        if (tmp && (typeof tmp.constructor === 'function')) {
           ext = new tmp(this.gui)
-        } else {}
+          if (!GuiExtension.is(ext)) {
+            err = new Error(`Error loading extension from ${extPath}, the loaded module do not export a valid GuiExtension`)
+            this.emit('error', err)
+          }
+        } else {
+          err = new Error(`Error loading extension from ${extPath}, the loaded module do not export a valid GuiExtension`)
+          this.emit('error', err)
+        }
       } catch (e) {
-        this.emit('error', new Error(`Error loading extension from ${extPath}, details: ${e.message}`))
-        return
+        err = new Error(`Error loading extension from ${extPath}, details: ${e.message}`)
+        this.emit('error', err)
       }
     } else {
-      this.emit('error', new Error(`trying to load non path extension from ${extPath}`))
-      return
+      err = new Error(`Error loading extension, the path must be a valid string`)
+      this.emit('error', err)
     }
     if (typeof cl === 'function') {
-      cl(ext)
+      cl(ext, err)
+    }
+  }
+
+  _register(name, pth) {
+    this._installRegister[name] = pth
+    storage.set('extension_register', this._installRegister, (error) => {})
+  }
+
+  _cleanInstalled() {
+    this._installRegister = {
+
     }
   }
 

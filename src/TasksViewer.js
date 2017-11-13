@@ -148,10 +148,7 @@ class TasksViewer extends GuiExtension {
     })
     header.appendChild(btns)
     this.modal.addTitle(header)
-
-
     super.activate()
-
   }
 
   deactivate() {

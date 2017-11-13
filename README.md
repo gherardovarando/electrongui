@@ -146,6 +146,7 @@ gui.extensions.extensions.MyExtension.activate()
 ##### Using ExtensionsManager from the GUI
 
 ExtensionsManager is a GuiExtension and provide also GUI element to operate on extensions.
+It is possoble to load a local extension or to download and install an extension from **npm**
 To use it from the GUI it is necessary to activate it.
 
 ```
@@ -157,6 +158,7 @@ gui.extensions.activate()
 // from there it is possible to install new extensions, selecting the main js file
 // moreover it is possible to activate/deactivate extensions
 ```
+
 
 ### Cleaning the interface on deactivate
 
