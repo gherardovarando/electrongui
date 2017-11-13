@@ -76,9 +76,11 @@ class ExtensionsManager extends GuiExtension {
               if (!filePaths) return
               let p = filePaths[0]
               this.load(p, (ext) => {
-                if (ext) {
+                if (GuiExtension.is(ext)) {
                   ext.info.manuallyinstalled = true
+                  this._register(ext.constructor.name, p)
                 }
+
               })
             })
           }
@@ -172,8 +174,6 @@ class ExtensionsManager extends GuiExtension {
         }
       })
     }
-
-
   }
 
   download(name, cl) {
