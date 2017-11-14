@@ -75,8 +75,9 @@ class ExtensionsManager extends GuiExtension {
               }
               if (!filePaths) return
               let p = filePaths[0]
-              this.load(p, (ext) => {
-                if (GuiExtension.is(ext)) {
+              this.load(p, (ext, err) => {
+                if (err) return
+                if (Guixtension.is(ext)) {
                   ext.info.manuallyinstalled = true
                   this._register(ext.constructor.name, p)
                 }
@@ -110,7 +111,7 @@ class ExtensionsManager extends GuiExtension {
         type: 'separator'
       }]
     })
-    this.localFolder = app.getPath('appData')
+    this.localFolder = app.getPath('home')
     this.extensions = {}
     this.sidebar = new Sidebar(this.element)
     this.sidebar.addList('list')
@@ -157,6 +158,8 @@ class ExtensionsManager extends GuiExtension {
   }
 
 
+
+
   install(name) {
     if (typeof name === 'string') {
       name = name.toLowerCase()
@@ -180,6 +183,9 @@ class ExtensionsManager extends GuiExtension {
     let alert = this.gui.alerts.add(`npm install ${name}`, 'progress')
     let ch = spawn('npm', ['install', name], {
       cwd: this.localFolder
+    })
+    ch.on('error',()=>{
+      alert.remove()
     })
     ch.on('close', (code) => {
       alert.remove()
