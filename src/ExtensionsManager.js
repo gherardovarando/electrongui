@@ -111,7 +111,7 @@ class ExtensionsManager extends GuiExtension {
         type: 'separator'
       }]
     })
-    this.localFolder = app.getPath('home')
+    this.localFolder = app.getPath('userData')
     this.extensions = {}
     this.sidebar = new Sidebar(this.element)
     this.sidebar.addList('list')
