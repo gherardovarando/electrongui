@@ -304,11 +304,15 @@ class ExtensionsManager extends GuiExtension {
 
     extension.on('deactivate', () => {
       this.sidebar.list.deactiveItem(extension.constructor.name)
+      this._activeRegister[extension.constructor.name] = false
+      storage.set('active_register', this._activeRegister, () => {})
       menuitem.checked = false
     })
 
     extension.on('activate', () => {
       this.sidebar.list.activeItem(extension.constructor.name)
+      this._activeRegister[extension.constructor.name] = true
+      storage.set('active_register', this._activeRegister, () => {})
       menuitem.checked = true
     })
 
