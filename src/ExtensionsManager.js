@@ -140,12 +140,13 @@ class ExtensionsManager extends GuiExtension {
         }
         if (data) {
           Object.keys(data).map((name) => {
+            //prevent loading already present extensions
             if (!this.extensions[name]) this.load(data[name], (ext) => {
               if (GuiExtension.is(ext)) {
                 this._register(ext.constructor.name, data[name])
                 if (this._activeRegister[name]) ext.activate()
               }
-            }) //prevent loading already present extensions
+            })
           })
         }
       })
@@ -182,7 +183,7 @@ class ExtensionsManager extends GuiExtension {
     let ch = spawn('npm', ['install', name], {
       cwd: this.localFolder
     })
-    ch.on('error',()=>{
+    ch.on('error', () => {
       alert.remove()
     })
     ch.on('close', (code) => {
