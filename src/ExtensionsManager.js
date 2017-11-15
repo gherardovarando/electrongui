@@ -181,7 +181,9 @@ class ExtensionsManager extends GuiExtension {
   download(name, cl) {
     let alert = this.gui.alerts.add(`npm install ${name}`, 'progress')
     let ch = spawn('npm', ['install', name], {
-      cwd: this.localFolder
+      cwd: this.localFolder,
+      shell: true,
+      windowsHide: true
     })
     ch.on('error', () => {
       alert.remove()
