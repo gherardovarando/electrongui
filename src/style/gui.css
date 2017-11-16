@@ -879,3 +879,16 @@ div.gui-alert-body {
   font-family: monospace;
   font-weight: bold;
 }
+
+
+div.table{
+  display: table;
+}
+
+div.table-raw{
+  display: table-raw
+}
+
+div.table-cell{
+  display: table-cell;
+}

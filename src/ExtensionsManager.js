@@ -33,6 +33,7 @@ const ToggleElement = require('./ToggleElement.js')
 const util = require('./util.js')
 const Modal = require('./Modal.js')
 const input = require('./input.js')
+const Alert = require('./Alert.js')
 const {
   spawn
 } = require('child_process')
@@ -152,8 +153,7 @@ class ExtensionsManager extends GuiExtension {
     if (Modal.is(this._searchModal)) this._searchModal.show()
     else {
       let body = util.div('pane padded')
-      let inf = util.div('')
-      inf.style.display = 'table'
+      let inf = util.div('table')
       let inp = input.input({
         parent: body,
         className: 'form-control',
@@ -162,14 +162,44 @@ class ExtensionsManager extends GuiExtension {
         type: 'text',
         value: '',
         onchange: () => {
-          util.empty(inf,inf.firstChild)
+          util.empty(inf, inf.firstChild)
+          let al = new Alert({
+            body: 'Searching npm registry...',
+            icon: 'fa fa-circle-o-notch fa-spin',
+            status: 'progress',
+            sticky: true
+          })
+          al.appendTo(inf)
           this.search(inp.value, (res) => {
+            al.remove()
+            if (!res) return
             res.map((r) => {
-              let row = util.div()
-              row.style.display = 'table-row'
-              let name = util.div()
-              row.innerHTML = r.name
-              inf.appendChild(row)
+              if (!r) return
+              if (r.name === 'electrongui') return
+              if (r.name === 'electron') return
+              let alr = new Alert({
+                sticky: true,
+                icon: 'fa fa-download',
+                status: '',
+                body: r.name
+              })
+              alr.element.onclick = () => {
+                dialog.showMessageBox({
+                  type: 'question',
+                  buttons: ['install', 'cancel'],
+                  cancelId: 1,
+                  title: 'Install extension',
+                  message: `Install ${r.name} ?`
+                }, (id) => {
+                  if (id == 0) {
+                    this.install(r.name)
+                    util.empty(inf, inf.firstChild)
+                    inp.value = ''
+                    this._searchModal.hide()
+                  }
+                })
+              }
+              alr.appendTo(inf)
             })
           })
         }
@@ -212,9 +242,7 @@ class ExtensionsManager extends GuiExtension {
     })
   }
 
-
-
-
+  //name is the npm module name (will be converted to lowercase anyway)
   install(name) {
     if (typeof name === 'string') {
       name = name.toLowerCase()
@@ -234,9 +262,18 @@ class ExtensionsManager extends GuiExtension {
     }
   }
 
+  /// name is the constructor.name of the extension
+  /// this function will not call npm uninstall
+  uninstall(name) {
+    this.remove(name)
+    delete this._installRegister[name]
+    this._saveRegister()
+  }
+
+  // call npm install name --force
   download(name, cl) {
     let alert = this.gui.alerts.add(`npm install ${name}`, 'progress')
-    let ch = spawn('npm', ['install', name], {
+    let ch = spawn('npm', ['install', name, '--force'], {
       cwd: this.localFolder,
       shell: true,
       windowsHide: true
@@ -289,15 +326,18 @@ class ExtensionsManager extends GuiExtension {
     }
   }
 
-  _register(name, pth) {
-    this._installRegister[name] = pth
+  _saveRegister() {
     storage.set('extension_register', this._installRegister, (error) => {})
   }
 
-  _cleanInstalled() {
-    this._installRegister = {
+  _register(name, pth) {
+    this._installRegister[name] = pth
+    this._saveRegister()
+  }
 
-    }
+  _cleanInstalled() {
+    this._installRegister = {}
+    this._saveRegister()
   }
 
 
@@ -308,9 +348,11 @@ class ExtensionsManager extends GuiExtension {
     this.hide()
   }
 
-
-
-  add(extension) {
+  remove(extension) {
+    if (typeof extension === 'string') {
+      extension = this.extensions[extension]
+    }
+    if (!GuiExtension.is(extension)) return
     if (this.extensions[extension.constructor.name]) {
       this.extensions[extension.constructor.name].deactivate()
       this.sidebar.list.removeItem(extension.constructor.name)
@@ -318,6 +360,11 @@ class ExtensionsManager extends GuiExtension {
       this.removeMenuItem(this.extensions[extension.constructor.name]._extMenuIdx)
       delete this.extensions[extension.constructor.name]
     }
+  }
+
+  add(extension) {
+    if (!GuiExtension.is(extension)) return
+    this.remove(extension) //be sure not to add duplicate
     this.extensions[extension.constructor.name] = extension
     let menuitem = new MenuItem({
       label: extension.constructor.name,
@@ -362,7 +409,7 @@ class ExtensionsManager extends GuiExtension {
 
     extension.on('deactivate', () => {
       this.sidebar.list.deactiveItem(extension.constructor.name)
-      this._activeRegister[extension.constructor.name] = false
+      delete this._activeRegister[extension.constructor.name]
       storage.set('active_register', this._activeRegister, () => {})
       menuitem.checked = false
     })
@@ -402,9 +449,6 @@ class ExtensionsManager extends GuiExtension {
       }) && this.isHidden()) {}
     super.hide()
   }
-
-
-
 
 
 
