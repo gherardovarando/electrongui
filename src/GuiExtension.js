@@ -46,7 +46,6 @@ class GuiExtension extends ToggleElement {
       keyword: []
     }, config.info)
     this.image = config.image
-    this.author = config.author
     this.gui = gui
     this._menuIndx = -1
     this._menu = new Menu()

@@ -88,23 +88,7 @@ class ExtensionsManager extends GuiExtension {
         }, {
           label: 'Download npm module',
           click: () => {
-            let modal = new Modal({
-              title: 'Download npm module',
-              onsubmit: () => {
-                this.install(inp.value)
-              }
-            })
-            let body = util.div('pane padded')
-            let inp = input.input({
-              parent: body,
-              className: 'form-control',
-              label: '',
-              placeholder: 'module name',
-              type: 'text',
-              value: ''
-            })
-            modal.addBody(body)
-            modal.show()
+            this.showInstallModal()
           }
         }]
       }, {
@@ -153,10 +137,82 @@ class ExtensionsManager extends GuiExtension {
     })
   }
 
+
   activate() {
     this.appendMenu()
     super.activate()
   }
+
+  deactivate() {
+    if (Modal.is(this._searchModal)) this._searchModal.remove()
+    super.deactivate()
+  }
+
+  showInstallModal() { //lazy creation of the modal
+    if (Modal.is(this._searchModal)) this._searchModal.show()
+    else {
+      let body = util.div('pane padded')
+      let inf = util.div('')
+      inf.style.display = 'table'
+      let inp = input.input({
+        parent: body,
+        className: 'form-control',
+        label: '',
+        placeholder: 'module name',
+        type: 'text',
+        value: '',
+        onchange: () => {
+          util.empty(inf,inf.firstChild)
+          this.search(inp.value, (res) => {
+            res.map((r) => {
+              let row = util.div()
+              row.style.display = 'table-row'
+              let name = util.div()
+              row.innerHTML = r.name
+              inf.appendChild(row)
+            })
+          })
+        }
+      })
+      body.appendChild(inf)
+      this._searchModal = new Modal({
+        title: 'Download npm module',
+        body: body,
+        permanent: true,
+        onsubmit: () => {
+          //this.install(inp.value)
+          //this._searchModal.hide()
+        },
+        oncancel: () => {
+          this._searchModal.hide()
+        }
+      })
+      this._searchModal.show()
+    }
+  }
+
+  search(name, cl) {
+    let res = ''
+    let ch = spawn('npm', ['search', `${name}`, `--json`], {
+      cwd: this.localFolder,
+      shell: true,
+      windowsHide: true
+    })
+    ch.stdout.setEncoding('utf8')
+    ch.stdout.on('data', (data) => {
+      res += data
+    })
+    ch.on('error', () => {})
+    ch.on('close', (code) => {
+      if (code === 0) {
+        if (typeof cl === 'function') cl(JSON.parse(res))
+      } else {
+        if (typeof cl === 'function') cl(null, new Error(`Error on npm search ${name}.`))
+      }
+    })
+  }
+
+
 
 
   install(name) {
