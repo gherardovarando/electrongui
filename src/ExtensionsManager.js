@@ -314,7 +314,7 @@ class ExtensionsManager extends GuiExtension {
           this.emit('error', err)
         }
       } catch (e) {
-        err = new Error(`Error loading extension from ${extPath}, details: ${e.message}`)
+        err = new Error(`Error loading extension from ${extPath}, details: ${e}`)
         this.emit('error', err)
       }
     } else {
