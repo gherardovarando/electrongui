@@ -125,8 +125,7 @@ class ExtensionsManager extends GuiExtension {
         }
         if (data) {
           Object.keys(data).map((name) => {
-            //prevent loading already present extensions
-            if (!this.extensions[name]) this.load(data[name], (ext) => {
+            this.load(data[name], (ext) => {
               if (GuiExtension.is(ext)) {
                 this._register(ext.constructor.name, data[name])
                 if (this._activeRegister[name]) ext.activate()
