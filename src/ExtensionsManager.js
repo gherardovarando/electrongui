@@ -35,8 +35,7 @@ const Modal = require('./Modal.js')
 const input = require('./input.js')
 const Alert = require('./Alert.js')
 const {
-  fork,
-  spawn
+  fork
 } = require('child_process')
 const storage = require('electron-json-storage')
 
@@ -223,14 +222,18 @@ class ExtensionsManager extends GuiExtension {
 
   search(name, cl) {
     let res = ''
-    let ch = spawn('npm', ['search', `${name}`, `--json`], {
+    let ch = fork(`${path.join(__dirname,'npm-search.js')}`, [name.toLowerCase()], {
       cwd: this.localFolder,
-      shell: true,
-      windowsHide: true
+      silent: true
     })
     ch.stdout.setEncoding('utf8')
     ch.stdout.on('data', (data) => {
       res += data
+    })
+    ch.on('message', (e) => {
+      if (e.status === 'completed') {
+        ch.kill()
+      }
     })
     ch.on('error', () => {})
     ch.on('close', (code) => {
@@ -249,6 +252,7 @@ class ExtensionsManager extends GuiExtension {
       this.download(name, (pth, err) => {
         if (err) {
           this.gui.alerts.add(`Unable to install ${name} \n ${err.message}`)
+          if (typeof errCl === 'function') errCl(err)
         } else {
           this.load(pth, (ext, err) => {
             if (err) {
@@ -284,17 +288,13 @@ class ExtensionsManager extends GuiExtension {
     ch.on('error', () => {
       alert.remove()
     })
-    ch.on('message',(e)=>{
+    ch.on('close', (code) => {
       alert.remove()
-       if (e.status === 'completed'){
-         cl(path.join(this.localFolder, 'node_modules', name))
-       }else {
-         cl(null, new Error(`Error on npm install ${name}. ${name} must be a valid npm module`))
-       }
-       ch.kill()
-    })
-    ch.on('error', (code) => {
-       ch.kill()
+      if (code === 0) {
+        cl(path.join(this.localFolder, 'node_modules', name))
+      } else {
+        cl(null, new Error(`Error on npm install ${name}. ${name} must be a valid npm module`))
+      }
     })
   }
 
