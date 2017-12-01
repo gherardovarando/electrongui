@@ -26,6 +26,7 @@
   "dependencies": {
     "dateformat": "^2.0.0",
     "electron-json-storage": "^3.0.1",
-    "json2csv": "^3.7.3"
+    "json2csv": "^3.7.3",
+    "npm": "^5.5.1"
   }
 }

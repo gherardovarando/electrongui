@@ -35,6 +35,7 @@ const Modal = require('./Modal.js')
 const input = require('./input.js')
 const Alert = require('./Alert.js')
 const {
+  fork,
   spawn
 } = require('child_process')
 const storage = require('electron-json-storage')
@@ -242,7 +243,7 @@ class ExtensionsManager extends GuiExtension {
   }
 
   //name is the npm module name (will be converted to lowercase anyway)
-  install(name) {
+  install(name, cl, errCl) {
     if (typeof name === 'string') {
       name = name.toLowerCase()
       this.download(name, (pth, err) => {
@@ -250,10 +251,14 @@ class ExtensionsManager extends GuiExtension {
           this.gui.alerts.add(`Unable to install ${name} \n ${err.message}`)
         } else {
           this.load(pth, (ext, err) => {
-            if (err) return
+            if (err) {
+              if (typeof errCl === 'function') errCl(err)
+              return
+            }
             if (GuiExtension.is(ext)) {
               this.gui.alerts.add(`Extension ${name} installed and loaded`, 'success')
               this._register(ext.constructor.name, pth)
+              if (typeof cl === 'function') cl(ext, pth)
             }
           })
         }
@@ -272,21 +277,24 @@ class ExtensionsManager extends GuiExtension {
   // call npm install name --force
   download(name, cl) {
     let alert = this.gui.alerts.add(`npm install ${name}`, 'progress')
-    let ch = spawn('npm', ['install', name, '--force'], {
+    let ch = fork(`${path.join(__dirname,'npm-install.js')}`, [name.toLowerCase()], {
       cwd: this.localFolder,
-      shell: true,
-      windowsHide: true
+      silent: true
     })
     ch.on('error', () => {
       alert.remove()
     })
-    ch.on('close', (code) => {
+    ch.on('message',(e)=>{
       alert.remove()
-      if (code === 0) {
-        cl(path.join(this.localFolder, 'node_modules', name))
-      } else {
-        cl(null, new Error(`Error on npm install ${name}. ${name} must be a valid npm module`))
-      }
+       if (e.status === 'completed'){
+         cl(path.join(this.localFolder, 'node_modules', name))
+       }else {
+         cl(null, new Error(`Error on npm install ${name}. ${name} must be a valid npm module`))
+       }
+       ch.kill()
+    })
+    ch.on('error', (code) => {
+       ch.kill()
     })
   }
 
@@ -330,7 +338,7 @@ class ExtensionsManager extends GuiExtension {
   }
 
   _register(name, pth) {
-    this._installRegister[name] = pth
+    this._installRegister[name] = pth || name
     this._saveRegister()
   }
 
