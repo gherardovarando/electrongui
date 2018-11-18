@@ -26,7 +26,7 @@ const {
   MenuItem,
 } = require('electron').remote
 
-let colors = ['blue', 'red', 'pink', 'orange', 'yellow', 'green', 'purple', 'black', 'white']
+const colors = ['blue', 'red', 'pink', 'orange', 'yellow', 'green', 'purple', 'black', 'white']
 
 
 

@@ -1,7 +1,7 @@
 {
   "name": "electrongui",
   "version": "1.2.0",
-  "description": "gui skeleton for electron app ",
+  "description": "gui skeleton for electron app",
   "main": "electrongui.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

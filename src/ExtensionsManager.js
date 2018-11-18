@@ -18,12 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-"use strict"
+"use strict";
 const {
   Menu,
   MenuItem,
   dialog,
-  app
+  app,
+  ButtonsContainer
 } = require('electron').remote
 const fs = require('fs')
 const path = require('path')
@@ -394,12 +395,28 @@ class ExtensionsManager extends GuiExtension {
       active: extension.active,
       onmouseover: () => {
         this.pane.clear()
+        let btc = new ButtonsContainer()
+        btc.addButton({
+          id: `${extension.constructor.name}submitissue`,
+          className: 'btn-default',
+          icon:'fa fa-plus', //put icon github
+          action: (btn) => {
+            /// open issue github
+          }
+        })
+        this.pane.appendChild(btc)
         if (extension.info) {
-          this.pane.appendChild(util.div('padded', `Author: ${extension.info.author}`))
+          this.pane.appendChild(util.div('padded',
+           `Author: ${extension.info.author}`))
           this.pane.appendChild(util.div('padded', extension.info.note))
           if (extension.info.manuallyinstalled) {
-            this.pane.appendChild(util.div('cell', 'Manually installed'))
+            this.pane.appendChild(util.div('cell', 'Installed from local files'))
+          } else {
+            this.pane.appendChild(util.div('cell', 'Installed from npm'))
           }
+          this.pane.appendChild(util.div('cell',
+           `main file path: ${extension.info.mainfile}`))
+           this.pane.appendChild()
         }
         this.pane.show()
       },
@@ -438,9 +455,7 @@ class ExtensionsManager extends GuiExtension {
         }
       })
     })
-
     this.emit('add', extension)
-
   }
 
   show() {

@@ -59,7 +59,7 @@ class Gui extends ToggleElement {
     this.extensions = new ExtensionsManager(this)
     this.workspace = new Workspace(options.workspace)
     this.tasks = this.taskManager
-    this.alerts = new AlertManager(5)
+    this.alerts = new AlertManager(options.maxAlerts || 5)
     this.appendTo(util.body)
   }
 
@@ -82,7 +82,7 @@ class Gui extends ToggleElement {
     if (this.alerts instanceof AlertManager) {
       this.alerts.add(body, status || 'default')
     }
-  }
+  }https://github.com/gherardovarando/electrongui
 
 
   reloadMenu() {

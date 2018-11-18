@@ -142,8 +142,6 @@ class ToggleElement extends EventEmitter {
 
       return btn
     }
-
-
   }
 
   removeToggleButton(id) {

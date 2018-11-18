@@ -24,7 +24,7 @@ const ToggleElement = require('./ToggleElement')
 const Alert = require('./Alert')
 const util = require('./util')
 
-let icons = {
+const icons = {
   default: 'fa fa-info',
   warning: 'fa fa-warning',
   danger: 'fa fa-exclamation',
@@ -78,7 +78,7 @@ class AlertManager extends EventEmitter {
     this.alerts.push(alert)
     alert.on('remove', () => {
       this.alerts.splice(this.alerts.indexOf(alert), 1)
-      this._check()
+      this._check()https://github.com/gherardovarando/electrongui
     })
 
     alert.appendTo(this.container)
@@ -91,6 +91,12 @@ class AlertManager extends EventEmitter {
       if (this.alerts.length - i <= this.max) this.alerts[i].show()
       else this.alerts[i].hide()
     }
+  }
+
+  clean() {
+    this.alerts.map( (al) => {
+      al.remove()
+    })
   }
 
   static is(x) {

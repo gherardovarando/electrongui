@@ -39,7 +39,8 @@ class TasksViewer extends GuiExtension {
 
   constructor(gui) {
     super(gui, {
-      icon: icon
+      icon: icon,
+      author: "electrongui"
     })
   }
 

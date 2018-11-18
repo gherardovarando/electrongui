@@ -159,7 +159,7 @@ let gui = new Gui()
 
 gui.extensions.activate()
 // now there will be a new menu entry in the application named Extensions
-// from there it is possible to install new extensions, selecting the main js file or from npm 
+// from there it is possible to install new extensions, selecting the main js file or from npm
 // moreover it is possible to activate/deactivate extensions
 ```
 
@@ -171,7 +171,10 @@ The `deactivate` method must clean all the elements added to the interfaces as b
 
 ## Acknowledgment
 
-Mario Juez [mjuez@fi.upm.es](mailto:mjuez@fi.upm.es) collaborated in part of the code. This project was partially founded by the [Cajal Blue Brain Project](http://cajalbbp.cesvima.upm.es/).
+Mario Juez [mjuez@fi.upm.es](mailto:mjuez@fi.upm.es) collaborated in part of the code.  
+This project was partially founded by the
+[Cajal Blue Brain Project](http://cajalbbp.cesvima.upm.es/)
+until march 2018.
 
 ## License
 
