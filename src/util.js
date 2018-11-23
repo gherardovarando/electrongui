@@ -99,7 +99,7 @@ exports.div = function(className, text) {
 }
 
 exports.setProgress = function(val) {
-    require('electron').remote.getCurrentWindow().setProgressBar(val / 100)
+    require('electron').remote.getCurrentWindow().setProgressBar( (val || 0 ) / 100)
 }
 
 exports.stringify = function(object) {
