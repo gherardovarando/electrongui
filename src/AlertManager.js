@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-'use strict'
+'use strict';
 
 const EventEmitter = require('events')
 const ToggleElement = require('./ToggleElement')
@@ -58,7 +58,7 @@ class AlertManager extends EventEmitter {
     this.container.remove()
   }
 
-  add(body, status) {
+  add(body, status, sticky) {
     let alert
     let timeout = null
     if (Alert.is(body)) {
@@ -70,7 +70,7 @@ class AlertManager extends EventEmitter {
         body: body,
         status: status || 'default',
         icon: icons[status || 'default'],
-        sticky: status === 'progress',
+        sticky: (status === 'progress') || sticky,
         timeout: timeout
       })
     }
@@ -78,7 +78,7 @@ class AlertManager extends EventEmitter {
     this.alerts.push(alert)
     alert.on('remove', () => {
       this.alerts.splice(this.alerts.indexOf(alert), 1)
-      this._check()https://github.com/gherardovarando/electrongui
+      this._check()
     })
 
     alert.appendTo(this.container)
