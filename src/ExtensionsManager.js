@@ -23,8 +23,7 @@ const {
   Menu,
   MenuItem,
   dialog,
-  app,
-  ButtonsContainer
+  app
 } = require('electron').remote
 const fs = require('fs')
 const path = require('path')
@@ -35,6 +34,7 @@ const util = require('./util.js')
 const Modal = require('./Modal.js')
 const input = require('./input.js')
 const Alert = require('./Alert.js')
+const ButtonsContainer = require('./ButtonsContainer.js')
 const {
   fork
 } = require('child_process')
