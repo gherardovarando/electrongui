@@ -416,7 +416,6 @@ class ExtensionsManager extends GuiExtension {
           }
           this.pane.appendChild(util.div('cell',
            `main file path: ${extension.info.mainfile}`))
-           this.pane.appendChild()
         }
         this.pane.show()
       },
