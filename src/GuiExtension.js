@@ -44,7 +44,7 @@ class GuiExtension extends ToggleElement {
     this.info = Object.assign({
       author: config.author || 'undefined',
       keyword: [],
-      mainfile: modules.filename
+      mainfile: module.filename
     }, config.info)
     this.image = config.image
     this.gui = gui
