@@ -82,7 +82,7 @@ class Gui extends ToggleElement {
     if (this.alerts instanceof AlertManager) {
       this.alerts.add(body, status || 'default')
     }
-  }https://github.com/gherardovarando/electrongui
+  }
 
 
   reloadMenu() {
